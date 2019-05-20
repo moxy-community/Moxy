@@ -1,0 +1,18 @@
+include ':moxy', ':moxy-android', ':moxy-compiler', ':moxy-app-compat', ':moxy-androidx', ':moxy-material'
+
+include ':stub-reflector', ':stub-android', ':stub-appcompat', ':stub-androidx', ':stub-material'
+
+include ':sample-app'
+
+project(':stub-reflector').projectDir = new File('moxy/stub-reflector')
+project(':stub-android').projectDir = new File('moxy-android/stub-android')
+project(':stub-appcompat').projectDir = new File('moxy-app-compat/stub-appcompat')
+project(':stub-androidx').projectDir = new File('moxy-androidx/stub-androidx')
+project(':stub-material').projectDir = new File('moxy-material/stub-material')
+
+project(':moxy').projectDir = new File('moxy')
+project(':moxy-androidx').projectDir = new File('moxy-androidx')
+project(':moxy-app-compat').projectDir = new File('moxy-app-compat')
+project(':moxy-compiler').projectDir = new File('moxy-compiler')
+project(':moxy-android').projectDir = new File('moxy-android')
+project(':moxy-material').projectDir = new File('moxy-material')

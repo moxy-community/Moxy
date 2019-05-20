@@ -1,0 +1,67 @@
+apply plugin: 'java'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+dependencies {
+    implementation project(':moxy')
+    implementation deps.javapoet
+
+    compileOnly deps.autocommon
+    compileOnly deps.autoservice
+    compileOnly deps.guava
+
+//    javadocDeps project(':moxy')
+//    javadocDeps deps.javapoet
+//    javadocDeps deps.autoservice
+
+    testImplementation deps.junit
+    testImplementation deps.truth
+    testImplementation deps.compiletesting
+    testImplementation deps.asm
+
+    //workaround to use test resources (https://stackoverflow.com/q/24870464)
+    testRuntime files(sourceSets.test.output.resourcesDir)
+}
+
+def artifact = 'moxy-compiler'
+project.archivesBaseName = artifact
+group = rootProject.ext.groupId // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom.project {
+            packaging 'jar'
+            groupId rootProject.ext.groupId
+            artifactId artifact
+        }
+    }
+}
+
+
+version = getArtifactVersion('moxy-compiler') // Library version
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    // User and ApiKey stored in local.properties
+    user = properties.getProperty("bintrayUser")
+    key = properties.getProperty("bintrayApiKey")
+
+    configurations = ['archives']
+    // Package info for Bintray
+    pkg {
+        repo = 'maven'
+        name = artifact
+        licenses = ['MIT']
+        vcsUrl = 'https://github.com/moxy-community/Moxy'
+        publish = true
+    }
+}
+
+// Dependency to call only bintrayUpload task
+bintrayUpload.dependsOn install
