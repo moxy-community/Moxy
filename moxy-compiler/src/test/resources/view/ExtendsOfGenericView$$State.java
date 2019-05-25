@@ -1,3 +1,4 @@
+
 package view;
 
 import io.moxy.viewstate.MvpViewState;
@@ -12,7 +13,7 @@ public class ExtendsOfGenericView$$State extends MvpViewState<ExtendsOfGenericVi
         TestEventCommand testEventCommand = new TestEventCommand(param);
         mViewCommands.beforeApply(testEventCommand);
 
-        if (mViews == null || mViews.isEmpty()) {
+        if (hasNotView()) {
             return;
         }
 

@@ -2,18 +2,17 @@ package view.strategies_inheritance;
 
 import io.moxy.viewstate.MvpViewState;
 import io.moxy.viewstate.ViewCommand;
-
+import java.lang.Override;
 import view.strategies_inheritance.strategies.ParentDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;
 
 public class ParentView$$State extends MvpViewState<ParentView> implements ParentView {
-
 	@Override
 	public void parentMethod1() {
 		ParentMethod1Command parentMethod1Command = new ParentMethod1Command();
 		mViewCommands.beforeApply(parentMethod1Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -29,7 +28,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
 		ParentMethod2Command parentMethod2Command = new ParentMethod2Command();
 		mViewCommands.beforeApply(parentMethod2Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -45,7 +44,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
 		ParentMethod3Command parentMethod3Command = new ParentMethod3Command();
 		mViewCommands.beforeApply(parentMethod3Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -61,7 +60,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
 		ParentMethodWithStrategyCommand parentMethodWithStrategyCommand = new ParentMethodWithStrategyCommand();
 		mViewCommands.beforeApply(parentMethodWithStrategyCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -71,7 +70,6 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
 
 		mViewCommands.afterApply(parentMethodWithStrategyCommand);
 	}
-
 
 	public class ParentMethod1Command extends ViewCommand<ParentView> {
 		ParentMethod1Command() {

@@ -5,15 +5,15 @@ import io.moxy.viewstate.ViewCommand;
 import io.moxy.viewstate.strategy.AddToEndSingleStrategy;
 import io.moxy.viewstate.strategy.OneExecutionStateStrategy;
 import io.moxy.viewstate.strategy.SingleStateStrategy;
+import java.lang.Override;
 
 public class StrategiesView$$State extends MvpViewState<StrategiesView> implements StrategiesView {
-
 	@Override
 	public void singleState() {
 		SingleStateCommand singleStateCommand = new SingleStateCommand();
 		mViewCommands.beforeApply(singleStateCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -29,7 +29,7 @@ public class StrategiesView$$State extends MvpViewState<StrategiesView> implemen
 		OneExecutionCommand oneExecutionCommand = new OneExecutionCommand();
 		mViewCommands.beforeApply(oneExecutionCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -45,7 +45,7 @@ public class StrategiesView$$State extends MvpViewState<StrategiesView> implemen
 		WithoutStrategyCommand withoutStrategyCommand = new WithoutStrategyCommand();
 		mViewCommands.beforeApply(withoutStrategyCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -55,7 +55,6 @@ public class StrategiesView$$State extends MvpViewState<StrategiesView> implemen
 
 		mViewCommands.afterApply(withoutStrategyCommand);
 	}
-
 
 	public class SingleStateCommand extends ViewCommand<StrategiesView> {
 		SingleStateCommand() {

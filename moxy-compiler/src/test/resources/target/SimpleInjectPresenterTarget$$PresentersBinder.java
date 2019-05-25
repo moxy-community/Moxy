@@ -3,7 +3,6 @@ package target;
 import io.moxy.MvpPresenter;
 import io.moxy.PresenterBinder;
 import io.moxy.presenter.PresenterField;
-import io.moxy.presenter.PresenterType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +13,14 @@ public class SimpleInjectPresenterTarget$$PresentersBinder extends PresenterBind
 	public List<PresenterField<SimpleInjectPresenterTarget>> getPresenterFields() {
 		List<PresenterField<SimpleInjectPresenterTarget>> presenters = new ArrayList<>(1);
 
-		presenters.add(new presenterBinder());
+		presenters.add(new PresenterBinder());
 
 		return presenters;
 	}
 
-	public class presenterBinder extends PresenterField<SimpleInjectPresenterTarget> {
-		public presenterBinder() {
-			super("presenter", PresenterType.LOCAL, null, EmptyViewPresenter.class);
+	public class PresenterBinder extends PresenterField<SimpleInjectPresenterTarget> {
+		public PresenterBinder() {
+			super("presenter", null, EmptyViewPresenter.class);
 		}
 
 		@Override

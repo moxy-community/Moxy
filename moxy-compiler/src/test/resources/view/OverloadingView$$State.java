@@ -3,15 +3,17 @@ package view;
 import io.moxy.viewstate.MvpViewState;
 import io.moxy.viewstate.ViewCommand;
 import io.moxy.viewstate.strategy.AddToEndStrategy;
+import java.lang.Object;
+import java.lang.Override;
+import java.lang.String;
 
 public class OverloadingView$$State extends MvpViewState<OverloadingView> implements OverloadingView {
-
 	@Override
 	public void method(String string) {
 		MethodCommand methodCommand = new MethodCommand(string);
 		mViewCommands.beforeApply(methodCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -27,7 +29,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
 		Method1Command method1Command = new Method1Command(number);
 		mViewCommands.beforeApply(method1Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -43,7 +45,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
 		Method2Command method2Command = new Method2Command(object);
 		mViewCommands.beforeApply(method2Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -54,12 +56,12 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
 		mViewCommands.afterApply(method2Command);
 	}
 
-
 	public class MethodCommand extends ViewCommand<OverloadingView> {
 		public final String string;
 
 		MethodCommand(String string) {
 			super("method", AddToEndStrategy.class);
+
 			this.string = string;
 		}
 
@@ -74,6 +76,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
 
 		Method1Command(int number) {
 			super("method", AddToEndStrategy.class);
+
 			this.number = number;
 		}
 
@@ -88,6 +91,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
 
 		Method2Command(Object object) {
 			super("method", AddToEndStrategy.class);
+
 			this.object = object;
 		}
 

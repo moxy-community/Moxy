@@ -35,7 +35,7 @@ import io.moxy.presenter.PresenterField;
  * public class Sample extends MvpActivity implements MyView
  * {
  *
- * &#64;InjectPresenter(type = PresenterType.LOCAL, tag = "SOME_TAG")
+ * &#64;InjectPresenter
  * example.MyPresenter mMyPresenter;
  *
  * }

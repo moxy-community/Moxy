@@ -3,15 +3,16 @@ package view;
 import io.moxy.viewstate.MvpViewState;
 import io.moxy.viewstate.ViewCommand;
 import io.moxy.viewstate.strategy.AddToEndStrategy;
+import java.lang.Number;
+import java.lang.Override;
 
 public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> implements GenericMethodsView {
-
 	@Override
 	public <T> void generic(T param) {
 		GenericCommand genericCommand = new GenericCommand(param);
 		mViewCommands.beforeApply(genericCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -27,7 +28,7 @@ public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> 
 		GenericWithExtendsCommand genericWithExtendsCommand = new GenericWithExtendsCommand(param);
 		mViewCommands.beforeApply(genericWithExtendsCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -38,12 +39,12 @@ public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> 
 		mViewCommands.afterApply(genericWithExtendsCommand);
 	}
 
-
 	public class GenericCommand<T> extends ViewCommand<GenericMethodsView> {
 		public final T param;
 
 		GenericCommand(T param) {
 			super("generic", AddToEndStrategy.class);
+
 			this.param = param;
 		}
 
@@ -58,6 +59,7 @@ public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> 
 
 		GenericWithExtendsCommand(T param) {
 			super("genericWithExtends", AddToEndStrategy.class);
+
 			this.param = param;
 		}
 

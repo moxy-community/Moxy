@@ -2,19 +2,18 @@ package view.strategies_inheritance;
 
 import io.moxy.viewstate.MvpViewState;
 import io.moxy.viewstate.ViewCommand;
-
+import java.lang.Override;
 import view.strategies_inheritance.strategies.ChildDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;
 import view.strategies_inheritance.strategies.Strategy2;
 
 public class ChildView$$State extends MvpViewState<ChildView> implements ChildView {
-
 	@Override
 	public void parentMethod1() {
 		ParentMethod1Command parentMethod1Command = new ParentMethod1Command();
 		mViewCommands.beforeApply(parentMethod1Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -30,7 +29,7 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 		ParentMethod2Command parentMethod2Command = new ParentMethod2Command();
 		mViewCommands.beforeApply(parentMethod2Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -46,7 +45,7 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 		ChildMethodCommand childMethodCommand = new ChildMethodCommand();
 		mViewCommands.beforeApply(childMethodCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -62,7 +61,7 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 		ChildMethodWithStrategyCommand childMethodWithStrategyCommand = new ChildMethodWithStrategyCommand();
 		mViewCommands.beforeApply(childMethodWithStrategyCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -78,7 +77,7 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 		ParentMethod3Command parentMethod3Command = new ParentMethod3Command();
 		mViewCommands.beforeApply(parentMethod3Command);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -94,7 +93,7 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 		ParentMethodWithStrategyCommand parentMethodWithStrategyCommand = new ParentMethodWithStrategyCommand();
 		mViewCommands.beforeApply(parentMethodWithStrategyCommand);
 
-		if (mViews == null || mViews.isEmpty()) {
+		if (hasNotView()) {
 			return;
 		}
 
@@ -104,7 +103,6 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 
 		mViewCommands.afterApply(parentMethodWithStrategyCommand);
 	}
-
 
 	public class ParentMethod1Command extends ViewCommand<ChildView> {
 		ParentMethod1Command() {
