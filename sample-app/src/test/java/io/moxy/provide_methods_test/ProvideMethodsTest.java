@@ -7,6 +7,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import io.moxy.MvpDelegate;
 import io.moxy.provide_methods_test.resources.LocalProvidedView;

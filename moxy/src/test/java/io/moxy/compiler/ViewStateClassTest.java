@@ -8,9 +8,6 @@ import com.google.testing.compile.JavaFileObjects;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
-
-import javax.tools.Diagnostic;
 
 import static org.junit.Assert.fail;
 
@@ -30,9 +27,9 @@ public class ViewStateClassTest extends CompilerTest {
     @Test
     public void positiveViewState() {
         try {
-            assertCompilationResultIs(ImmutableTable.<Diagnostic.Kind, Integer, Pattern>of(),
-                    ImmutableList.of(getString(
-                            "io/moxy/view/PositiveViewStateView$$State.java")));
+            assertCompilationResultIs(
+                    ImmutableTable.of(), ImmutableList.of(getString("view/PositiveViewStateView$$State.java"))
+            );
         } catch (IOException e) {
             fail(e.getLocalizedMessage());
         }
