@@ -150,7 +150,7 @@ Brave people how created library
 @A-Zaiats
 @lion4ik
 
-You may also find them in [contributors page of original project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
+You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
 
 ## License
 ```
