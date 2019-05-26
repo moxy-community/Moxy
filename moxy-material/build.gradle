@@ -6,7 +6,8 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    implementation project(':moxy')
+    implementation "io.moxy:moxy:${getArtifactVersion("moxy")}"
+    //implementation project(':moxy')
 
     compileOnly deps.android
     compileOnly project(':stub-androidx')
@@ -52,8 +53,29 @@ bintray {
         licenses = ['MIT']
         vcsUrl = 'https://github.com/moxy-community/Moxy'
         publish = true
+        version{
+            gpg {
+                sign = true
+                passphrase = properties.getProperty("gpgPassphrase")
+            }
+        }
     }
 }
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
+
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}

@@ -14,6 +14,7 @@ dependencies {
     testImplementation deps.truth
     testImplementation deps.android
     testImplementation deps.robolectric
+    testImplementation deps.androidJunit
     testImplementation deps.compiletesting
     testImplementation project(':moxy-compiler')
     testImplementation deps.javapoet
@@ -57,3 +58,39 @@ bintray {
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
+
+
+/*publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId 'io.moxy'
+            artifactId 'gradle-project'
+            version '0.1'
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'MVP Android library')
+                root.appendNode('name', 'Moxy')
+                root.appendNode('url', 'https://github.com/moxy-community/Moxy')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}*/
+
+// Tasks for sources and javadocs jars
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}

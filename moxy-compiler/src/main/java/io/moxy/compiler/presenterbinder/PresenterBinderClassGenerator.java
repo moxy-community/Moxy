@@ -44,7 +44,6 @@ import io.moxy.presenter.PresenterField;
  * </pre>
  * <p>
  * PresenterBinderClassGenerator generates PresenterBinder
- * <p>
  */
 public final class PresenterBinderClassGenerator extends JavaFilesGenerator<TargetClassInfo> {
 
