@@ -124,6 +124,34 @@ allprojects {
 ## ProGuard
 Moxy is completely without reflection! No special ProGuard rules required.
 
+## Moxy Community
+Brave people how created library
+
+@senneco
+@ekursakov
+@jordan1997
+@dependabot-bot
+@xanderblinov
+@VovaStelmashchuk
+@SavinMike
+@AlexeyKorshun
+@dmdevgo
+@rsajob
+@terrakok
+@mohaxspb
+@CherryPerry
+@fl1pflops
+@phoenixxt
+@Dosssik
+@AcoustickSan
+@seven332
+@v-grishechko
+@sbogolepov
+@A-Zaiats
+@lion4ik
+
+You may also find them in [contributors page of original project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
+
 ## License
 ```
 The MIT License (MIT)
