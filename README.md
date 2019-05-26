@@ -127,28 +127,29 @@ Moxy is completely without reflection! No special ProGuard rules required.
 ## Moxy Community
 Brave people how created library
 
-@senneco
-@ekursakov
-@jordan1997
-@dependabot-bot
-@xanderblinov
-@VovaStelmashchuk
-@SavinMike
-@AlexeyKorshun
-@dmdevgo
-@rsajob
-@terrakok
-@mohaxspb
-@CherryPerry
-@fl1pflops
-@phoenixxt
-@Dosssik
-@AcoustickSan
-@seven332
-@v-grishechko
-@sbogolepov
-@A-Zaiats
-@lion4ik
+[@senneco](https://github.com/senneco)
+[@ekursakov](https://github.com/ekursakov)
+[@jordan1997](https://github.com/jordan1997)
+[@dependabot-bot](https://github.com/dependabot-bot)
+[@xanderblinov](https://github.com/xanderblinov)
+[@VovaStelmashchuk](https://github.com/VovaStelmashchuk)
+[@SavinMike](https://github.com/SavinMike)
+[@AlexeyKorshun](https://github.com/AlexeyKorshun)
+[@dmdevgo](https://github.com/dmdevgo)
+[@rsajob](https://github.com/rsajob)
+[@terrakok](https://github.com/terrakok)
+[@mohaxspb](https://github.com/mohaxspb)
+[@CherryPerry](https://github.com/CherryPerry)
+[@fl1pflops](https://github.com/fl1pflops)
+[@phoenixxt](https://github.com/phoenixxt)
+[@Dosssik](https://github.com/Dosssik)
+[@AcoustickSan](https://github.com/AcoustickSan)
+[@seven332](https://github.com/seven332)
+[@v-grishechko](https://github.com/v-grishechko)
+[@sbogolepov](https://github.com/sbogolepov)
+[@A-Zaiats](https://github.com/A-Zaiats)
+[@lion4ik](https://github.com/lion4ik)
+
 
 You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
 
