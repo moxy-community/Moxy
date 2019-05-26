@@ -1,4 +1,6 @@
 # Moxy
+[ ![Download](https://api.bintray.com/packages/moxy-io/maven/moxy/images/download.svg) ](https://bintray.com/moxy-io/maven/moxy/_latestVersion)
+
 Moxy is a library that helps to use MVP pattern when you do the Android Application. Without problems of lifecycle and boilerplate code!
 
 The main idea of using Moxy:
