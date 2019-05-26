@@ -76,40 +76,49 @@ In order to avoid boilerplate code creating for binding activity, fragments and 
 ## Integration
 ### Base modules integration: 
 ```groovy
-implementation 'io.moxy:moxy:0.1'
+implementation 'io.moxy:moxy:1.0'
 ```
 #### Java project
 ```groovy
-annotationProcessor 'io.moxy:moxy-compiler:0.1'
+annotationProcessor 'io.moxy:moxy-compiler:1.0'
 ```
 #### Kotlin
 ```groovy
 apply plugin: 'kotlin-kapt'
 ```
 ```groovy
-kapt 'io.moxy:moxy-compiler:0.1'
+kapt 'io.moxy:moxy-compiler:1.0'
 ```
 ### Default android module integration
 For additional base view classes `MvpActivity` and `MvpFragment` add this:
 ```groovy
-implementation 'io.moxy:moxy-android:0.1'
+implementation 'io.moxy:moxy-android:1.0'
 ```
 ### AppCompat module integration
 If you use AppCompat, use `MvpAppCompatActivity` and `MvpAppCompatFragment` add this:
 ```groovy
-implementation 'io.moxy:moxy-app-compat:0.1'
+implementation 'io.moxy:moxy-app-compat:1.0'
 ```
 ### AndroidX module integration
 If you use AndroidX, use `MvpAppCompatActivity` and `MvpAppCompatFragment` add this:
 ```groovy
-implementation 'io.moxy:moxy-androidx:0.1'
+implementation 'io.moxy:moxy-androidx:1.0'
 ```
 ### AndroidX(Google material) module integration
 If you use google material, use `MvpBottomSheetDialogFragment` add this:
 ```groovy
-implementation 'io.moxy:moxy-material:0.1'
+implementation 'io.moxy:moxy-material:1.0'
 ```
 
+Temporary artifacts are in Bintray repository (until published to jcenter and maven).
+```
+allprojects {
+    repositories {
+        maven {
+            url 'https://dl.bintray.com/moxy-io/maven'
+        }
+    }
+```
 ## ProGuard
 Moxy is completely without reflection! No special ProGuard rules required.
 
