@@ -112,15 +112,6 @@ If you use google material, use `MvpBottomSheetDialogFragment` add this:
 implementation 'io.moxy:moxy-material:1.0'
 ```
 
-Temporary artifacts are in Bintray repository (until published to jcenter and maven).
-```
-allprojects {
-    repositories {
-        maven {
-            url 'https://dl.bintray.com/moxy-io/maven'
-        }
-    }
-```
 ## ProGuard
 Moxy is completely without reflection! No special ProGuard rules required.
 
