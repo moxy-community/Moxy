@@ -1,6 +1,6 @@
 package presenter;
 
-import io.moxy.InjectViewState;
+import moxy.InjectViewState;
 
 @InjectViewState
 public class PositiveViewStateProviderForNotPresenter {

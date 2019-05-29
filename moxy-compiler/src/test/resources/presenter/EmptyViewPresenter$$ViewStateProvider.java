@@ -1,8 +1,8 @@
 package presenter;
 
-import io.moxy.MvpView;
-import io.moxy.ViewStateProvider;
-import io.moxy.viewstate.MvpViewState;
+import moxy.MvpView;
+import moxy.ViewStateProvider;
+import moxy.viewstate.MvpViewState;
 
 import view.EmptyView$$State;
 

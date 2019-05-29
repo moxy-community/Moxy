@@ -1,6 +1,6 @@
 package multimodules.app;
 
-import io.moxy.MvpView;
+import moxy.MvpView;
 
 public interface AppView extends MvpView {
 }

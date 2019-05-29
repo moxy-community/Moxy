@@ -1,6 +1,7 @@
-package io.moxy.presenter;
+package moxy.presenter;
 
-import io.moxy.InjectViewState;
+import moxy.InjectViewState;
+import moxy.presenter.TestViewPresenter;
 
 @InjectViewState
 public class InjectViewStatePresenter extends TestViewPresenter {

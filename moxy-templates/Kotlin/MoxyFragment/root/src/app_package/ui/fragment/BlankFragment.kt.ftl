@@ -8,8 +8,8 @@ import ${packageName}.R
 import ${packageName}.presentation.view${dotSubpackage}.${viewName}
 import ${packageName}.presentation.presenter${dotSubpackage}.${presenterName}
 
-import io.moxy.MvpFragment
-import io.moxy.presenter.InjectPresenter
+import moxy.MvpFragment
+import moxy.presenter.InjectPresenter
 
 class ${className} : MvpFragment(), ${viewName} {
     companion object {

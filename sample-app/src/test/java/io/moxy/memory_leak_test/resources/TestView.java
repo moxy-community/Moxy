@@ -1,6 +1,6 @@
-package io.moxy.memory_leak_test.resources;
+package moxy.memory_leak_test.resources;
 
-import io.moxy.MvpView;
+import moxy.MvpView;
 
 public interface TestView extends MvpView {
 

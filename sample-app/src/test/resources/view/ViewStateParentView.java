@@ -1,8 +1,8 @@
 package view;
 
-import io.moxy.MvpView;
-import io.moxy.viewstate.strategy.AddToEndSingleStrategy;
-import io.moxy.viewstate.strategy.StateStrategyType;
+import moxy.MvpView;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.StateStrategyType;
 
 public interface ViewStateParentView extends MvpView {
 

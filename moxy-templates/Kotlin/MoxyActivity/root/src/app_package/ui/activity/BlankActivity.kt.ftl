@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 
-import io.moxy.presenter.InjectPresenter
+import moxy.presenter.InjectPresenter
 import ${packageName}.R
 import ${packageName}.presentation.view${dotSubpackage}.${viewName}
 import ${packageName}.presentation.presenter${dotSubpackage}.${presenterName}
@@ -12,7 +12,7 @@ import ${packageName}.presentation.presenter${dotSubpackage}.${presenterName}
 import ${superClassFqcn};
 
 <#if createProvidesMethod>
-import io.moxy.presenter.ProvidePresenter;
+import moxy.presenter.ProvidePresenter;
 </#if>
 
 

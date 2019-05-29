@@ -1,6 +1,9 @@
-package io.moxy.inheritance_test.resources;
+package moxy.inheritance_test.resources;
 
-import io.moxy.presenter.InjectPresenter;
+import moxy.inheritance_test.resources.TestPresenter;
+import moxy.inheritance_test.resources.TestView;
+import moxy.inheritance_test.resources.ViewWithoutInject;
+import moxy.presenter.InjectPresenter;
 
 public class SuperViewWithInject extends ViewWithoutInject implements TestView {
 

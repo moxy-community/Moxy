@@ -6,8 +6,8 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    implementation "io.moxy:moxy:${getArtifactVersion("moxy")}"
-//    implementation project(':moxy')
+    implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
+    //implementation project(':moxy')
 
     compileOnly deps.android
     compileOnly project(':stub-android')

@@ -1,7 +1,7 @@
 package view.strategies_inheritance;
 
-import io.moxy.MvpView;
-import io.moxy.viewstate.strategy.StateStrategyType;
+import moxy.MvpView;
+import moxy.viewstate.strategy.StateStrategyType;
 
 import view.strategies_inheritance.strategies.ParentDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;

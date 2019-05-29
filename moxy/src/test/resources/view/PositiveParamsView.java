@@ -1,9 +1,9 @@
 package view;
 
-import io.moxy.MvpView;
-import io.moxy.factory.MockPresenterFactory;
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.PresenterType;
+import moxy.MvpView;
+import moxy.factory.MockPresenterFactory;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.PresenterType;
 import params.Params1;
 import presenter.PositiveParamsViewPresenter;
 

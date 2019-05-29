@@ -1,7 +1,7 @@
 package target;
 
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.ProvidePresenter;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 import presenter.EmptyViewPresenter;
 import view.EmptyView;

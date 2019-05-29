@@ -1,8 +1,8 @@
 package view;
 
-import io.moxy.MvpPresenter;
-import io.moxy.MvpView;
-import io.moxy.presenter.InjectPresenter;
+import moxy.MvpPresenter;
+import moxy.MvpView;
+import moxy.presenter.InjectPresenter;
 
 public class InjectPresenterAnnotationInsideNotMvpViewClass {
 

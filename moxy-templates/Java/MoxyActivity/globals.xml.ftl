@@ -9,8 +9,8 @@
 
     <global id="superClassFqcn" type="string" value="
             <#if superClass == 'baseActivity'>${packageName}.ui.activity.BaseActivity
-            <#elseif superClass == 'appCompat'>io.moxy.MvpAppCompatActivity
-            <#else>io.moxy.MvpActivity</#if>
+            <#elseif superClass == 'appCompat'>moxy.MvpAppCompatActivity
+            <#else>moxy.MvpActivity</#if>
         " />
 
     <global id="manifestOut" value="${manifestDir}" />

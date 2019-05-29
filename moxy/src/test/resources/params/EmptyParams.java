@@ -1,7 +1,7 @@
 package params;
 
-import io.moxy.ParamsProvider;
-import io.moxy.factory.MockPresenterFactory;
+import moxy.ParamsProvider;
+import moxy.factory.MockPresenterFactory;
 
 @ParamsProvider(MockPresenterFactory.class)
 public interface EmptyParams {

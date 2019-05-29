@@ -1,4 +1,4 @@
-package io.moxy.provide_methods_test;
+package moxy.provide_methods_test;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,11 +7,10 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import android.os.Bundle;
-import android.util.Log;
 
-import io.moxy.MvpDelegate;
-import io.moxy.provide_methods_test.resources.LocalProvidedView;
-import io.moxy.provide_methods_test.resources.TwoLocalProvidedView;
+import moxy.MvpDelegate;
+import moxy.provide_methods_test.resources.LocalProvidedView;
+import moxy.provide_methods_test.resources.TwoLocalProvidedView;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)

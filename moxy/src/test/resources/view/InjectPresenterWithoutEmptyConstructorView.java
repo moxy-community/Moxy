@@ -1,7 +1,7 @@
 package view;
 
-import io.moxy.MvpView;
-import io.moxy.presenter.InjectPresenter;
+import moxy.MvpView;
+import moxy.presenter.InjectPresenter;
 import presenter.PresenterWithoutEmptyConstructor;
 
 public class InjectPresenterWithoutEmptyConstructorView implements MvpView {

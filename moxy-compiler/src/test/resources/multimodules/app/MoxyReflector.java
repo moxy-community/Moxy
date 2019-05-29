@@ -1,4 +1,4 @@
-package io.moxy;
+package moxy;
 
 import java.lang.Class;
 import java.lang.Object;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.moxy.ViewStateProvider;
+import moxy.ViewStateProvider;
 import multimodules.app.AppPresenter;
 import multimodules.app.AppPresenter$$ViewStateProvider;
 

@@ -14,9 +14,9 @@ import ${superClassFqcn};
 import ${packageName}.R;
 </#if>
 
-import io.moxy.presenter.InjectPresenter;
+import moxy.presenter.InjectPresenter;
 <#if createProvidesMethod>
-import io.moxy.presenter.ProvidePresenter;
+import moxy.presenter.ProvidePresenter;
 </#if>
 
 public class ${className} extends ${superClassName} implements ${viewName} {

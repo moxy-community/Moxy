@@ -1,6 +1,6 @@
 package view;
 
-import io.moxy.MvpView;
+import moxy.MvpView;
 
 public interface GenericView<T> extends MvpView {
 	void testEvent(T param);

@@ -1,7 +1,7 @@
 package view;
 
-import io.moxy.viewstate.strategy.AddToEndSingleStrategy;
-import io.moxy.viewstate.strategy.StateStrategyType;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.StateStrategyType;
 
 public interface ViewStateParentStrategyTagView {
 

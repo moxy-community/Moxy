@@ -1,4 +1,4 @@
-package io.moxy.memory_leak_test;
+package moxy.memory_leak_test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +10,8 @@ import android.os.Bundle;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.TimeUnit;
 
-import io.moxy.MvpDelegate;
-import io.moxy.memory_leak_test.resources.TestViewImplementation;
+import moxy.MvpDelegate;
+import moxy.memmory_leak_test.resources.TestViewImplementation;
 
 import static org.junit.Assert.assertTrue;
 

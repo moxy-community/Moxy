@@ -1,8 +1,8 @@
 package view;
 
-import io.moxy.viewstate.MvpViewState;
-import io.moxy.viewstate.ViewCommand;
-import io.moxy.viewstate.strategy.AddToEndStrategy;
+import moxy.viewstate.MvpViewState;
+import moxy.viewstate.ViewCommand;
+import moxy.viewstate.strategy.AddToEndStrategy;
 import java.lang.Override;
 
 public class SimpleView$$State extends MvpViewState<SimpleView> implements SimpleView {

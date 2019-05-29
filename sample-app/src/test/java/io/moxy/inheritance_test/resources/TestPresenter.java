@@ -1,6 +1,7 @@
-package io.moxy.inheritance_test.resources;
+package moxy.inheritance_test.resources;
 
-import io.moxy.MvpPresenter;
+import moxy.MvpPresenter;
+import moxy.inheritance_test.resources.TestView;
 
 @SuppressWarnings("WeakerAccess")
 public class TestPresenter extends MvpPresenter<TestView> {

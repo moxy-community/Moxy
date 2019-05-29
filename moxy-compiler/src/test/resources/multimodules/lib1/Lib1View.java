@@ -1,6 +1,6 @@
 package multimodules.lib1;
 
-import io.moxy.MvpView;
+import moxy.MvpView;
 
 public interface Lib1View extends MvpView {
 }

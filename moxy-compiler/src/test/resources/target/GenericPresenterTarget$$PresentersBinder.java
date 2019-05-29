@@ -1,8 +1,8 @@
 package target;
 
-import io.moxy.MvpPresenter;
-import io.moxy.PresenterBinder;
-import io.moxy.presenter.PresenterField;
+import moxy.MvpPresenter;
+import moxy.PresenterBinder;
+import moxy.presenter.PresenterField;
 
 import java.util.ArrayList;
 import java.util.List;

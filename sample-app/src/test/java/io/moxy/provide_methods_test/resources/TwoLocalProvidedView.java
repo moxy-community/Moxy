@@ -1,21 +1,23 @@
-package io.moxy.provide_methods_test.resources;
+package moxy.provide_methods_test.resources;
 
-import io.moxy.MvpDelegate;
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.ProvidePresenter;
+import moxy.MvpDelegate;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
+import moxy.provide_methods_test.resources.TestPresenter;
+import moxy.provide_methods_test.resources.TestView;
 
 public class TwoLocalProvidedView implements TestView {
 
     @InjectPresenter
-    public TestPresenter oneLocalPresenter;
+    public moxy.provide_methods_test.resources.TestPresenter oneLocalPresenter;
 
     @InjectPresenter
-    public TestPresenter secondLocalPresenter;
+    public moxy.provide_methods_test.resources.TestPresenter secondLocalPresenter;
 
-    public MvpDelegate<TwoLocalProvidedView> delegate;
+    public MvpDelegate<moxy.provide_methods_test.resources.TwoLocalProvidedView> delegate;
 
     @ProvidePresenter
-    TestPresenter provideLocalPresenter() {
+    moxy.provide_methods_test.resources.TestPresenter provideLocalPresenter() {
         return new TestPresenter();
     }
 }

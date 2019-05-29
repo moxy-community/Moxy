@@ -1,7 +1,7 @@
 package presenter;
 
-import io.moxy.InjectViewState;
-import io.moxy.MvpPresenter;
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
 
 import view.GenericView;
 

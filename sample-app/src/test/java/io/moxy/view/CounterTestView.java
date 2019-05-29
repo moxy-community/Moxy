@@ -1,7 +1,9 @@
-package io.moxy.view;
+package moxy.view;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import moxy.view.TestView;
 
 public class CounterTestView implements TestView {
 

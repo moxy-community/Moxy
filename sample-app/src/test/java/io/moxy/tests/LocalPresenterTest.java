@@ -1,4 +1,4 @@
-package io.moxy.tests;
+package moxy.tests;
 
 import org.junit.After;
 import org.junit.Before;
@@ -12,12 +12,12 @@ import android.os.Bundle;
 
 import java.lang.reflect.Field;
 
-import io.moxy.MvpDelegate;
-import io.moxy.MvpPresenter;
-import io.moxy.presenter.InjectViewStatePresenter;
-import io.moxy.presenter.NoViewStatePresenter;
-import io.moxy.view.DelegateLocalPresenterTestView;
-import io.moxy.view.TestView;
+import moxy.MvpDelegate;
+import moxy.MvpPresenter;
+import moxy.presenter.InjectViewStatePresenter;
+import moxy.presenter.NoViewStatePresenter;
+import moxy.view.DelegateLocalPresenterTestView;
+import moxy.view.TestView;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;

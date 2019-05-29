@@ -9,8 +9,8 @@
 
     <global id="superClassFqcn" type="string" value="
             <#if superClass == 'baseFragment'>${packageName}.ui.fragment.BaseFragment
-            <#elseif superClass == 'appCompat'>io.moxy.MvpAppCompatFragment
-            <#else>io.moxy.MvpFragment</#if>
+            <#elseif superClass == 'appCompat'>moxy.MvpAppCompatFragment
+            <#else>moxy.MvpFragment</#if>
         " />
 
     <global id="useSupport" type="boolean" value="${(minApiLevel lt 11)?string}" />

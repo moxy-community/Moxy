@@ -1,10 +1,10 @@
-package io.moxy.compiler.view;
+package moxy.compiler.view;
 
-import io.moxy.MvpPresenter;
-import io.moxy.MvpView;
-import io.moxy.factory.MockPresenterFactory;
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.PresenterType;
+import moxy.MvpPresenter;
+import moxy.MvpView;
+import moxy.factory.MockPresenterFactory;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.PresenterType;
 import params.EmptyParams;
 
 public class EmptyParamsView implements MvpView, EmptyParams {

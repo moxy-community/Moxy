@@ -5,9 +5,9 @@ import android.util.Log
 import dagger.Lazy
 import dagger.android.AndroidInjection
 import example.com.androidxsample.R
-import io.moxy.MvpAppCompatActivity
-import io.moxy.presenter.InjectPresenter
-import io.moxy.presenter.ProvidePresenter
+import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 class MainActivity : MvpAppCompatActivity(), MainView {

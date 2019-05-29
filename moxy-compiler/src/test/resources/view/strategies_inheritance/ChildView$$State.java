@@ -1,7 +1,7 @@
 package view.strategies_inheritance;
 
-import io.moxy.viewstate.MvpViewState;
-import io.moxy.viewstate.ViewCommand;
+import moxy.viewstate.MvpViewState;
+import moxy.viewstate.ViewCommand;
 import java.lang.Override;
 import view.strategies_inheritance.strategies.ChildDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;

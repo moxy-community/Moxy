@@ -1,6 +1,7 @@
-package io.moxy.view;
+package moxy.view;
 
-import io.moxy.MvpView;
+import moxy.MvpView;
+import moxy.view.TestView;
 
 public abstract class TestViewChild<T extends MvpView> implements TestView {
 

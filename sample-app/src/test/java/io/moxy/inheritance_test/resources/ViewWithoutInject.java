@@ -1,8 +1,8 @@
-package io.moxy.inheritance_test.resources;
+package moxy.inheritance_test.resources;
 
-import io.moxy.MvpDelegate;
+import moxy.MvpDelegate;
 
 public class ViewWithoutInject {
 
-    public MvpDelegate<? extends ViewWithoutInject> delegate;
+    public MvpDelegate<? extends moxy.inheritance_test.resources.ViewWithoutInject> delegate;
 }

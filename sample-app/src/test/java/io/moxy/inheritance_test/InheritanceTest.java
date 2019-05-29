@@ -1,20 +1,18 @@
-package io.moxy.inheritance_test;
+package moxy.inheritance_test;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 //import androidx.test.ext.junit.runners.AndroidJUnit4;
 import android.os.Bundle;
 
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import io.moxy.MvpDelegate;
-import io.moxy.inheritance_test.resources.ChildViewWithoutInject;
-import io.moxy.inheritance_test.resources.SuperViewWithInject;
-import io.moxy.inheritance_test.resources.ViewWithoutInject;
+import moxy.MvpDelegate;
+import moxy.inheritance_test.resources.ChildViewWithoutInject;
+import moxy.inheritance_test.resources.SuperViewWithInject;
+import moxy.inheritance_test.resources.ViewWithoutInject;
 
 @RunWith(AndroidJUnit4.class)
 @Config(manifest = Config.NONE)

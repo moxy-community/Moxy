@@ -1,6 +1,6 @@
 package view;
 
-import io.moxy.GenerateViewState;
+import moxy.GenerateViewState;
 
 @GenerateViewState
 public interface ViewStateChildWithIncorrectStrategyTagView

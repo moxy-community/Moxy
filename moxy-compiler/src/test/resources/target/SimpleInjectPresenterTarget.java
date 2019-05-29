@@ -1,6 +1,6 @@
 package target;
 
-import io.moxy.presenter.InjectPresenter;
+import moxy.presenter.InjectPresenter;
 
 import presenter.EmptyViewPresenter;
 import view.EmptyView;

@@ -1,10 +1,10 @@
 package view;
 
-import io.moxy.factory.MockPresenterFactory2;
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.PresenterType;
-import io.moxy.presenter.TestViewPresenter;
-import io.moxy.view.TestView;
+import moxy.factory.MockPresenterFactory2;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.PresenterType;
+import moxy.presenter.TestViewPresenter;
+import moxy.view.TestView;
 import params.Params1;
 
 public class InjectPresenterWithIncorrectParamsView implements TestView, Params1 {

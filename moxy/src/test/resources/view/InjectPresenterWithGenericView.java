@@ -1,7 +1,7 @@
 package view;
 
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.view.CounterTestView;
+import moxy.presenter.InjectPresenter;
+import moxy.view.CounterTestView;
 import presenter.WithViewGenericPresenter;
 
 public class InjectPresenterWithGenericView extends CounterTestView {

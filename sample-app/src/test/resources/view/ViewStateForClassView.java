@@ -1,7 +1,7 @@
 package view;
 
-import io.moxy.GenerateViewState;
-import io.moxy.MvpView;
+import moxy.GenerateViewState;
+import moxy.MvpView;
 
 @GenerateViewState
 public class ViewStateForClassView implements MvpView {

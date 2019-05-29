@@ -1,7 +1,8 @@
-package io.moxy.view;
+package moxy.view;
 
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.InjectViewStatePresenter;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.InjectViewStatePresenter;
+import moxy.view.CounterTestView;
 
 public class DelegateLocalPresenterTestView extends CounterTestView {
     @InjectPresenter

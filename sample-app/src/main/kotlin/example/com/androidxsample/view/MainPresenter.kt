@@ -1,8 +1,8 @@
 package example.com.androidxsample.view
 
 import android.util.Log
-import io.moxy.InjectViewState
-import io.moxy.MvpPresenter
+import moxy.InjectViewState
+import moxy.MvpPresenter
 import javax.inject.Inject
 
 @InjectViewState

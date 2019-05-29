@@ -1,8 +1,8 @@
 package view;
 
-import io.moxy.MvpView;
-import io.moxy.presenter.InjectPresenter;
-import io.moxy.presenter.TestViewPresenter;
+import moxy.MvpView;
+import moxy.presenter.InjectPresenter;
+import moxy.presenter.TestViewPresenter;
 
 public class InjectPresenterWithIncorrectViewView implements MvpView {
 

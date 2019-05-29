@@ -1,7 +1,7 @@
 package view;
 
-import io.moxy.InjectViewState;
-import io.moxy.MvpPresenter;
+import moxy.InjectViewState;
+import moxy.MvpPresenter;
 
 @InjectViewState
 public class InjectViewStateForGenericViewPresenter extends MvpPresenter<ViewStateForGenericView<Object>> {

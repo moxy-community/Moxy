@@ -1,12 +1,14 @@
-package io.moxy.memory_leak_test.resources;
+package moxy.memory_leak_test.resources;
 
-import io.moxy.MvpDelegate;
-import io.moxy.presenter.InjectPresenter;
+import moxy.MvpDelegate;
+import moxy.memmory_leak_test.resources.TestPresenter;
+import moxy.memmory_leak_test.resources.TestView;
+import moxy.presenter.InjectPresenter;
 
 public class TestViewImplementation implements TestView {
 
     @InjectPresenter
     public TestPresenter presenter;
 
-    public MvpDelegate<TestViewImplementation> delegate;
+    public MvpDelegate<moxy.memmory_leak_test.resources.TestViewImplementation> delegate;
 }

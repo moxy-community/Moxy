@@ -1,10 +1,10 @@
 package view;
 
-import io.moxy.viewstate.MvpViewState;
-import io.moxy.viewstate.ViewCommand;
-import io.moxy.viewstate.strategy.AddToEndSingleStrategy;
-import io.moxy.viewstate.strategy.OneExecutionStateStrategy;
-import io.moxy.viewstate.strategy.SingleStateStrategy;
+import moxy.viewstate.MvpViewState;
+import moxy.viewstate.ViewCommand;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.OneExecutionStateStrategy;
+import moxy.viewstate.strategy.SingleStateStrategy;
 import java.lang.Override;
 
 public class StrategiesView$$State extends MvpViewState<StrategiesView> implements StrategiesView {
