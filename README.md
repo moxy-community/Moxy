@@ -77,40 +77,42 @@ In order to avoid boilerplate code creating for binding activity, fragments and 
 [Telegram channel (ru)](https://telegram.me/moxy_ru)<br />
 
 ## Integration
-### Base modules integration: 
+(Please replace moxyVersion with the latest version number:[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy))
+
+### Base modules integration:
 ```groovy
-implementation 'com.github.moxy-community:moxy:1.0'
+implementation 'com.github.moxy-community:moxy:moxyVersion'
 ```
 #### Java project
 ```groovy
-annotationProcessor 'com.github.moxy-community:moxy-compiler:1.0'
+annotationProcessor 'com.github.moxy-community:moxy-compiler:moxyVersion'
 ```
 #### Kotlin
 ```groovy
 apply plugin: 'kotlin-kapt'
 ```
 ```groovy
-kapt 'com.github.moxy-community:moxy-compiler:1.0'
+kapt 'com.github.moxy-community:moxy-compiler:moxyVersion'
 ```
 ### Default android module integration
 For additional base view classes `MvpActivity` and `MvpFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-android:1.0'
+implementation 'com.github.moxy-community:moxy-android:moxyVersion'
 ```
 ### AppCompat module integration
 If you use AppCompat, use `MvpAppCompatActivity` and `MvpAppCompatFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-app-compat:1.0'
+implementation 'com.github.moxy-community:moxy-app-compat:moxyVersion'
 ```
 ### AndroidX module integration
 If you use AndroidX, use `MvpAppCompatActivity` and `MvpAppCompatFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-androidx:1.0'
+implementation 'com.github.moxy-community:moxy-androidx:moxyVersion'
 ```
 ### AndroidX(Google material) module integration
 If you use google material, use `MvpBottomSheetDialogFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-material:1.0'
+implementation 'com.github.moxy-community:moxy-material:moxyVersion'
 ```
 
 ## ProGuard
