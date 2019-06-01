@@ -27,6 +27,32 @@ install {
             packaging 'jar'
             groupId rootProject.ext.groupId
             artifactId artifact
+            version rootProject.ext.targetVersion
+            name 'Moxy Android X'
+            modelVersion = '4.0.0'
+            description = 'Moxy Android X library for Android'
+            url = 'https://github.com/moxy-community/'
+            inceptionYear '2019'
+            licenses {
+                license {
+                    name 'MIT'
+                    url 'https://opensource.org/licenses/MIT'
+                    distribution 'repo'
+                }
+            }
+            developers {
+                developer {
+                    name 'Moxy Community'
+                    email 'moxy-community@yandex.ru'
+                    organization = 'Moxy Community'
+                    organizationUrl 'https://github.com/moxy-community/'
+                }
+            }
+            scm {
+                connection 'scm:git@github.com:moxy-community/Moxy.git'
+                developerConnection 'scm:git@github.com:moxy-community/Moxy.git'
+                url 'https://github.com/moxy-community/Moxy.git'
+            }
         }
     }
 }
@@ -50,10 +76,16 @@ bintray {
         licenses = ['MIT']
         vcsUrl = 'https://github.com/moxy-community/Moxy'
         publish = true
-        version{
+        version {
             gpg {
                 sign = true
                 passphrase = properties.getProperty("gpgPassphrase")
+            }
+            mavenCentralSync {
+                sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+                user = properties.getProperty("mavenUser") //OSS user token: mandatory
+                password = properties.getProperty("mavenToken") //OSS user password: mandatory
+                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
             }
         }
     }
