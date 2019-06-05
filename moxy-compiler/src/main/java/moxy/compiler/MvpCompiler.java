@@ -29,7 +29,6 @@ import javax.tools.Diagnostic;
 
 import moxy.InjectViewState;
 import moxy.RegisterMoxyReflectorPackages;
-import moxy.presenter.InjectPresenter;
 import moxy.compiler.presenterbinder.InjectPresenterProcessor;
 import moxy.compiler.presenterbinder.PresenterBinderClassGenerator;
 import moxy.compiler.reflector.MoxyReflectorGenerator;
@@ -37,6 +36,7 @@ import moxy.compiler.viewstate.ViewInterfaceProcessor;
 import moxy.compiler.viewstate.ViewStateClassGenerator;
 import moxy.compiler.viewstateprovider.InjectViewStateProcessor;
 import moxy.compiler.viewstateprovider.ViewStateProviderClassGenerator;
+import moxy.presenter.InjectPresenter;
 
 import static javax.lang.model.SourceVersion.latestSupported;
 
@@ -47,6 +47,12 @@ public class MvpCompiler extends AbstractProcessor {
     public static final String MOXY_REFLECTOR_DEFAULT_PACKAGE = "moxy";
 
     private static final String OPTION_MOXY_REFLECTOR_PACKAGE = "moxyReflectorPackage";
+
+    private static final String OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY
+            = "moxyMigrationToOneExecutionStrategy";
+
+    private static final String OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY
+            = "useOldDefaultStrategy";
 
     private static Messager sMessager;
 
@@ -80,7 +86,11 @@ public class MvpCompiler extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedOptions() {
-        return Collections.singleton(OPTION_MOXY_REFLECTOR_PACKAGE);
+        Set<String> options = new HashSet<>();
+        options.add(OPTION_MOXY_REFLECTOR_PACKAGE);
+        options.add(OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
+        options.add(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
+        return options;
     }
 
     @Override
@@ -111,7 +121,8 @@ public class MvpCompiler extends AbstractProcessor {
                     "Moxy compilation failed. Could you copy stack trace above and write us (or make issue on Github)?");
             e.printStackTrace();
             getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "Moxy compilation failed; see the compiler error output for details (" + e + ")");
+                    "Moxy compilation failed; see the compiler error output for details (" + e
+                            + ")");
         }
 
         return true;
@@ -122,12 +133,19 @@ public class MvpCompiler extends AbstractProcessor {
                 new PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT));
 
         InjectViewStateProcessor injectViewStateProcessor = new InjectViewStateProcessor();
-        ViewStateProviderClassGenerator viewStateProviderClassGenerator = new ViewStateProviderClassGenerator();
+        ViewStateProviderClassGenerator viewStateProviderClassGenerator
+                = new ViewStateProviderClassGenerator();
 
         InjectPresenterProcessor injectPresenterProcessor = new InjectPresenterProcessor();
-        PresenterBinderClassGenerator presenterBinderClassGenerator = new PresenterBinderClassGenerator();
+        PresenterBinderClassGenerator presenterBinderClassGenerator
+                = new PresenterBinderClassGenerator();
 
-        ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor();
+        boolean migrationToOneExecutionStrategyEnabled = isMigrationToOneExecutionStrategyEnabled();
+        boolean useOldDefaultStrategy = isUseOldDefaultStrategyEnabled();
+
+        ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor(
+                migrationToOneExecutionStrategyEnabled,
+                useOldDefaultStrategy);
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
         processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
@@ -161,10 +179,20 @@ public class MvpCompiler extends AbstractProcessor {
         return true;
     }
 
+    private boolean isMigrationToOneExecutionStrategyEnabled() {
+        String option = sOptions.get(OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
+        return Boolean.parseBoolean(option);
+    }
+
+    private boolean isUseOldDefaultStrategyEnabled() {
+        String option = sOptions.get(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
+        return Boolean.parseBoolean(option);
+    }
     private List<String> getAdditionalMoxyReflectorPackages(RoundEnvironment roundEnv) {
         List<String> result = new ArrayList<>();
 
-        for (Element element : roundEnv.getElementsAnnotatedWith(RegisterMoxyReflectorPackages.class)) {
+        for (Element element : roundEnv
+                .getElementsAnnotatedWith(RegisterMoxyReflectorPackages.class)) {
             if (element.getKind() != ElementKind.CLASS) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
                         element + " must be " + ElementKind.CLASS.name() + ", or not mark it as @"
@@ -200,7 +228,8 @@ public class MvpCompiler extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(clazz)) {
             if (element.getKind() != kind) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        element + " must be " + kind.name() + ", or not mark it as @" + clazz.getSimpleName());
+                        element + " must be " + kind.name() + ", or not mark it as @" + clazz
+                                .getSimpleName());
             }
 
             generateCode(element, kind, processor, classGenerator);
@@ -212,7 +241,7 @@ public class MvpCompiler extends AbstractProcessor {
             ElementProcessor<E, R> processor,
             JavaFilesGenerator<R> classGenerator) {
         if (element.getKind() != kind) {
-            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name());
+            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name(), element);
         }
 
         //noinspection unchecked
