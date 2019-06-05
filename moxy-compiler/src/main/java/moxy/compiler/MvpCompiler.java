@@ -196,7 +196,7 @@ public class MvpCompiler extends AbstractProcessor {
             if (element.getKind() != ElementKind.CLASS) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
                         element + " must be " + ElementKind.CLASS.name() + ", or not mark it as @"
-                                + RegisterMoxyReflectorPackages.class.getSimpleName());
+                                + RegisterMoxyReflectorPackages.class.getSimpleName(), element);
             }
 
             String[] packages = element.getAnnotation(RegisterMoxyReflectorPackages.class).value();
@@ -229,7 +229,7 @@ public class MvpCompiler extends AbstractProcessor {
             if (element.getKind() != kind) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
                         element + " must be " + kind.name() + ", or not mark it as @" + clazz
-                                .getSimpleName());
+                                .getSimpleName(), element);
             }
 
             generateCode(element, kind, processor, classGenerator);

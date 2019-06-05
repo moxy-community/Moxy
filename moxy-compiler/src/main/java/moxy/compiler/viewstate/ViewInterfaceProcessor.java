@@ -123,7 +123,7 @@ public class ViewInterfaceProcessor
                         methodElement.getSimpleName(),
                         methodElement.getReturnType()
                 );
-                MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+                MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message, methodElement);
             }
 
             AnnotationMirror annotation = Util
