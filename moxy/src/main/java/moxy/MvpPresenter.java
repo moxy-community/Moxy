@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
 
+import moxy.locators.ViewStateLocator;
 import moxy.viewstate.MvpViewState;
 
 public abstract class MvpPresenter<View extends MvpView> {
@@ -149,7 +150,7 @@ public abstract class MvpPresenter<View extends MvpView> {
     private static class Binder {
 
         static void bind(MvpPresenter presenter) {
-            MvpView viewState = (MvpView) MoxyReflector.getViewState(presenter.getClass());
+            MvpView viewState = ViewStateLocator.getViewState(presenter.getClass());
 
             presenter.viewStateAsView = viewState;
             presenter.viewState = (MvpViewState) viewState;

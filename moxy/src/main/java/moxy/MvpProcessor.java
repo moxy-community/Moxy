@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import moxy.locators.PresenterBinderLocator;
 import moxy.presenter.InjectPresenter;
 import moxy.presenter.PresenterField;
 
@@ -73,7 +74,7 @@ public class MvpProcessor {
         List<Object> presenterBinders = null;
 
         while (aClass != Object.class && presenterBinders == null) {
-            presenterBinders = MoxyReflector.getPresenterBinders(aClass);
+            presenterBinders = PresenterBinderLocator.getPresenterBinders(aClass);
 
             aClass = aClass.getSuperclass();
         }

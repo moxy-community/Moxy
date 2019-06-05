@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import moxy.MoxyReflector;
 import moxy.MvpView;
+import moxy.locators.StrategyLocator;
 import moxy.viewstate.strategy.StateStrategy;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
@@ -30,7 +30,7 @@ public class ViewCommands<View extends MvpView> {
     }
 
     private StateStrategy getStateStrategy(ViewCommand<View> viewCommand) {
-        StateStrategy stateStrategy = (StateStrategy) MoxyReflector.getStrategy(viewCommand.getStrategyType());
+        StateStrategy stateStrategy = StrategyLocator.getStrategy(viewCommand.getStrategyType());
         if (stateStrategy == null) {
             //noinspection TryWithIdenticalCatches
             try {
