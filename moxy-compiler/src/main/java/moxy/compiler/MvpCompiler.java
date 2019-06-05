@@ -6,10 +6,8 @@ import com.squareup.javapoet.JavaFile;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,11 +26,9 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
 import moxy.InjectViewState;
-import moxy.RegisterMoxyReflectorPackages;
 import moxy.presenter.InjectPresenter;
 import moxy.compiler.presenterbinder.InjectPresenterProcessor;
 import moxy.compiler.presenterbinder.PresenterBinderClassGenerator;
-import moxy.compiler.reflector.MoxyReflectorGenerator;
 import moxy.compiler.viewstate.ViewInterfaceProcessor;
 import moxy.compiler.viewstate.ViewStateClassGenerator;
 import moxy.compiler.viewstateprovider.InjectViewStateProcessor;
@@ -45,8 +41,6 @@ import static javax.lang.model.SourceVersion.latestSupported;
 public class MvpCompiler extends AbstractProcessor {
 
     public static final String MOXY_REFLECTOR_DEFAULT_PACKAGE = "moxy";
-
-    private static final String OPTION_MOXY_REFLECTOR_PACKAGE = "moxyReflectorPackage";
 
     private static Messager sMessager;
 
@@ -80,7 +74,7 @@ public class MvpCompiler extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedOptions() {
-        return Collections.singleton(OPTION_MOXY_REFLECTOR_PACKAGE);
+        return Collections.emptySet();
     }
 
     @Override
@@ -88,8 +82,7 @@ public class MvpCompiler extends AbstractProcessor {
         Set<String> supportedAnnotationTypes = new HashSet<>();
         Collections.addAll(supportedAnnotationTypes,
                 InjectPresenter.class.getCanonicalName(),
-                InjectViewState.class.getCanonicalName(),
-                RegisterMoxyReflectorPackages.class.getCanonicalName());
+                InjectViewState.class.getCanonicalName());
         return supportedAnnotationTypes;
     }
 
@@ -140,45 +133,8 @@ public class MvpCompiler extends AbstractProcessor {
                     viewInterfaceProcessor, viewStateClassGenerator);
         }
 
-        String moxyReflectorPackage = sOptions.get(OPTION_MOXY_REFLECTOR_PACKAGE);
-
-        if (moxyReflectorPackage == null) {
-            moxyReflectorPackage = MOXY_REFLECTOR_DEFAULT_PACKAGE;
-        }
-
-        List<String> additionalMoxyReflectorPackages = getAdditionalMoxyReflectorPackages(roundEnv);
-
-        JavaFile moxyReflector = MoxyReflectorGenerator.generate(
-                moxyReflectorPackage,
-                injectViewStateProcessor.getPresenterClassNames(),
-                injectPresenterProcessor.getPresentersContainers(),
-                viewInterfaceProcessor.getUsedStrategies(),
-                additionalMoxyReflectorPackages
-        );
-
-        createSourceFile(moxyReflector);
-
         return true;
     }
-
-    private List<String> getAdditionalMoxyReflectorPackages(RoundEnvironment roundEnv) {
-        List<String> result = new ArrayList<>();
-
-        for (Element element : roundEnv.getElementsAnnotatedWith(RegisterMoxyReflectorPackages.class)) {
-            if (element.getKind() != ElementKind.CLASS) {
-                getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        element + " must be " + ElementKind.CLASS.name() + ", or not mark it as @"
-                                + RegisterMoxyReflectorPackages.class.getSimpleName());
-            }
-
-            String[] packages = element.getAnnotation(RegisterMoxyReflectorPackages.class).value();
-
-            Collections.addAll(result, packages);
-        }
-
-        return result;
-    }
-
 
     private void checkInjectors(final RoundEnvironment roundEnv, Class<? extends Annotation> clazz,
             AnnotationRule annotationRule) {

@@ -28,10 +28,6 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
     private final List<TypeElement> presentersContainers = new ArrayList<>();
 
-    public List<TypeElement> getPresentersContainers() {
-        return new ArrayList<>(presentersContainers);
-    }
-
     @Override
     public TargetClassInfo process(VariableElement variableElement) {
         final Element enclosingElement = variableElement.getEnclosingElement();

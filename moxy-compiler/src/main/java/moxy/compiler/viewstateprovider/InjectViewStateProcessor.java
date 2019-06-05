@@ -1,6 +1,5 @@
 package moxy.compiler.viewstateprovider;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,19 +32,12 @@ public class InjectViewStateProcessor
 
     private final Set<TypeElement> usedViews = new HashSet<>();
 
-    private final List<TypeElement> presenterClassNames = new ArrayList<>();
-
     public Set<TypeElement> getUsedViews() {
         return usedViews;
     }
 
-    public List<TypeElement> getPresenterClassNames() {
-        return presenterClassNames;
-    }
-
     @Override
     public moxy.compiler.viewstateprovider.PresenterInfo process(TypeElement element) {
-        presenterClassNames.add(element);
         return new moxy.compiler.viewstateprovider.PresenterInfo(element, getViewStateClassName(element));
     }
 

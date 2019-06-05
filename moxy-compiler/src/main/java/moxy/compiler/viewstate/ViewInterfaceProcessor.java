@@ -39,12 +39,6 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
 
     private String viewInterfaceName;
 
-    private Set<TypeElement> usedStrategies = new HashSet<>();
-
-    public List<TypeElement> getUsedStrategies() {
-        return new ArrayList<>(usedStrategies);
-    }
-
     @Override
     public moxy.compiler.viewstate.ViewInterfaceInfo process(TypeElement element) {
         this.viewInterfaceElement = element;
@@ -123,9 +117,6 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
             } else {
                 methodTag = methodElement.getSimpleName().toString();
             }
-
-            // add strategy to list
-            usedStrategies.add(strategyClass);
 
             final moxy.compiler.viewstate.ViewMethod method = new moxy.compiler.viewstate.ViewMethod(
                     (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass, methodTag

@@ -29,6 +29,7 @@ import moxy.ViewStateProvider;
 
 import static moxy.compiler.MvpCompiler.MOXY_REFLECTOR_DEFAULT_PACKAGE;
 
+//TODO: remove, it is not used anymore
 public class MoxyReflectorGenerator {
 
     private static final Comparator<TypeElement> TYPE_ELEMENT_COMPARATOR = Comparator.comparing(Object::toString);
