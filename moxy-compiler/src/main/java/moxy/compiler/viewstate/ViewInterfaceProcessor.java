@@ -1,5 +1,6 @@
 package moxy.compiler.viewstate;
 
+import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.ParameterSpec;
 
 import java.util.ArrayList;
@@ -44,20 +45,26 @@ public class ViewInterfaceProcessor
 
     private final boolean migrationToOneExecutionStrategyEnabled;
 
+    private final boolean migrationHelperEnabled;
+
     private TypeElement viewInterfaceElement;
 
     private String viewInterfaceName;
 
     private Set<TypeElement> usedStrategies = new HashSet<>();
 
+    private List<MigrationMethod> migrationMethods = new ArrayList<>();
+
     public ViewInterfaceProcessor(
             final boolean migrationToOneExecutionStrategyEnabled,
-            final boolean useOldDefaultStrategyEnabled
+            final boolean useOldDefaultStrategyEnabled,
+            final boolean migrationHelperEnabled
     ) {
         super();
-        if (useOldDefaultStrategyEnabled){
+        this.migrationHelperEnabled = migrationHelperEnabled;
+        if (useOldDefaultStrategyEnabled) {
             frameworkDefaultStrategy = OLD_DEFAULT_STATE_STRATEGY;
-        }else {
+        } else {
             frameworkDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
         }
         this.migrationToOneExecutionStrategyEnabled = migrationToOneExecutionStrategyEnabled;
@@ -101,6 +108,13 @@ public class ViewInterfaceProcessor
         return new moxy.compiler.viewstate.ViewInterfaceInfo(element, methods);
     }
 
+    public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
+        if (migrationHelperEnabled && !migrationMethods.isEmpty()) {
+            return MigrationHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
+        }
+        return null;
+    }
+
 
     private void getMethods(TypeElement typeElement,
             TypeElement defaultStrategy,
@@ -123,7 +137,8 @@ public class ViewInterfaceProcessor
                         methodElement.getSimpleName(),
                         methodElement.getReturnType()
                 );
-                MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message, methodElement);
+                MvpCompiler.getMessager()
+                        .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
             }
 
             AnnotationMirror annotation = Util
@@ -149,8 +164,15 @@ public class ViewInterfaceProcessor
 
                     MvpCompiler.getMessager()
                             .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
+
                 }
-                strategyClass = defaultStrategy != null ? defaultStrategy : frameworkDefaultStrategy;
+
+                if (migrationHelperEnabled) {
+                    migrationMethods.add(new MigrationMethod(typeElement, methodElement));
+                }
+
+                strategyClass = defaultStrategy != null ? defaultStrategy
+                        : frameworkDefaultStrategy;
 
 
             }

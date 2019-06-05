@@ -49,10 +49,13 @@ public class MvpCompiler extends AbstractProcessor {
     private static final String OPTION_MOXY_REFLECTOR_PACKAGE = "moxyReflectorPackage";
 
     private static final String OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY
-            = "moxyMigrationToOneExecutionStrategy";
+            = "useMigrationToOneExecutionStrategy";
 
     private static final String OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY
             = "useOldDefaultStrategy";
+
+    private static final String OPTION_MOXY_USE_MIGRATION_HELPER
+            = "useMigrationToOneExecutionStrategyHelper";
 
     private static Messager sMessager;
 
@@ -90,6 +93,7 @@ public class MvpCompiler extends AbstractProcessor {
         options.add(OPTION_MOXY_REFLECTOR_PACKAGE);
         options.add(OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
         options.add(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
+        options.add(OPTION_MOXY_USE_MIGRATION_HELPER);
         return options;
     }
 
@@ -129,7 +133,7 @@ public class MvpCompiler extends AbstractProcessor {
     }
 
     private boolean throwableProcess(RoundEnvironment roundEnv) {
-        checkInjectors(roundEnv, InjectPresenter.class,
+        checkInjectors(roundEnv,
                 new PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT));
 
         InjectViewStateProcessor injectViewStateProcessor = new InjectViewStateProcessor();
@@ -140,12 +144,15 @@ public class MvpCompiler extends AbstractProcessor {
         PresenterBinderClassGenerator presenterBinderClassGenerator
                 = new PresenterBinderClassGenerator();
 
-        boolean migrationToOneExecutionStrategyEnabled = isMigrationToOneExecutionStrategyEnabled();
-        boolean useOldDefaultStrategy = isUseOldDefaultStrategyEnabled();
+        boolean migrationToOneExecutionStrategyEnabled = isOptionEnabled(
+                OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
+        boolean useOldDefaultStrategy = isOptionEnabled(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
+        boolean migrationHelperEnabled = isOptionEnabled(OPTION_MOXY_USE_MIGRATION_HELPER);
 
         ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor(
                 migrationToOneExecutionStrategyEnabled,
-                useOldDefaultStrategy);
+                useOldDefaultStrategy,
+                migrationHelperEnabled);
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
         processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
@@ -176,18 +183,24 @@ public class MvpCompiler extends AbstractProcessor {
 
         createSourceFile(moxyReflector);
 
+        JavaFile migrationHelper = viewInterfaceProcessor.makeMigrationHelper(moxyReflectorPackage);
+
+        if (migrationHelper != null) {
+            createSourceFile(migrationHelper);
+        }
+
         return true;
     }
 
-    private boolean isMigrationToOneExecutionStrategyEnabled() {
-        String option = sOptions.get(OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
-        return Boolean.parseBoolean(option);
+    private boolean isOptionEnabled(final String option) {
+        return Boolean.parseBoolean(sOptions.get(option));
     }
 
     private boolean isUseOldDefaultStrategyEnabled() {
         String option = sOptions.get(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
         return Boolean.parseBoolean(option);
     }
+
     private List<String> getAdditionalMoxyReflectorPackages(RoundEnvironment roundEnv) {
         List<String> result = new ArrayList<>();
 
@@ -208,9 +221,9 @@ public class MvpCompiler extends AbstractProcessor {
     }
 
 
-    private void checkInjectors(final RoundEnvironment roundEnv, Class<? extends Annotation> clazz,
+    private void checkInjectors(final RoundEnvironment roundEnv,
             AnnotationRule annotationRule) {
-        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(clazz)) {
+        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(InjectPresenter.class)) {
             annotationRule.checkAnnotation(annotatedElement);
         }
 
@@ -241,7 +254,8 @@ public class MvpCompiler extends AbstractProcessor {
             ElementProcessor<E, R> processor,
             JavaFilesGenerator<R> classGenerator) {
         if (element.getKind() != kind) {
-            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name(), element);
+            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name(),
+                    element);
         }
 
         //noinspection unchecked
