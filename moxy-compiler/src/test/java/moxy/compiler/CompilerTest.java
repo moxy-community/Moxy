@@ -19,8 +19,6 @@ import java.util.Optional;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 
-import moxy.compiler.MvpCompiler;
-
 import static com.google.testing.compile.Compiler.javac;
 
 public abstract class CompilerTest {
@@ -38,9 +36,9 @@ public abstract class CompilerTest {
                 .compile(sources);
     }
 
-    protected Compilation compileLibSourcesWithProcessor(String moxyReflectorPackage, JavaFileObject... sources) {
+    protected Compilation compileLibSourcesWithProcessor(JavaFileObject... sources) {
         return javac()
-                .withOptions("-implicit:none", "-AmoxyReflectorPackage=" + moxyReflectorPackage)
+                .withOptions("-implicit:none")
                 .withProcessors(new MvpCompiler())
                 .compile(sources);
     }
