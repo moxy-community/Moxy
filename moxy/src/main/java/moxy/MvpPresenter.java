@@ -150,10 +150,10 @@ public abstract class MvpPresenter<View extends MvpView> {
     private static class Binder {
 
         static void bind(MvpPresenter presenter) {
-            MvpView viewState = ViewStateLocator.getViewState(presenter.getClass());
+            MvpViewState viewState = ViewStateLocator.getViewState(presenter.getClass());
 
-            presenter.viewStateAsView = viewState;
-            presenter.viewState = (MvpViewState) viewState;
+            presenter.viewStateAsView = (MvpView) viewState;
+            presenter.viewState = viewState;
         }
     }
 }
