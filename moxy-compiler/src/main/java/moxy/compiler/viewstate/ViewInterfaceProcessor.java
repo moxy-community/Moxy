@@ -26,8 +26,7 @@ import javax.tools.Diagnostic;
 import moxy.compiler.ElementProcessor;
 import moxy.compiler.MvpCompiler;
 import moxy.compiler.Util;
-import moxy.viewstate.strategy.AddToEndStrategy;
-import moxy.viewstate.strategy.OneExecutionStateStrategy;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 import moxy.viewstate.strategy.StateStrategyType;
 
 public class ViewInterfaceProcessor
@@ -35,17 +34,14 @@ public class ViewInterfaceProcessor
 
     private static final String STATE_STRATEGY_TYPE_ANNOTATION = StateStrategyType.class.getName();
 
-    private static final TypeElement OLD_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
-            .getTypeElement(AddToEndStrategy.class.getCanonicalName());
-
     private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
-            .getTypeElement(OneExecutionStateStrategy.class.getCanonicalName());
+            .getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
 
     private final TypeElement frameworkDefaultStrategy;
 
-    private final boolean migrationToOneExecutionStrategyEnabled;
+    private final boolean failOnMethodsWithoutStrategy;
 
-    private final boolean migrationHelperEnabled;
+    private final boolean failOnMethodsWithoutStrategyHelper;
 
     private TypeElement viewInterfaceElement;
 
@@ -56,18 +52,29 @@ public class ViewInterfaceProcessor
     private List<MigrationMethod> migrationMethods = new ArrayList<>();
 
     public ViewInterfaceProcessor(
-            final boolean migrationToOneExecutionStrategyEnabled,
-            final boolean useOldDefaultStrategyEnabled,
-            final boolean migrationHelperEnabled
+            final boolean failOnMethodsWithoutStrategy,
+            final boolean failOnMethodsWithoutStrategyHelper,
+            final String defaultStrategy
     ) {
         super();
-        this.migrationHelperEnabled = migrationHelperEnabled;
-        if (useOldDefaultStrategyEnabled) {
-            frameworkDefaultStrategy = OLD_DEFAULT_STATE_STRATEGY;
+        this.failOnMethodsWithoutStrategyHelper = failOnMethodsWithoutStrategyHelper;
+        if (defaultStrategy != null) {
+
+            TypeElement localDefaultStrategy = MvpCompiler.getElementUtils().getTypeElement(defaultStrategy);
+
+            if (localDefaultStrategy == null) {
+                String message = String
+                        .format("Unable to parse option %s. Check %s exists", defaultStrategy, defaultStrategy);
+
+                MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+                localDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
+            }
+
+            frameworkDefaultStrategy = localDefaultStrategy;
         } else {
             frameworkDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
         }
-        this.migrationToOneExecutionStrategyEnabled = migrationToOneExecutionStrategyEnabled;
+        this.failOnMethodsWithoutStrategy = failOnMethodsWithoutStrategy;
     }
 
     public List<TypeElement> getUsedStrategies() {
@@ -109,7 +116,7 @@ public class ViewInterfaceProcessor
     }
 
     public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
-        if (migrationHelperEnabled && !migrationMethods.isEmpty()) {
+        if (failOnMethodsWithoutStrategyHelper && !migrationMethods.isEmpty()) {
             return MigrationHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
         }
         return null;
@@ -153,7 +160,7 @@ public class ViewInterfaceProcessor
                 strategyClass = (TypeElement) ((DeclaredType) strategyClassFromAnnotation)
                         .asElement();
             } else {
-                if (defaultStrategy == null && migrationToOneExecutionStrategyEnabled) {
+                if (defaultStrategy == null && failOnMethodsWithoutStrategy) {
 
                     String message = String
                             .format("No default strategy for method! You are trying migrate to default OneExecutionStrategy, "
@@ -167,7 +174,7 @@ public class ViewInterfaceProcessor
 
                 }
 
-                if (migrationHelperEnabled) {
+                if (failOnMethodsWithoutStrategyHelper) {
                     migrationMethods.add(new MigrationMethod(typeElement, methodElement));
                 }
 

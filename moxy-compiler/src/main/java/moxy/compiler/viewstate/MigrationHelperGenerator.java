@@ -13,7 +13,7 @@ public class MigrationHelperGenerator {
 
 
     /**
-     * @param destinationPackage package to generate MigrationToOneExecutionStrategyHelper
+     * @param destinationPackage package to generate EmptyStrategyHelper
      * @param migrationMethods   non empty list of methods
      */
     public static JavaFile generate(String destinationPackage,
@@ -22,7 +22,7 @@ public class MigrationHelperGenerator {
         Name firstViewSimpleName = migrationMethods.get(0).clazz.getSimpleName();
 
         TypeSpec.Builder classBuilder = TypeSpec
-                .classBuilder("MigrationToOneExecutionStrategyHelper")
+                .classBuilder("EmptyStrategyHelper")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
         String javaDoc =

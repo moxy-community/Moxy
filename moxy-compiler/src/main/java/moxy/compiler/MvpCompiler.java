@@ -48,14 +48,14 @@ public class MvpCompiler extends AbstractProcessor {
 
     private static final String OPTION_MOXY_REFLECTOR_PACKAGE = "moxyReflectorPackage";
 
-    private static final String OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY
-            = "useMigrationToOneExecutionStrategy";
+    private static final String OPTION_FAIL_ON_METHODS_WITHOUT_STRATEGY
+            = "failOnMethodsWithoutStrategy";
 
-    private static final String OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY
-            = "useOldDefaultStrategy";
+    private static final String DEFAULT_MOXY_STRATEGY
+            = "defaultMoxyStrategy";
 
-    private static final String OPTION_MOXY_USE_MIGRATION_HELPER
-            = "useMigrationToOneExecutionStrategyHelper";
+    private static final String FAIL_ON_METHODS_WITHOUT_STRATEGY_BY_MIGRATION_HELPER
+            = "failOnMethodsWithoutStrategyHelper";
 
     private static Messager sMessager;
 
@@ -91,9 +91,9 @@ public class MvpCompiler extends AbstractProcessor {
     public Set<String> getSupportedOptions() {
         Set<String> options = new HashSet<>();
         options.add(OPTION_MOXY_REFLECTOR_PACKAGE);
-        options.add(OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
-        options.add(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
-        options.add(OPTION_MOXY_USE_MIGRATION_HELPER);
+        options.add(OPTION_FAIL_ON_METHODS_WITHOUT_STRATEGY);
+        options.add(DEFAULT_MOXY_STRATEGY);
+        options.add(FAIL_ON_METHODS_WITHOUT_STRATEGY_BY_MIGRATION_HELPER);
         return options;
     }
 
@@ -144,15 +144,16 @@ public class MvpCompiler extends AbstractProcessor {
         PresenterBinderClassGenerator presenterBinderClassGenerator
                 = new PresenterBinderClassGenerator();
 
-        boolean migrationToOneExecutionStrategyEnabled = isOptionEnabled(
-                OPTION_MOXY_MIRATION_TO_ONE_EXECUTION_STRATEGY);
-        boolean useOldDefaultStrategy = isOptionEnabled(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
-        boolean migrationHelperEnabled = isOptionEnabled(OPTION_MOXY_USE_MIGRATION_HELPER);
+        boolean failOnMethodsWithoutStrategy = isOptionEnabled(
+                OPTION_FAIL_ON_METHODS_WITHOUT_STRATEGY);
+        String defaultStrategy = getDefaultStrategy();
+        boolean failOnMethodsWithoutStrategyHelper = isOptionEnabled(
+                FAIL_ON_METHODS_WITHOUT_STRATEGY_BY_MIGRATION_HELPER);
 
         ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor(
-                migrationToOneExecutionStrategyEnabled,
-                useOldDefaultStrategy,
-                migrationHelperEnabled);
+                failOnMethodsWithoutStrategy,
+                failOnMethodsWithoutStrategyHelper,
+                getDefaultStrategy());
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
         processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
@@ -192,12 +193,16 @@ public class MvpCompiler extends AbstractProcessor {
         return true;
     }
 
+    private String getDefaultStrategy() {
+        return sOptions.get(DEFAULT_MOXY_STRATEGY);
+    }
+
     private boolean isOptionEnabled(final String option) {
         return Boolean.parseBoolean(sOptions.get(option));
     }
 
     private boolean isUseOldDefaultStrategyEnabled() {
-        String option = sOptions.get(OPTION_MOXY_USE_OLD_DEFAULT_STRATEGY);
+        String option = sOptions.get(DEFAULT_MOXY_STRATEGY);
         return Boolean.parseBoolean(option);
     }
 

@@ -29,9 +29,9 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
-                        useMigrationToOneExecutionStrategy      : 'false',
-                        useOldDefaultStrategy                   : 'false',
-                        useMigrationToOneExecutionStrategyHelper: 'false'
+                        failOnMethodsWithoutStrategy      : 'false',
+                        failOnMethodsWithoutStrategyHelper: 'false',
+                        defaultMoxyStrategy               : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
                 ]
             }
         }
