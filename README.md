@@ -116,7 +116,7 @@ implementation 'com.github.moxy-community:moxy-material:moxyVersion'
 ```
 ## New Features and Compiler option for Migration from old version
 
-By default, each `MvpView` method must has an annotation `@StateStrategy`.
+By default, each `MvpView` method must has an annotation `@StateStrategyType`.
 In the old version of Moxy, it was allowed to miss strategy for methods. In this case, the default strategy was applied.
 
 You can fallback to the old behavior. To do this, set the disableEmptyStrategyCheck parameter to true.
@@ -132,7 +132,7 @@ To change default strategy, provide for `defaultMoxyStrategy` parameter the full
 defaultMoxyStrategy : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
 ```
 
-If compiler finds `MvpView` method without annotation @StateStrategy it show this error with standard method for notifying about compilation problems.For ease of migration from older versions, we have provided an additional mechanism: `EmptyStrategyHelper`.
+If compiler finds `MvpView` method without annotation `@StateStrategyType` it show this error with standard method for notifying about compilation problems.For ease of migration from older versions, we have provided an additional mechanism: `EmptyStrategyHelper`.
 It collects all the errors associated with an empty strategy in one place. Using it, you can easily navigate from the `EmptyStrategyHelper` directly to the method with a missing strategy.
 
 To switch the error output method, enable the option
