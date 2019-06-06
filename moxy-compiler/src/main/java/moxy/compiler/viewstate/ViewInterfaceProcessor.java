@@ -117,7 +117,7 @@ public class ViewInterfaceProcessor
 
     public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
         if (enableEmptyStrategyHelper && !migrationMethods.isEmpty()) {
-            return MigrationHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
+            return EmptyStrategyHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
         }
         return null;
     }
