@@ -48,14 +48,11 @@ public class MvpCompiler extends AbstractProcessor {
 
     private static final String OPTION_MOXY_REFLECTOR_PACKAGE = "moxyReflectorPackage";
 
-    private static final String OPTION_FAIL_ON_METHODS_WITHOUT_STRATEGY
-            = "failOnMethodsWithoutStrategy";
+    private static final String OPTION_DISABLE_EMPTY_STRATEGY_CHECK = "disableEmptyStrategyCheck";
 
-    private static final String DEFAULT_MOXY_STRATEGY
-            = "defaultMoxyStrategy";
+    private static final String DEFAULT_MOXY_STRATEGY = "defaultMoxyStrategy";
 
-    private static final String FAIL_ON_METHODS_WITHOUT_STRATEGY_BY_MIGRATION_HELPER
-            = "failOnMethodsWithoutStrategyHelper";
+    private static final String OPTION_ENABLE_EMPTY_STRATEGY_HELPER = "enableEmptyStrategyHelper";
 
     private static Messager sMessager;
 
@@ -91,9 +88,9 @@ public class MvpCompiler extends AbstractProcessor {
     public Set<String> getSupportedOptions() {
         Set<String> options = new HashSet<>();
         options.add(OPTION_MOXY_REFLECTOR_PACKAGE);
-        options.add(OPTION_FAIL_ON_METHODS_WITHOUT_STRATEGY);
+        options.add(OPTION_DISABLE_EMPTY_STRATEGY_CHECK);
         options.add(DEFAULT_MOXY_STRATEGY);
-        options.add(FAIL_ON_METHODS_WITHOUT_STRATEGY_BY_MIGRATION_HELPER);
+        options.add(OPTION_ENABLE_EMPTY_STRATEGY_HELPER);
         return options;
     }
 
@@ -144,15 +141,13 @@ public class MvpCompiler extends AbstractProcessor {
         PresenterBinderClassGenerator presenterBinderClassGenerator
                 = new PresenterBinderClassGenerator();
 
-        boolean failOnMethodsWithoutStrategy = isOptionEnabled(
-                OPTION_FAIL_ON_METHODS_WITHOUT_STRATEGY);
+        boolean disableEmptyStrategyCheck = isOptionEnabled(OPTION_DISABLE_EMPTY_STRATEGY_CHECK);
         String defaultStrategy = getDefaultStrategy();
-        boolean failOnMethodsWithoutStrategyHelper = isOptionEnabled(
-                FAIL_ON_METHODS_WITHOUT_STRATEGY_BY_MIGRATION_HELPER);
+        boolean enableEmptyStrategyHelper = isOptionEnabled(OPTION_ENABLE_EMPTY_STRATEGY_HELPER);
 
         ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor(
-                failOnMethodsWithoutStrategy,
-                failOnMethodsWithoutStrategyHelper,
+                disableEmptyStrategyCheck,
+                enableEmptyStrategyHelper,
                 getDefaultStrategy());
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 

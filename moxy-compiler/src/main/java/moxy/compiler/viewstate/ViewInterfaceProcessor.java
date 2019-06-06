@@ -39,9 +39,9 @@ public class ViewInterfaceProcessor
 
     private final TypeElement frameworkDefaultStrategy;
 
-    private final boolean failOnMethodsWithoutStrategy;
+    private final boolean disableEmptyStrategyCheck;
 
-    private final boolean failOnMethodsWithoutStrategyHelper;
+    private final boolean enableEmptyStrategyHelper;
 
     private TypeElement viewInterfaceElement;
 
@@ -52,12 +52,12 @@ public class ViewInterfaceProcessor
     private List<MigrationMethod> migrationMethods = new ArrayList<>();
 
     public ViewInterfaceProcessor(
-            final boolean failOnMethodsWithoutStrategy,
-            final boolean failOnMethodsWithoutStrategyHelper,
+            final boolean disableEmptyStrategyCheck,
+            final boolean enableEmptyStrategyHelper,
             final String defaultStrategy
     ) {
         super();
-        this.failOnMethodsWithoutStrategyHelper = failOnMethodsWithoutStrategyHelper;
+        this.enableEmptyStrategyHelper = enableEmptyStrategyHelper;
         if (defaultStrategy != null) {
 
             TypeElement localDefaultStrategy = MvpCompiler.getElementUtils().getTypeElement(defaultStrategy);
@@ -74,7 +74,7 @@ public class ViewInterfaceProcessor
         } else {
             frameworkDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
         }
-        this.failOnMethodsWithoutStrategy = failOnMethodsWithoutStrategy;
+        this.disableEmptyStrategyCheck = disableEmptyStrategyCheck;
     }
 
     public List<TypeElement> getUsedStrategies() {
@@ -116,7 +116,7 @@ public class ViewInterfaceProcessor
     }
 
     public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
-        if (failOnMethodsWithoutStrategyHelper && !migrationMethods.isEmpty()) {
+        if (enableEmptyStrategyHelper && !migrationMethods.isEmpty()) {
             return MigrationHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
         }
         return null;
@@ -160,26 +160,24 @@ public class ViewInterfaceProcessor
                 strategyClass = (TypeElement) ((DeclaredType) strategyClassFromAnnotation)
                         .asElement();
             } else {
-                if (defaultStrategy == null && failOnMethodsWithoutStrategy) {
+                if (defaultStrategy == null && !disableEmptyStrategyCheck) {
 
-                    String message = String
-                            .format("No default strategy for method! You are trying migrate to default OneExecutionStrategy, "
-                                            + "but has methods without any Strategy!  See %s method \"%s\"",
-                                    typeElement.getQualifiedName(),
-                                    methodElement.getSimpleName()
-                            );
+                    if (enableEmptyStrategyHelper) {
+                        migrationMethods.add(new MigrationMethod(typeElement, methodElement));
+                    } else {
+                        String message = String
+                                .format("No default strategy for method! You are trying migrate to default OneExecutionStrategy, "
+                                                + "but has methods without any Strategy!  See %s method \"%s\"",
+                                        typeElement.getQualifiedName(),
+                                        methodElement.getSimpleName()
+                                );
 
-                    MvpCompiler.getMessager()
-                            .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
-
+                        MvpCompiler.getMessager()
+                                .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
+                    }
                 }
 
-                if (failOnMethodsWithoutStrategyHelper) {
-                    migrationMethods.add(new MigrationMethod(typeElement, methodElement));
-                }
-
-                strategyClass = defaultStrategy != null ? defaultStrategy
-                        : frameworkDefaultStrategy;
+                strategyClass = defaultStrategy != null ? defaultStrategy : frameworkDefaultStrategy;
 
 
             }
