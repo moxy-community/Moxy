@@ -80,6 +80,5 @@ dependencies {
     testImplementation "androidx.test:core:1.1.0"
     testImplementation "androidx.test.ext:junit:1.1.0"
     testImplementation deps.android
-    testImplementation project(':stub-reflector')
     kaptAndroidTest project(':moxy-compiler')
 }
