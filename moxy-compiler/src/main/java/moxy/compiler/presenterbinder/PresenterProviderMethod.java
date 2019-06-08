@@ -4,34 +4,35 @@ import javax.lang.model.type.DeclaredType;
 
 class PresenterProviderMethod {
 
-    private final DeclaredType clazz;
+  private final DeclaredType clazz;
 
-    private final String name;
+  private final String name;
 
-    private final String tag;
+  private final String tag;
 
-    private final String presenterId;
+  private final String presenterId;
 
-    PresenterProviderMethod(DeclaredType clazz, String name, String tag, String presenterId) {
-        this.clazz = clazz;
-        this.name = name;
-        this.tag = tag;
-        this.presenterId = presenterId;
-    }
+  PresenterProviderMethod(DeclaredType clazz, String name, String tag, String presenterId) {
 
-    DeclaredType getClazz() {
-        return clazz;
-    }
+    this.clazz = clazz;
+    this.name = name;
+    this.tag = tag;
+    this.presenterId = presenterId;
+  }
 
-    String getName() {
-        return name;
-    }
+  DeclaredType getClazz() {
+    return clazz;
+  }
 
-    String getTag() {
-        return tag;
-    }
+  String getName() {
+    return name;
+  }
 
-    String getPresenterId() {
-        return presenterId;
-    }
+  String getTag() {
+    return tag;
+  }
+
+  String getPresenterId() {
+    return presenterId;
+  }
 }

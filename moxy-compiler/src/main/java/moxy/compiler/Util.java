@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -37,161 +36,169 @@ import javax.lang.model.type.WildcardType;
 @SuppressWarnings("WeakerAccess")
 public final class Util {
 
-    public static String fillGenerics(Map<String, String> types, TypeMirror param) {
-        return fillGenerics(types, Collections.singletonList(param));
-    }
+  private Util() {
+  }
 
-    public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params) {
-        return fillGenerics(types, params, ", ");
-    }
+  public static String fillGenerics(Map<String, String> types, TypeMirror param) {
+    return fillGenerics(types, Collections.singletonList(param));
+  }
 
-    public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params, String separator) {
-        String result = "";
+  public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params) {
+    return fillGenerics(types, params, ", ");
+  }
 
-        for (TypeMirror param : params) {
-            if (result.length() > 0) {
-                result += separator;
-            }
+  public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params,
+      String separator) {
+    String result = "";
 
-            /**
-             * "if" block's order is critically! E.g. IntersectionType is TypeVariable.
-             */
-            if (param instanceof WildcardType) {
-                result += "?";
-                final TypeMirror extendsBound = ((WildcardType) param).getExtendsBound();
-                if (extendsBound != null) {
-                    result += " extends " + fillGenerics(types, extendsBound);
-                }
-                final TypeMirror superBound = ((WildcardType) param).getSuperBound();
-                if (superBound != null) {
-                    result += " super " + fillGenerics(types, superBound);
-                }
-            } else if (param instanceof IntersectionType) {
-                result += "?";
-                final List<? extends TypeMirror> bounds = ((IntersectionType) param).getBounds();
+    for (TypeMirror param : params) {
+      if (result.length() > 0) {
+        result += separator;
+      }
 
-                if (!bounds.isEmpty()) {
-                    result += " extends " + fillGenerics(types, bounds, " & ");
-                }
-            } else if (param instanceof DeclaredType) {
-                result += ((DeclaredType) param).asElement();
-
-                final List<? extends TypeMirror> typeArguments = ((DeclaredType) param).getTypeArguments();
-                if (!typeArguments.isEmpty()) {
-                    final String s = fillGenerics(types, typeArguments);
-
-                    result += "<" + s + ">";
-                }
-            } else if (param instanceof TypeVariable) {
-                String type = types.get(param.toString());
-                if (type == null) {
-                    type = param.toString();
-                }
-                result += type;
-            } else {
-                result += param;
-            }
+      /**
+       * "if" block's order is critically! E.g. IntersectionType is TypeVariable.
+       */
+      if (param instanceof WildcardType) {
+        result += "?";
+        final TypeMirror extendsBound = ((WildcardType) param).getExtendsBound();
+        if (extendsBound != null) {
+          result += " extends " + fillGenerics(types, extendsBound);
         }
+        final TypeMirror superBound = ((WildcardType) param).getSuperBound();
+        if (superBound != null) {
+          result += " super " + fillGenerics(types, superBound);
+        }
+      } else if (param instanceof IntersectionType) {
+        result += "?";
+        final List<? extends TypeMirror> bounds = ((IntersectionType) param).getBounds();
 
-        return result;
+        if (!bounds.isEmpty()) {
+          result += " extends " + fillGenerics(types, bounds, " & ");
+        }
+      } else if (param instanceof DeclaredType) {
+        result += ((DeclaredType) param).asElement();
+
+        final List<? extends TypeMirror> typeArguments = ((DeclaredType) param).getTypeArguments();
+        if (!typeArguments.isEmpty()) {
+          final String s = fillGenerics(types, typeArguments);
+
+          result += "<" + s + ">";
+        }
+      } else if (param instanceof TypeVariable) {
+        String type = types.get(param.toString());
+        if (type == null) {
+          type = param.toString();
+        }
+        result += type;
+      } else {
+        result += param;
+      }
     }
 
-    public static String getFullClassName(TypeMirror typeMirror) {
-        if (!(typeMirror instanceof DeclaredType)) {
-            return "";
-        }
+    return result;
+  }
 
-        TypeElement typeElement = (TypeElement) ((DeclaredType) typeMirror).asElement();
-        return getFullClassName(typeElement);
+  public static String getFullClassName(TypeMirror typeMirror) {
+    if (!(typeMirror instanceof DeclaredType)) {
+      return "";
     }
 
-    public static String getFullClassName(TypeElement typeElement) {
-        String packageName = MvpCompiler.getElementUtils().getPackageOf(typeElement).getQualifiedName().toString();
-        if (packageName.length() > 0) {
-            packageName += ".";
-        }
+    TypeElement typeElement = (TypeElement) ((DeclaredType) typeMirror).asElement();
+    return getFullClassName(typeElement);
+  }
 
-        String className = typeElement.toString().substring(packageName.length());
-        return packageName + className.replaceAll("\\.", "\\$");
+  public static String getFullClassName(TypeElement typeElement) {
+    String packageName =
+        MvpCompiler.getElementUtils().getPackageOf(typeElement).getQualifiedName().toString();
+    if (packageName.length() > 0) {
+      packageName += ".";
     }
 
-    public static AnnotationMirror getAnnotation(Element element, String annotationClass) {
-        for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            if (annotationMirror.getAnnotationType().asElement().toString().equals(annotationClass)) {
-                return annotationMirror;
-            }
-        }
+    String className = typeElement.toString().substring(packageName.length());
+    return packageName + className.replaceAll("\\.", "\\$");
+  }
 
-        return null;
+  public static AnnotationMirror getAnnotation(Element element, String annotationClass) {
+    for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
+      if (annotationMirror.getAnnotationType().asElement().toString().equals(annotationClass)) {
+        return annotationMirror;
+      }
     }
 
-    public static TypeMirror getAnnotationValueAsTypeMirror(AnnotationMirror annotationMirror, String key) {
-        AnnotationValue av = getAnnotationValue(annotationMirror, key);
+    return null;
+  }
 
-        if (av != null) {
-            return (TypeMirror) av.getValue();
-        } else {
-            return null;
-        }
+  public static TypeMirror getAnnotationValueAsTypeMirror(AnnotationMirror annotationMirror,
+      String key) {
+    AnnotationValue av = getAnnotationValue(annotationMirror, key);
+
+    if (av != null) {
+      return (TypeMirror) av.getValue();
+    } else {
+      return null;
+    }
+  }
+
+  public static String getAnnotationValueAsString(AnnotationMirror annotationMirror, String key) {
+    AnnotationValue av = getAnnotationValue(annotationMirror, key);
+
+    if (av != null) {
+      return av.getValue().toString();
+    } else {
+      return null;
+    }
+  }
+
+  public static AnnotationValue getAnnotationValue(AnnotationMirror annotationMirror, String key) {
+    if (annotationMirror == null) {
+      return null;
     }
 
-    public static String getAnnotationValueAsString(AnnotationMirror annotationMirror, String key) {
-        AnnotationValue av = getAnnotationValue(annotationMirror, key);
-
-        if (av != null) {
-            return av.getValue().toString();
-        } else {
-            return null;
-        }
+    for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
+        .getElementValues().entrySet()) {
+      if (entry.getKey().getSimpleName().toString().equals(key)) {
+        return entry.getValue();
+      }
     }
 
-    public static AnnotationValue getAnnotationValue(AnnotationMirror annotationMirror, String key) {
-        if (annotationMirror == null) {
-            return null;
-        }
+    return null;
+  }
 
-        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
-                .getElementValues().entrySet()) {
-            if (entry.getKey().getSimpleName().toString().equals(key)) {
-                return entry.getValue();
-            }
-        }
-
-        return null;
+  public static Map<String, AnnotationValue> getAnnotationValues(
+      AnnotationMirror annotationMirror) {
+    if (annotationMirror == null) {
+      return Collections.emptyMap();
     }
 
-    public static Map<String, AnnotationValue> getAnnotationValues(AnnotationMirror annotationMirror) {
-        if (annotationMirror == null) {
-            return Collections.emptyMap();
-        }
+    Map<String, AnnotationValue> result = new HashMap<>();
 
-        Map<String, AnnotationValue> result = new HashMap<>();
-
-        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
-                .getElementValues().entrySet()) {
-            String key = entry.getKey().getSimpleName().toString();
-            if (entry.getValue() != null) {
-                result.put(key, entry.getValue());
-            }
-        }
-
-        return result;
+    for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
+        .getElementValues().entrySet()) {
+      String key = entry.getKey().getSimpleName().toString();
+      if (entry.getValue() != null) {
+        result.put(key, entry.getValue());
+      }
     }
 
-    public static boolean hasEmptyConstructor(TypeElement element) {
-        for (Element enclosedElement : element.getEnclosedElements()) {
-            if (enclosedElement.getKind() == ElementKind.CONSTRUCTOR) {
-                List<? extends VariableElement> parameters = ((ExecutableElement) enclosedElement).getParameters();
-                if (parameters == null || parameters.isEmpty()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    return result;
+  }
 
-    public static String decapitalizeString(String string) {
-        return string == null || string.isEmpty() ? "" : string.length() == 1 ? string.toLowerCase()
-                : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+  public static boolean hasEmptyConstructor(TypeElement element) {
+    for (Element enclosedElement : element.getEnclosedElements()) {
+      if (enclosedElement.getKind() == ElementKind.CONSTRUCTOR) {
+        List<? extends VariableElement> parameters =
+            ((ExecutableElement) enclosedElement).getParameters();
+        if (parameters == null || parameters.isEmpty()) {
+          return true;
+        }
+      }
     }
+    return false;
+  }
+
+  public static String decapitalizeString(String string) {
+    return string == null || string.isEmpty() ? "" : string.length() == 1 ? string.toLowerCase()
+        : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+  }
 }

@@ -11,48 +11,48 @@ import ${packageName}.presentation.presenter${dotSubpackage}.${presenterName};
 import ${superClassFqcn};
 
 <#if packageName??>
-import ${packageName}.R;
+  import ${packageName}.R;
 </#if>
 
 import moxy.presenter.InjectPresenter;
 <#if createProvidesMethod>
-import moxy.presenter.ProvidePresenter;
+  import moxy.presenter.ProvidePresenter;
 </#if>
 
 public class ${className} extends ${superClassName} implements ${viewName} {
-    public static final String TAG = "${className}";
-	@InjectPresenter
-	${presenterName} m${presenterName};
+public static final String TAG = "${className}";
+@InjectPresenter
+${presenterName} m${presenterName};
 
 <#if createProvidesMethod>
-        @ProvidePresenter
-        ${presenterName} providePresenter() {
-            return new ${presenterName}();
-        }
+  @ProvidePresenter
+    ${presenterName} providePresenter() {
+  return new ${presenterName}();
+  }
 </#if>
 
 <#if includeFactory>
-    public static ${className} newInstance() {
-        ${className} fragment = new ${className}();
+  public static ${className} newInstance() {
+    ${className} fragment = new ${className}();
 
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
+  Bundle args = new Bundle();
+  fragment.setArguments(args);
 
-        return fragment;
-    }
+  return fragment;
+  }
 </#if>
 
-    @Override
-    public View onCreateView(final LayoutInflater inflater, final   ViewGroup container,
-            final Bundle savedInstanceState) {
+@Override
+public View onCreateView(final LayoutInflater inflater, final   ViewGroup container,
+final Bundle savedInstanceState) {
 <#if includeLayout>
-        return inflater.inflate(R.layout.${fragmentName}, container, false);
+  return inflater.inflate(R.layout.${fragmentName}, container, false);
 </#if>
-    }
+}
 
-    @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+@Override
+public void onViewCreated(final View view, final Bundle savedInstanceState) {
+super.onViewCreated(view, savedInstanceState);
 
-    }
+}
 }

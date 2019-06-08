@@ -4,6 +4,6 @@ import moxy.presenter.InjectPresenter;
 import moxy.presenter.InjectViewStatePresenter;
 
 public class DelegateLocalPresenterTestView extends CounterTestView {
-    @InjectPresenter
-    public InjectViewStatePresenter mInjectViewStatePresenter;
+  @InjectPresenter
+  public InjectViewStatePresenter mInjectViewStatePresenter;
 }

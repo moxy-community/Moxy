@@ -1,60 +1,56 @@
 package moxy;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({ "WeakerAccess", "unused" })
 public final class MvpFacade {
 
-    private static volatile MvpFacade sInstance;
+  private static final Object sLock = new Object();
+  private static volatile MvpFacade sInstance;
+  private PresenterStore mPresenterStore;
+  private MvpProcessor mMvpProcessor;
+  private PresentersCounter mPresentersCounter;
 
-    private static final Object sLock = new Object();
+  private MvpFacade() {
+    mPresentersCounter = new PresentersCounter();
+    mPresenterStore = new PresenterStore();
+    mMvpProcessor = new MvpProcessor();
+  }
 
-    public static MvpFacade getInstance() {
+  public static MvpFacade getInstance() {
+    if (sInstance == null) {
+      synchronized (sLock) {
         if (sInstance == null) {
-            synchronized (sLock) {
-                if (sInstance == null) {
-                    sInstance = new MvpFacade();
-                }
-            }
+          sInstance = new MvpFacade();
         }
-        return sInstance;
+      }
     }
+    return sInstance;
+  }
 
-    public static void init() {
-        getInstance();
-    }
+  public static void init() {
+    getInstance();
+  }
 
-    private MvpFacade() {
-        mPresentersCounter = new PresentersCounter();
-        mPresenterStore = new PresenterStore();
-        mMvpProcessor = new MvpProcessor();
-    }
+  public PresenterStore getPresenterStore() {
+    return mPresenterStore;
+  }
 
-    private PresenterStore mPresenterStore;
+  public void setPresenterStore(PresenterStore presenterStore) {
+    mPresenterStore = presenterStore;
+  }
 
-    private MvpProcessor mMvpProcessor;
+  public MvpProcessor getMvpProcessor() {
+    return mMvpProcessor;
+  }
 
-    private PresentersCounter mPresentersCounter;
+  public void setMvpProcessor(MvpProcessor mvpProcessor) {
+    mMvpProcessor = mvpProcessor;
+  }
 
-    public PresenterStore getPresenterStore() {
-        return mPresenterStore;
-    }
+  public PresentersCounter getPresentersCounter() {
+    return mPresentersCounter;
+  }
 
-    public void setPresenterStore(PresenterStore presenterStore) {
-        mPresenterStore = presenterStore;
-    }
-
-    public MvpProcessor getMvpProcessor() {
-        return mMvpProcessor;
-    }
-
-    public void setMvpProcessor(MvpProcessor mvpProcessor) {
-        mMvpProcessor = mvpProcessor;
-    }
-
-    public PresentersCounter getPresentersCounter() {
-        return mPresentersCounter;
-    }
-
-    public void setPresentersCounter(PresentersCounter presentersCounter) {
-        mPresentersCounter = presentersCounter;
-    }
+  public void setPresentersCounter(PresentersCounter presentersCounter) {
+    mPresentersCounter = presentersCounter;
+  }
 }

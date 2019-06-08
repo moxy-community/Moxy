@@ -1,7 +1,6 @@
 package moxy;
 
 import java.lang.annotation.Target;
-
 import moxy.viewstate.MvpViewState;
 
 import static java.lang.annotation.ElementType.TYPE;
@@ -16,7 +15,7 @@ import static java.lang.annotation.ElementType.TYPE;
 @Target(value = TYPE)
 public @interface InjectViewState {
 
-    Class<? extends MvpViewState> value() default DefaultViewState.class;
+  Class<? extends MvpViewState> value() default DefaultViewState.class;
 
-    Class<? extends MvpView> view() default DefaultView.class;
+  Class<? extends MvpView> view() default DefaultView.class;
 }

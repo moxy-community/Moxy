@@ -9,5 +9,5 @@ import static java.lang.annotation.ElementType.TYPE;
  */
 @Target(value = TYPE)
 public @interface RegisterMoxyReflectorPackages {
-	String[] value();
+  String[] value();
 }

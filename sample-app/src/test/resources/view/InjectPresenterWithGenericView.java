@@ -6,10 +6,10 @@ import presenter.WithViewGenericPresenter;
 
 public class InjectPresenterWithGenericView extends CounterTestView {
 
-    @InjectPresenter
-    WithViewGenericPresenter<InjectPresenterWithGenericView, CounterTestView> mPresenter;
+  @InjectPresenter
+  WithViewGenericPresenter<InjectPresenterWithGenericView, CounterTestView> mPresenter;
 
-    public void testEvent() {
+  public void testEvent() {
 
-    }
+  }
 }
