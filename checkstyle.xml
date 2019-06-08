@@ -37,21 +37,17 @@
       <property name="checkFirstSentence" value="false"/>
     </module>
 
-
-    <!-- Checks for Naming Conventions.                  -->
     <!-- See http://checkstyle.sf.net/config_naming.html -->
-    <module name="ConstantName"/>
+    <!--<module name="ConstantName"/>-->
+    <!--<module name="PackageName"/>-->
     <module name="LocalFinalVariableName"/>
     <module name="LocalVariableName"/>
     <module name="MemberName"/>
     <module name="MethodName"/>
-    <!--<module name="PackageName"/>-->
     <module name="ParameterName"/>
     <module name="StaticVariableName"/>
     <module name="TypeName"/>
 
-
-    <!-- Checks for imports                              -->
     <!-- See http://checkstyle.sf.net/config_import.html -->
     <module name="AvoidStarImport"/>
     <module name="IllegalImport"/>
@@ -60,7 +56,6 @@
     <module name="UnusedImports">
       <property name="processJavadoc" value="true"/>
     </module>
-
 
     <!-- Checks for Size Violations.                    -->
     <!-- See http://checkstyle.sf.net/config_sizes.html -->
@@ -71,14 +66,12 @@
       <property name="max" value="200"/>
     </module>
 
-
-    <!-- Checks for whitespace                               -->
     <!-- See http://checkstyle.sf.net/config_whitespace.html -->
-    <module name="GenericWhitespace"/>
-    <!--<module name="EmptyForIteratorPad"/>-->
-    <module name="MethodParamPad"/>
     <!--<module name="NoWhitespaceAfter"/>-->
     <!--<module name="NoWhitespaceBefore"/>-->
+    <!--<module name="EmptyForIteratorPad"/>-->
+    <module name="GenericWhitespace"/>
+    <module name="MethodParamPad"/>
     <module name="OperatorWrap"/>
     <module name="ParenPad"/>
     <module name="TypecastParenPad"/>
@@ -93,56 +86,49 @@
           SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, LITERAL_ASSERT, TYPE_EXTENSION_AND"/>
     </module>
 
-
-    <!-- Modifier Checks                                    -->
     <!-- See http://checkstyle.sf.net/config_modifiers.html -->
     <module name="ModifierOrder"/>
     <module name="RedundantModifier"/>
 
-
-    <!-- Checks for blocks. You know, those {}'s         -->
     <!-- See http://checkstyle.sf.net/config_blocks.html -->
-    <module name="AvoidNestedBlocks"/>
     <!--module name="EmptyBlock"/-->
-    <module name="LeftCurly"/>
     <!--<module name="NeedBraces"/>-->
+    <module name="AvoidNestedBlocks"/>
+    <module name="LeftCurly"/>
     <module name="RightCurly"/>
-
 
     <!-- Checks for common coding problems               -->
     <!-- See http://checkstyle.sf.net/config_coding.html -->
     <!--module name="AvoidInlineConditionals"/-->
-    <module name="CovariantEquals"/>
-    <module name="EmptyStatement"/>
-    <!--<module name="EqualsAvoidNull"/>-->
-    <module name="EqualsHashCode"/>
     <!--module name="HiddenField"/-->
-    <module name="IllegalInstantiation"/>
     <!--module name="InnerAssignment"/-->
     <!--module name="MagicNumber"/-->
     <!--module name="MissingSwitchDefault"/-->
     <!--<module name="RedundantThrows"/>-->
+    <!--<module name="EqualsAvoidNull"/>-->
+
+    <module name="CovariantEquals"/>
+    <module name="EmptyStatement"/>
+    <module name="EqualsHashCode"/>
+    <module name="IllegalInstantiation"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
     <module name="MagicNumber">
       <property name="ignoreHashCodeMethod" value="true"/>
     </module>
-    <module name="SimplifyBooleanExpression"/>
-    <module name="SimplifyBooleanReturn"/>
 
-    <!-- Checks for class design                         -->
     <!-- See http://checkstyle.sf.net/config_design.html -->
     <!--module name="DesignForExtension"/-->
     <!--<module name="FinalClass"/>-->
+    <!--module name="VisibilityModifier"/-->
     <module name="HideUtilityClassConstructor"/>
     <module name="InterfaceIsType"/>
-    <!--module name="VisibilityModifier"/-->
 
-
-    <!-- Miscellaneous other checks.                   -->
     <!-- See http://checkstyle.sf.net/config_misc.html -->
-    <module name="ArrayTypeStyle"/>
     <!--module name="FinalParameters"/-->
     <!--module name="TodoComment"/-->
     <module name="UpperEll"/>
+    <module name="ArrayTypeStyle"/>
 
     <!-- Make the @SuppressWarnings annotations available to Checkstyle -->
     <module name="SuppressWarningsHolder"/>
