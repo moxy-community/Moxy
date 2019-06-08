@@ -50,6 +50,8 @@ public class MvpDialogFragment extends DialogFragment {
     getMvpDelegate().onDestroyView();
   }
 
+  //todo remove this SuppressWarnings
+  @SuppressWarnings("MagicNumber")
   @Override
   public void onDestroy() {
     super.onDestroy();

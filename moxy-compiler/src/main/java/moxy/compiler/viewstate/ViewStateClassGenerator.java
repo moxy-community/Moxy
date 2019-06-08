@@ -84,7 +84,7 @@ public final class ViewStateClassGenerator
     // Add salt if contains argument with same name
     Random random = new Random();
     while (method.getArgumentsString().contains(commandFieldName)) {
-      commandFieldName += random.nextInt(10);
+      commandFieldName += random.nextInt(RANDOM_BOUND);
     }
 
     return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
@@ -121,4 +121,6 @@ public final class ViewStateClassGenerator
 
     return builder.build();
   }
+
+  private static final int RANDOM_BOUND = 10;
 }
