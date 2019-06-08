@@ -1,22 +1,17 @@
 package moxy.compiler.presenterbinder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
-
+import moxy.compiler.ElementProcessor;
+import moxy.compiler.Util;
 import moxy.presenter.InjectPresenter;
 import moxy.presenter.ProvidePresenter;
 import moxy.presenter.ProvidePresenterTag;
-import moxy.compiler.ElementProcessor;
-import moxy.compiler.Util;
+
+import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InjectPresenterProcessor extends ElementProcessor<VariableElement, TargetClassInfo> {
 
@@ -49,7 +44,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
         bindProvidersToFields(fields, collectPresenterProviders(presentersContainer));
         bindTagProvidersToFields(fields, collectTagProviders(presentersContainer));
 
-        return new TargetClassInfo(presentersContainer, fields);
+        return new TargetClassInfo(presentersContainer, fields, findSuperPresenterContainer(presentersContainer));
     }
 
     private static List<TargetPresenterField> collectFields(TypeElement presentersContainer) {
@@ -188,5 +183,29 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                 }
             }
         }
+    }
+
+    private TypeElement findSuperPresenterContainer(TypeElement typeElement) {
+        TypeElement currentTypeElement = typeElement;
+
+        while (currentTypeElement != null) {
+            TypeMirror superclass = currentTypeElement.getSuperclass();
+            if (superclass.getKind() == TypeKind.DECLARED) {
+                DeclaredType superType = (DeclaredType) superclass;
+                currentTypeElement = (TypeElement) superType.asElement();
+            } else {
+                currentTypeElement = null;
+            }
+
+            if (currentTypeElement != null) {
+                for (Element enclosedElement : currentTypeElement.getEnclosedElements()) {
+                    if (enclosedElement.getKind() == ElementKind.FIELD &&
+                            enclosedElement.getAnnotation(InjectPresenter.class) != null) {
+                        return currentTypeElement;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

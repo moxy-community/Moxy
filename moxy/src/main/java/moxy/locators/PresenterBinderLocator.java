@@ -1,32 +1,30 @@
 package moxy.locators;
 
 import moxy.MvpProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
+import moxy.PresenterBinder;
 
 public class PresenterBinderLocator {
 
     private PresenterBinderLocator() {
     }
 
-    public static List<Object> getPresenterBinders(Class<?> delegated) {
-        //TODO: edit PresenterBinderClassGenerator to generate code, that returns list of super presenter binders
-        ArrayList<Object> binders = new ArrayList<>();
+    public static <Delegated> PresenterBinder<Delegated> getPresenterBinders(Class<?> delegated) {
         Class<?> currentClass = delegated;
         do {
-            Object presenterBinder = locatePresenterBinder(currentClass);
+            PresenterBinder<?> presenterBinder = locatePresenterBinder(currentClass);
             if (presenterBinder != null) {
-                binders.add(presenterBinder);
+                //noinspection unchecked
+                return (PresenterBinder<Delegated>) presenterBinder;
             }
             currentClass = currentClass.getSuperclass();
         } while (currentClass != null);
-        return binders;
+        return null;
     }
 
-    private static Object locatePresenterBinder(Class<?> delegated) {
+    private static PresenterBinder<?> locatePresenterBinder(Class<?> delegated) {
         try {
-            return Class.forName(delegated.getName() + MvpProcessor.PRESENTER_BINDER_SUFFIX).newInstance();
+            String className = delegated.getName() + MvpProcessor.PRESENTER_BINDER_SUFFIX;
+            return (PresenterBinder<?>) Class.forName(className).newInstance();
         } catch (Exception e) {
             return null;
         }

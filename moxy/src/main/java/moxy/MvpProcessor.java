@@ -67,33 +67,25 @@ public class MvpProcessor {
     <Delegated> List<MvpPresenter<? super Delegated>> getMvpPresenters(Delegated delegated, String delegateTag) {
         @SuppressWarnings("unchecked")
         Class<? super Delegated> aClass = (Class<Delegated>) delegated.getClass();
-        List<Object> presenterBinders = null;
+        PresenterBinder<Delegated> presenterBinder = PresenterBinderLocator.getPresenterBinders(aClass);
 
-        while (aClass != Object.class && presenterBinders == null) {
-            presenterBinders = PresenterBinderLocator.getPresenterBinders(aClass);
-
-            aClass = aClass.getSuperclass();
-        }
-
-        if (presenterBinders == null || presenterBinders.isEmpty()) {
+        if (presenterBinder == null) {
             return Collections.emptyList();
         }
 
         List<MvpPresenter<? super Delegated>> presenters = new ArrayList<>();
         PresentersCounter presentersCounter = MvpFacade.getInstance().getPresentersCounter();
-        for (Object presenterBinderObject : presenterBinders) {
-            //noinspection unchecked
-            PresenterBinder<Delegated> presenterBinder = (PresenterBinder<Delegated>) presenterBinderObject;
-            List<PresenterField<Delegated>> presenterFields = presenterBinder.getPresenterFields();
 
-            for (PresenterField<Delegated> presenterField : presenterFields) {
-                MvpPresenter<? super Delegated> presenter = getMvpPresenter(delegated, presenterField, delegateTag);
+        //noinspection unchecked
+        List<PresenterField<? super Delegated>> presenterFields = presenterBinder.getPresenterFields();
 
-                if (presenter != null) {
-                    presentersCounter.injectPresenter(presenter, delegateTag);
-                    presenters.add(presenter);
-                    presenterField.bind(delegated, presenter);
-                }
+        for (PresenterField<? super Delegated> presenterField : presenterFields) {
+            MvpPresenter<? super Delegated> presenter = (MvpPresenter<? super Delegated>) getMvpPresenter(delegated, presenterField, delegateTag);
+
+            if (presenter != null) {
+                presentersCounter.injectPresenter(presenter, delegateTag);
+                presenters.add(presenter);
+                presenterField.bind(delegated, presenter);
             }
         }
 
