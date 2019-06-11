@@ -146,7 +146,7 @@ How to correctly use compilation flags see at [sample-app build.gradle file](htt
 Moxy is completely without reflection! No special ProGuard rules required.
 
 ## Road Map
-* [✓] ~~Provide migration mechanic from com.arello-mobile.moxy and its default strategy~~
+* [✓] ~~Provide a migration tool from com.arello-mobile.moxy and its default strategy~~
 * [ ]Kotlin incremental compilation support
 * [ ]Remove reflectors and common presenter store
 * [ ]Provide Runtime Implementation
