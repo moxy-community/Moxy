@@ -7,13 +7,12 @@ android:
 
 env:
   global:
-    # install timeout in minutes (2 minutes by default)
     - ADB_INSTALL_TIMEOUT=8
 
 before_install:
   - yes | sdkmanager "platforms;android-27"
   - chmod +x gradlew
 
-# Run assemble and unit tests
+# Run code style
 script:
   - ./gradlew clean checkstyle
