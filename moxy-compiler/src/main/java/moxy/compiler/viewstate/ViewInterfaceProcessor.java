@@ -1,5 +1,6 @@
 package moxy.compiler.viewstate;
 
+import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.ParameterSpec;
 
 import java.util.ArrayList;
@@ -22,18 +23,25 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
-import moxy.viewstate.strategy.AddToEndStrategy;
-import moxy.viewstate.strategy.StateStrategyType;
 import moxy.compiler.ElementProcessor;
 import moxy.compiler.MvpCompiler;
 import moxy.compiler.Util;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.StateStrategyType;
 
-public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.compiler.viewstate.ViewInterfaceInfo> {
+public class ViewInterfaceProcessor
+        extends ElementProcessor<TypeElement, moxy.compiler.viewstate.ViewInterfaceInfo> {
 
     private static final String STATE_STRATEGY_TYPE_ANNOTATION = StateStrategyType.class.getName();
 
-    private static final TypeElement DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
-            .getTypeElement(AddToEndStrategy.class.getCanonicalName());
+    private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
+            .getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
+
+    private final TypeElement frameworkDefaultStrategy;
+
+    private final boolean disableEmptyStrategyCheck;
+
+    private final boolean enableEmptyStrategyHelper;
 
     private TypeElement viewInterfaceElement;
 
@@ -41,16 +49,44 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
 
     private Set<TypeElement> usedStrategies = new HashSet<>();
 
+    private List<MigrationMethod> migrationMethods = new ArrayList<>();
+
+    public ViewInterfaceProcessor(
+            final boolean disableEmptyStrategyCheck,
+            final boolean enableEmptyStrategyHelper,
+            final String defaultStrategy
+    ) {
+        super();
+        this.enableEmptyStrategyHelper = enableEmptyStrategyHelper;
+        if (defaultStrategy != null) {
+
+            TypeElement localDefaultStrategy = MvpCompiler.getElementUtils().getTypeElement(defaultStrategy);
+
+            if (localDefaultStrategy == null) {
+                String message = String
+                        .format("Unable to parse option %s. Check %s exists", defaultStrategy, defaultStrategy);
+
+                MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+                localDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
+            }
+
+            frameworkDefaultStrategy = localDefaultStrategy;
+        } else {
+            frameworkDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
+        }
+        this.disableEmptyStrategyCheck = disableEmptyStrategyCheck;
+    }
+
     public List<TypeElement> getUsedStrategies() {
         return new ArrayList<>(usedStrategies);
     }
 
     @Override
-    public moxy.compiler.viewstate.ViewInterfaceInfo process(TypeElement element) {
+    public ViewInterfaceInfo process(TypeElement element) {
         this.viewInterfaceElement = element;
         viewInterfaceName = element.getSimpleName().toString();
 
-        List<moxy.compiler.viewstate.ViewMethod> methods = new ArrayList<>();
+        List<ViewMethod> methods = new ArrayList<>();
 
         TypeElement interfaceStateStrategyType = getInterfaceStateStrategyType(element);
 
@@ -58,11 +94,12 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
         getMethods(element, interfaceStateStrategyType, new ArrayList<>(), methods);
 
         // Add methods from super interfaces
-        methods.addAll(iterateInterfaces(0, element, interfaceStateStrategyType, methods, new ArrayList<>()));
+        methods.addAll(iterateInterfaces(0, element, interfaceStateStrategyType, methods,
+                new ArrayList<>()));
 
         // Allow methods be with same names
         Map<String, Integer> methodsCounter = new HashMap<>();
-        for (moxy.compiler.viewstate.ViewMethod method : methods) {
+        for (ViewMethod method : methods) {
             Integer counter = methodsCounter.get(method.getName());
 
             if (counter != null && counter > 0) {
@@ -78,14 +115,22 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
         return new moxy.compiler.viewstate.ViewInterfaceInfo(element, methods);
     }
 
+    public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
+        if (enableEmptyStrategyHelper && !migrationMethods.isEmpty()) {
+            return EmptyStrategyHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
+        }
+        return null;
+    }
+
 
     private void getMethods(TypeElement typeElement,
             TypeElement defaultStrategy,
-            List<moxy.compiler.viewstate.ViewMethod> rootMethods,
-            List<moxy.compiler.viewstate.ViewMethod> superinterfacesMethods) {
+            List<ViewMethod> rootMethods,
+            List<ViewMethod> superinterfacesMethods) {
         for (Element element : typeElement.getEnclosedElements()) {
             // ignore all but non-static methods
-            if (element.getKind() != ElementKind.METHOD || element.getModifiers().contains(Modifier.STATIC)) {
+            if (element.getKind() != ElementKind.METHOD || element.getModifiers()
+                    .contains(Modifier.STATIC)) {
                 continue;
             }
 
@@ -99,19 +144,43 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
                         methodElement.getSimpleName(),
                         methodElement.getReturnType()
                 );
-                MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
+                MvpCompiler.getMessager()
+                        .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
             }
 
-            AnnotationMirror annotation = Util.getAnnotation(methodElement, STATE_STRATEGY_TYPE_ANNOTATION);
+            AnnotationMirror annotation = Util
+                    .getAnnotation(methodElement, STATE_STRATEGY_TYPE_ANNOTATION);
 
             // get strategy from annotation
-            TypeMirror strategyClassFromAnnotation = Util.getAnnotationValueAsTypeMirror(annotation, "value");
+            TypeMirror strategyClassFromAnnotation = Util
+                    .getAnnotationValueAsTypeMirror(annotation, "value");
 
             TypeElement strategyClass;
             if (strategyClassFromAnnotation != null) {
-                strategyClass = (TypeElement) ((DeclaredType) strategyClassFromAnnotation).asElement();
+                strategyClass = (TypeElement) ((DeclaredType) strategyClassFromAnnotation)
+                        .asElement();
             } else {
-                strategyClass = defaultStrategy != null ? defaultStrategy : DEFAULT_STATE_STRATEGY;
+                if (defaultStrategy == null && !disableEmptyStrategyCheck) {
+
+                    if (enableEmptyStrategyHelper) {
+                        migrationMethods.add(new MigrationMethod(typeElement, methodElement));
+                    } else {
+                        String message = String
+                                .format("A View method has no strategy! You are probably trying to migrate from an "
+                                                + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
+                                                + "without any Strategy, and you did not specify a default Strategy.",
+                                        typeElement.getQualifiedName(),
+                                        methodElement.getSimpleName()
+                                );
+
+                        MvpCompiler.getMessager()
+                                .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
+                    }
+                }
+
+                strategyClass = defaultStrategy != null ? defaultStrategy : frameworkDefaultStrategy;
+
+
             }
 
             // get tag from annotation
@@ -127,8 +196,10 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
             // add strategy to list
             usedStrategies.add(strategyClass);
 
-            final moxy.compiler.viewstate.ViewMethod method = new moxy.compiler.viewstate.ViewMethod(
-                    (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass, methodTag
+            final ViewMethod method
+                    = new ViewMethod(
+                    (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass,
+                    methodTag
             );
 
             if (rootMethods.contains(method)) {
@@ -136,7 +207,8 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
             }
 
             if (superinterfacesMethods.contains(method)) {
-                checkStrategyAndTagEquals(method, superinterfacesMethods.get(superinterfacesMethods.indexOf(method)));
+                checkStrategyAndTagEquals(method,
+                        superinterfacesMethods.get(superinterfacesMethods.indexOf(method)));
                 continue;
             }
 
@@ -145,7 +217,8 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
     }
 
     private void checkStrategyAndTagEquals(
-            moxy.compiler.viewstate.ViewMethod method, moxy.compiler.viewstate.ViewMethod existingMethod) {
+            ViewMethod method,
+            ViewMethod existingMethod) {
         List<String> differentParts = new ArrayList<>();
         if (!existingMethod.getStrategy().equals(method.getStrategy())) {
             differentParts.add("strategies");
@@ -165,24 +238,28 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
                     " and " + method.getEnclosedClassName() +
                     " has method " + method.getName() + "(" + arguments + ")" +
                     " with different " + parts + "." +
-                    " Override this method in " + viewInterfaceName + " or make " + parts + " equals");
+                    " Override this method in " + viewInterfaceName + " or make " + parts
+                    + " equals");
         }
     }
 
-    private List<moxy.compiler.viewstate.ViewMethod> iterateInterfaces(int level,
+    private List<ViewMethod> iterateInterfaces(int level,
             TypeElement parentElement,
             TypeElement parentDefaultStrategy,
-            List<moxy.compiler.viewstate.ViewMethod> rootMethods,
-            List<moxy.compiler.viewstate.ViewMethod> superinterfacesMethods) {
+            List<ViewMethod> rootMethods,
+            List<ViewMethod> superinterfacesMethods) {
         for (TypeMirror typeMirror : parentElement.getInterfaces()) {
             final TypeElement anInterface = (TypeElement) ((DeclaredType) typeMirror).asElement();
 
-            final List<? extends TypeMirror> typeArguments = ((DeclaredType) typeMirror).getTypeArguments();
-            final List<? extends TypeParameterElement> typeParameters = anInterface.getTypeParameters();
+            final List<? extends TypeMirror> typeArguments = ((DeclaredType) typeMirror)
+                    .getTypeArguments();
+            final List<? extends TypeParameterElement> typeParameters = anInterface
+                    .getTypeParameters();
 
             if (typeArguments.size() > typeParameters.size()) {
-                throw new IllegalArgumentException("Code generation for interface " + anInterface.getSimpleName()
-                        + " failed. Simplify your generics.");
+                throw new IllegalArgumentException(
+                        "Code generation for interface " + anInterface.getSimpleName()
+                                + " failed. Simplify your generics.");
             }
 
             TypeElement defaultStrategy = parentDefaultStrategy != null ? parentDefaultStrategy
@@ -190,14 +267,16 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
 
             getMethods(anInterface, defaultStrategy, rootMethods, superinterfacesMethods);
 
-            iterateInterfaces(level + 1, anInterface, defaultStrategy, rootMethods, superinterfacesMethods);
+            iterateInterfaces(level + 1, anInterface, defaultStrategy, rootMethods,
+                    superinterfacesMethods);
         }
 
         return superinterfacesMethods;
     }
 
     private TypeElement getInterfaceStateStrategyType(TypeElement typeElement) {
-        AnnotationMirror annotation = Util.getAnnotation(typeElement, STATE_STRATEGY_TYPE_ANNOTATION);
+        AnnotationMirror annotation = Util
+                .getAnnotation(typeElement, STATE_STRATEGY_TYPE_ANNOTATION);
         TypeMirror value = Util.getAnnotationValueAsTypeMirror(annotation, "value");
         if (value != null && value.getKind() == TypeKind.DECLARED) {
             return (TypeElement) ((DeclaredType) value).asElement();
