@@ -10,6 +10,7 @@ env:
     - ADB_INSTALL_TIMEOUT=8
 
 before_install:
+  - touch local.properties
   - yes | sdkmanager "platforms;android-27"
   - chmod +x gradlew
 
