@@ -11,18 +11,18 @@ import moxy.viewstate.strategy.StateStrategy;
 @SuppressWarnings("WeakerAccess")
 public abstract class MvpViewState<View extends MvpView> {
 
-  protected ViewCommands<View> mViewCommands = new ViewCommands<>();
+  protected ViewCommands<View> viewCommands = new ViewCommands<>();
 
-  protected Set<View> mViews;
+  protected Set<View> views;
 
-  protected Set<View> mInRestoreState;
+  protected Set<View> inRestoreState;
 
-  protected Map<View, Set<ViewCommand<View>>> mViewStates;
+  protected Map<View, Set<ViewCommand<View>>> viewStates;
 
   public MvpViewState() {
-    mViews = Collections.newSetFromMap(new WeakHashMap<View, Boolean>());
-    mInRestoreState = Collections.newSetFromMap(new WeakHashMap<View, Boolean>());
-    mViewStates = new WeakHashMap<>();
+    views = Collections.newSetFromMap(new WeakHashMap<View, Boolean>());
+    inRestoreState = Collections.newSetFromMap(new WeakHashMap<View, Boolean>());
+    viewStates = new WeakHashMap<>();
   }
 
   /**
@@ -32,18 +32,18 @@ public abstract class MvpViewState<View extends MvpView> {
    * @param currentState commands that was applied already
    */
   protected void restoreState(View view, Set<ViewCommand<View>> currentState) {
-    if (mViewCommands.isEmpty()) {
+    if (viewCommands.isEmpty()) {
       return;
     }
 
-    mViewCommands.reapply(view, currentState);
+    viewCommands.reapply(view, currentState);
   }
 
   /**
    * @return true if view state has one or more views, false otherwise (if view state doesn't have any view)
    */
   protected Boolean hasNotView() {
-    return (mViews == null) || mViews.isEmpty();
+    return (views == null) || views.isEmpty();
   }
 
   /**
@@ -56,22 +56,22 @@ public abstract class MvpViewState<View extends MvpView> {
       throw new IllegalArgumentException("Mvp view must be not null");
     }
 
-    boolean isViewAdded = mViews.add(view);
+    boolean isViewAdded = views.add(view);
 
     if (!isViewAdded) {
       return;
     }
 
-    mInRestoreState.add(view);
+    inRestoreState.add(view);
 
-    Set<ViewCommand<View>> currentState = mViewStates.get(view);
+    Set<ViewCommand<View>> currentState = viewStates.get(view);
     currentState = currentState == null ? Collections.<ViewCommand<View>>emptySet() : currentState;
 
     restoreState(view, currentState);
 
-    mViewStates.remove(view);
+    viewStates.remove(view);
 
-    mInRestoreState.remove(view);
+    inRestoreState.remove(view);
   }
 
   /**
@@ -82,24 +82,24 @@ public abstract class MvpViewState<View extends MvpView> {
    * @param view target mvp view to detach
    */
   public void detachView(View view) {
-    mViews.remove(view);
-    mInRestoreState.remove(view);
+    views.remove(view);
+    inRestoreState.remove(view);
 
     Set<ViewCommand<View>> currentState =
         Collections.newSetFromMap(new WeakHashMap<ViewCommand<View>, Boolean>());
-    currentState.addAll(mViewCommands.getCurrentState());
-    mViewStates.put(view, currentState);
+    currentState.addAll(viewCommands.getCurrentState());
+    viewStates.put(view, currentState);
   }
 
   public void destroyView(View view) {
-    mViewStates.remove(view);
+    viewStates.remove(view);
   }
 
   /**
    * @return views, attached to this view state instance
    */
   public Set<View> getViews() {
-    return mViews;
+    return views;
   }
 
   /**
@@ -109,6 +109,6 @@ public abstract class MvpViewState<View extends MvpView> {
    * @return true if view state restore state to incoming view. false otherwise.
    */
   public boolean isInRestoreState(View view) {
-    return mInRestoreState.contains(view);
+    return inRestoreState.contains(view);
   }
 }

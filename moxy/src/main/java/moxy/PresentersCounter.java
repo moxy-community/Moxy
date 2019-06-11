@@ -9,9 +9,9 @@ import java.util.Set;
 @SuppressWarnings("WeakerAccess")
 public class PresentersCounter {
 
-  private Map<MvpPresenter<?>, Set<String>> mConnections = new HashMap<>();
+  private Map<MvpPresenter<?>, Set<String>> connections = new HashMap<>();
 
-  private Map<String, Set<MvpPresenter>> mTags = new HashMap<>();
+  private Map<String, Set<MvpPresenter>> tags = new HashMap<>();
 
   /**
    * Save delegate tag when it inject presenter to delegate's object
@@ -20,18 +20,18 @@ public class PresentersCounter {
    * @param delegateTag Delegate tag
    */
   public void injectPresenter(MvpPresenter<?> presenter, String delegateTag) {
-    Set<String> delegateTags = mConnections.get(presenter);
+    Set<String> delegateTags = connections.get(presenter);
     if (delegateTags == null) {
       delegateTags = new HashSet<>();
-      mConnections.put(presenter, delegateTags);
+      connections.put(presenter, delegateTags);
     }
 
     delegateTags.add(delegateTag);
 
-    Set<MvpPresenter> presenters = mTags.get(delegateTag);
+    Set<MvpPresenter> presenters = tags.get(delegateTag);
     if (presenters == null) {
       presenters = new HashSet<>();
-      mTags.put(delegateTag, presenters);
+      tags.put(delegateTag, presenters);
     }
     presenters.add(presenter);
   }
@@ -44,17 +44,17 @@ public class PresentersCounter {
    * @return True if there are no links to this presenter and presenter be able to destroy. False otherwise
    */
   public boolean rejectPresenter(MvpPresenter<?> presenter, String delegateTag) {
-    Set<MvpPresenter> presenters = mTags.get(delegateTag);
+    Set<MvpPresenter> presenters = tags.get(delegateTag);
     if (presenters != null) {
       presenters.remove(presenter);
     }
     if (presenters == null || presenters.isEmpty()) {
-      mTags.remove(delegateTag);
+      tags.remove(delegateTag);
     }
 
-    Set<String> delegateTags = mConnections.get(presenter);
+    Set<String> delegateTags = connections.get(presenter);
     if (delegateTags == null) {
-      mConnections.remove(presenter);
+      connections.remove(presenter);
       return true;
     }
 
@@ -70,7 +70,7 @@ public class PresentersCounter {
     boolean noTags = delegateTags.isEmpty();
 
     if (noTags) {
-      mConnections.remove(presenter);
+      connections.remove(presenter);
     }
 
     return noTags;
@@ -78,7 +78,7 @@ public class PresentersCounter {
 
   public Set<MvpPresenter> getAll(String delegateTag) {
     Set<MvpPresenter> presenters = new HashSet<>();
-    for (Map.Entry<String, Set<MvpPresenter>> tagsWithPresenters : mTags.entrySet()) {
+    for (Map.Entry<String, Set<MvpPresenter>> tagsWithPresenters : tags.entrySet()) {
       if (tagsWithPresenters.getKey().startsWith(delegateTag)) {
         presenters.addAll(tagsWithPresenters.getValue());
       }
@@ -89,7 +89,7 @@ public class PresentersCounter {
 
   @SuppressWarnings("unused")
   public boolean isInjected(MvpPresenter<?> presenter) {
-    Set<String> mDelegateTags = mConnections.get(presenter);
+    Set<String> mDelegateTags = connections.get(presenter);
 
     return mDelegateTags != null && !mDelegateTags.isEmpty();
   }

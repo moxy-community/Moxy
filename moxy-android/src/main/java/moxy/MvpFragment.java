@@ -7,7 +7,7 @@ import android.os.Bundle;
 @SuppressWarnings("ConstantConditions")
 public class MvpFragment extends Fragment {
 
-  private boolean mIsStateSaved;
+  private boolean isStateSaved;
 
   private MvpDelegate<? extends MvpFragment> mvpDelegate;
 
@@ -21,7 +21,7 @@ public class MvpFragment extends Fragment {
   public void onStart() {
     super.onStart();
 
-    mIsStateSaved = false;
+    isStateSaved = false;
 
     getMvpDelegate().onAttach();
   }
@@ -29,7 +29,7 @@ public class MvpFragment extends Fragment {
   public void onResume() {
     super.onResume();
 
-    mIsStateSaved = false;
+    isStateSaved = false;
 
     getMvpDelegate().onAttach();
   }
@@ -37,7 +37,7 @@ public class MvpFragment extends Fragment {
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
 
-    mIsStateSaved = true;
+    isStateSaved = true;
 
     getMvpDelegate().onSaveInstanceState(outState);
     getMvpDelegate().onDetach();
@@ -72,8 +72,8 @@ public class MvpFragment extends Fragment {
 
     // When we rotate device isRemoving() return true for fragment placed in backstack
     // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-    if (mIsStateSaved) {
-      mIsStateSaved = false;
+    if (isStateSaved) {
+      isStateSaved = false;
       return;
     }
 

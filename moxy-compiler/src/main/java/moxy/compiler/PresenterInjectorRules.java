@@ -34,17 +34,17 @@ public class PresenterInjectorRules extends AnnotationRule {
   public void checkAnnotation(Element annotatedField) {
     checkEnvironment(annotatedField);
 
-    if (annotatedField.getKind() != mValidKind) {
-      mErrorBuilder
+    if (annotatedField.getKind() != validKind) {
+      errorBuilder
           .append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement()
               .getSimpleName()
-              + " should be " + mValidKind.name() + ", or not mark it as @" + InjectPresenter.class
+              + " should be " + validKind.name() + ", or not mark it as @" + InjectPresenter.class
               .getSimpleName()).append("\n");
     }
 
     for (Modifier modifier : annotatedField.getModifiers()) {
-      if (!mValidModifiers.contains(modifier)) {
-        mErrorBuilder.append(
+      if (!validModifiers.contains(modifier)) {
+        errorBuilder.append(
             "Field " + annotatedField + " of " + annotatedField.getEnclosingElement()
                 .getSimpleName() + " can't be a " + modifier)
             .append(". Use ")
@@ -56,7 +56,7 @@ public class PresenterInjectorRules extends AnnotationRule {
     Element enclosingElement = annotatedField.getEnclosingElement();
     while (enclosingElement.getKind() == ElementKind.CLASS) {
       if (!enclosingElement.getModifiers().contains(Modifier.PUBLIC)) {
-        mErrorBuilder.append(enclosingElement.getSimpleName() + " should be PUBLIC ");
+        errorBuilder.append(enclosingElement.getSimpleName() + " should be PUBLIC ");
         break;
       }
 

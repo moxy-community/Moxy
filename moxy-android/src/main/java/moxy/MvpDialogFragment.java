@@ -8,7 +8,7 @@ import android.os.Bundle;
 @SuppressWarnings("ConstantConditions")
 public class MvpDialogFragment extends DialogFragment {
 
-  private boolean mIsStateSaved;
+  private boolean isStateSaved;
 
   private MvpDelegate<? extends MvpDialogFragment> mvpDelegate;
 
@@ -21,7 +21,7 @@ public class MvpDialogFragment extends DialogFragment {
   public void onResume() {
     super.onResume();
 
-    mIsStateSaved = false;
+    isStateSaved = false;
 
     getMvpDelegate().onAttach();
   }
@@ -29,7 +29,7 @@ public class MvpDialogFragment extends DialogFragment {
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
 
-    mIsStateSaved = true;
+    isStateSaved = true;
 
     getMvpDelegate().onSaveInstanceState(outState);
     getMvpDelegate().onDetach();
@@ -64,8 +64,8 @@ public class MvpDialogFragment extends DialogFragment {
 
     // When we rotate device isRemoving() return true for fragment placed in backstack
     // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-    if (mIsStateSaved) {
-      mIsStateSaved = false;
+    if (isStateSaved) {
+      isStateSaved = false;
       return;
     }
 
