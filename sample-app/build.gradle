@@ -24,14 +24,24 @@ android {
     versionCode 1
     versionName "1.0"
 
-    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-  }
-  buildTypes {
-    release {
-      minifyEnabled false
-      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        disableEmptyStrategyCheck: 'false',
+                        enableEmptyStrategyHelper: 'true',
+                        defaultMoxyStrategy      : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
+                ]
+            }
+        }
     }
-  }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
 
   sourceSets {
     main {
@@ -58,28 +68,28 @@ dependencies {
   //implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
   //kapt "com.github.moxy-community::moxy-compiler:$moxyVersion"
 
-  def daggerVersion = '2.22.1'
-  implementation "com.google.dagger:dagger:$daggerVersion"
-  kapt "com.google.dagger:dagger-compiler:$daggerVersion"
-  implementation "com.google.dagger:dagger-android-support:$daggerVersion"
-  kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    def daggerVersion = '2.22.1'
+    implementation "com.google.dagger:dagger:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-  testImplementation "androidx.test:monitor:1.1.1"
-  testImplementation deps.mockito
+    testImplementation "androidx.test:monitor:1.1.1"
+    testImplementation deps.mockito
 
-  testImplementation deps.truth
-  testImplementation deps.android
-  testImplementation deps.robolectric
-  testImplementation deps.androidJunit
-  testImplementation deps.compiletesting
-  testImplementation project(':moxy-compiler')
-  testImplementation deps.javapoet
-  testImplementation 'androidx.test:runner:1.1.1'
-  testImplementation "org.mockito:mockito-core:2.27.0"
-  testImplementation "androidx.test:core:1.1.0"
-  testImplementation "androidx.test.ext:junit:1.1.0"
-  testImplementation deps.android
-  testImplementation project(':stub-reflector')
-  kaptAndroidTest project(':moxy-compiler')
+    testImplementation deps.truth
+    testImplementation deps.android
+    testImplementation deps.robolectric
+    testImplementation deps.androidJunit
+    testImplementation deps.compiletesting
+    testImplementation project(':moxy-compiler')
+    testImplementation deps.javapoet
+    testImplementation 'androidx.test:runner:1.1.1'
+    testImplementation "org.mockito:mockito-core:2.27.0"
+    testImplementation "androidx.test:core:1.1.0"
+    testImplementation "androidx.test.ext:junit:1.1.0"
+    testImplementation deps.android
+    testImplementation project(':stub-reflector')
+    kaptAndroidTest project(':moxy-compiler')
 }
