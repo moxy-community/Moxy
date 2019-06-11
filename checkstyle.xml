@@ -43,7 +43,7 @@
     <module name="LocalFinalVariableName"/>
     <module name="LocalVariableName"/>
     <module name="MemberName">
-      <property name="format" value="^m[a-zA-Z0-9]*$"/>
+      <property name="format" value="^[a-z]{2,}\S"/>
     </module>
     <module name="MethodName"/>
     <module name="ParameterName"/>
