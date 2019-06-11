@@ -47,7 +47,9 @@
     </module>
     <module name="MethodName"/>
     <module name="ParameterName"/>
-    <module name="StaticVariableName"/>
+    <module name="StaticVariableName">
+      <property name="format" value="^[a-z]{2,}\S"/>
+    </module>
     <module name="TypeName"/>
 
     <!-- See http://checkstyle.sf.net/config_import.html -->

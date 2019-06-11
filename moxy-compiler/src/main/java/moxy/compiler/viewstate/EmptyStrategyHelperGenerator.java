@@ -12,6 +12,9 @@ import javax.lang.model.element.Name;
 public class EmptyStrategyHelperGenerator {
 
 
+    private EmptyStrategyHelperGenerator() {
+    }
+
     /**
      * @param destinationPackage package to generate EmptyStrategyHelper
      * @param migrationMethods   non empty list of methods
