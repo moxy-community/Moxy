@@ -166,8 +166,9 @@ public class ViewInterfaceProcessor
                         migrationMethods.add(new MigrationMethod(typeElement, methodElement));
                     } else {
                         String message = String
-                                .format("No default strategy for method! You are trying migrate to default OneExecutionStrategy, "
-                                                + "but has methods without any Strategy!  See %s method \"%s\"",
+                                .format("A View method has no strategy! You are probably trying to migrate from an "
+                                                + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
+                                                + "without any Strategy, and you did not specify a default Strategy.",
                                         typeElement.getQualifiedName(),
                                         methodElement.getSimpleName()
                                 );
