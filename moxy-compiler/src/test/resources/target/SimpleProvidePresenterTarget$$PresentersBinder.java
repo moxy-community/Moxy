@@ -10,8 +10,8 @@ import java.util.List;
 import presenter.EmptyViewPresenter;
 
 public class SimpleProvidePresenterTarget$$PresentersBinder extends PresenterBinder<SimpleProvidePresenterTarget> {
-	public List<PresenterField<SimpleProvidePresenterTarget>> getPresenterFields() {
-		List<PresenterField<SimpleProvidePresenterTarget>> presenters = new ArrayList<>(1);
+	public List<PresenterField<? super SimpleProvidePresenterTarget>> getPresenterFields() {
+		List<PresenterField<? super SimpleProvidePresenterTarget>> presenters = new ArrayList<>(1);
 
 		presenters.add(new PresenterBinder());
 

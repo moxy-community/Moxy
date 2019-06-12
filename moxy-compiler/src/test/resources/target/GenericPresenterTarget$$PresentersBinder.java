@@ -10,8 +10,8 @@ import java.util.List;
 import presenter.GenericPresenter;
 
 public class GenericPresenterTarget$$PresentersBinder extends PresenterBinder<GenericPresenterTarget> {
-	public List<PresenterField<GenericPresenterTarget>> getPresenterFields() {
-		List<PresenterField<GenericPresenterTarget>> presenters = new ArrayList<>(1);
+	public List<PresenterField<? super GenericPresenterTarget>> getPresenterFields() {
+		List<PresenterField<? super GenericPresenterTarget>> presenters = new ArrayList<>(1);
 
 		presenters.add(new PresenterBinder());
 
