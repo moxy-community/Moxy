@@ -3,6 +3,7 @@ package moxy;
 import android.os.Bundle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +42,7 @@ public class MvpDelegate<Delegated> {
 
     private MvpDelegate mParentDelegate;
 
-    private List<MvpPresenter<? super Delegated>> mPresenters;
+    private List<MvpPresenter<? super Delegated>> mPresenters = Collections.emptyList();
 
     private List<MvpDelegate> mChildDelegates;
 

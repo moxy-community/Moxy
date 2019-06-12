@@ -114,15 +114,42 @@ If you use google material, use `MvpBottomSheetDialogFragment` add this:
 ```groovy
 implementation 'com.github.moxy-community:moxy-material:moxyVersion'
 ```
+## New Features and Compiler option for Migration from old version
+
+By default, each `MvpView` method must have an annotation `@StateStrategyType`.
+In the old version of Moxy, it was allowed to miss strategy for methods. In this case, the default strategy was applied.
+
+You can fallback to the old behavior. To do this, set the disableEmptyStrategyCheck parameter to true.
+```kotlin
+disableEmptyStrategyCheck : ‘true’
+```
+
+In this case, the default strategy will be `AddToEndSingleStrategy`. In old version default strategy was` AddToEndStrategy`.
+
+To change default strategy, provide for `defaultMoxyStrategy` parameter the full class name of new default strategy.
+
+```kotlin
+defaultMoxyStrategy : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
+```
+
+If compiler finds `MvpView` method without annotation `@StateStrategyType` it show this error with standard method for notifying about compilation problems.For ease of migration from older versions, we have provided an additional mechanism: `EmptyStrategyHelper`.
+It collects all the errors associated with an empty strategy in one place. Using it, you can easily navigate from the `EmptyStrategyHelper` directly to the method with a missing strategy.
+
+To switch the error output method, enable the option
+```kotlin
+enableEmptyStrategyHelper : 'true'
+```
+
+How to correctly use compilation flags see at [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
 
 ## ProGuard
 Moxy is completely without reflection! No special ProGuard rules required.
 
 ## Road Map
-* Provide migration mechanic from com.arello-mobile.moxy and its default strategy
-* Kotlin incremental compilation support
-* Remove reflectors and common presenter store
-* Provide Runtime Implementation
+* [✓] ~~Provide a migration tool from com.arello-mobile.moxy and its default strategy~~
+* [ ]Kotlin incremental compilation support
+* [ ]Remove reflectors and common presenter store
+* [ ]Provide Runtime Implementation
 
 ## Moxy Community
 Brave people how created library
@@ -130,9 +157,7 @@ Brave people how created library
 [@senneco](https://github.com/senneco)
 [@ekursakov](https://github.com/ekursakov)
 [@jordan1997](https://github.com/jordan1997)
-[@dependabot-bot](https://github.com/dependabot-bot)
 [@xanderblinov](https://github.com/xanderblinov)
-[@VovaStelmashchuk](https://github.com/VovaStelmashchuk)
 [@SavinMike](https://github.com/SavinMike)
 [@AlexeyKorshun](https://github.com/AlexeyKorshun)
 [@dmdevgo](https://github.com/dmdevgo)

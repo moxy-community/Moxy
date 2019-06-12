@@ -26,13 +26,13 @@ import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
 
 import moxy.InjectViewState;
-import moxy.presenter.InjectPresenter;
 import moxy.compiler.presenterbinder.InjectPresenterProcessor;
 import moxy.compiler.presenterbinder.PresenterBinderClassGenerator;
 import moxy.compiler.viewstate.ViewInterfaceProcessor;
 import moxy.compiler.viewstate.ViewStateClassGenerator;
 import moxy.compiler.viewstateprovider.InjectViewStateProcessor;
 import moxy.compiler.viewstateprovider.ViewStateProviderClassGenerator;
+import moxy.presenter.InjectPresenter;
 
 import static javax.lang.model.SourceVersion.latestSupported;
 
@@ -41,6 +41,12 @@ import static javax.lang.model.SourceVersion.latestSupported;
 public class MvpCompiler extends AbstractProcessor {
 
     public static final String MOXY_REFLECTOR_DEFAULT_PACKAGE = "moxy";
+
+    private static final String OPTION_DISABLE_EMPTY_STRATEGY_CHECK = "disableEmptyStrategyCheck";
+
+    private static final String DEFAULT_MOXY_STRATEGY = "defaultMoxyStrategy";
+
+    private static final String OPTION_ENABLE_EMPTY_STRATEGY_HELPER = "enableEmptyStrategyHelper";
 
     private static Messager sMessager;
 
@@ -74,7 +80,11 @@ public class MvpCompiler extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedOptions() {
-        return Collections.emptySet();
+        Set<String> options = new HashSet<>();
+        options.add(OPTION_DISABLE_EMPTY_STRATEGY_CHECK);
+        options.add(DEFAULT_MOXY_STRATEGY);
+        options.add(OPTION_ENABLE_EMPTY_STRATEGY_HELPER);
+        return options;
     }
 
     @Override
@@ -104,23 +114,33 @@ public class MvpCompiler extends AbstractProcessor {
                     "Moxy compilation failed. Could you copy stack trace above and write us (or make issue on Github)?");
             e.printStackTrace();
             getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "Moxy compilation failed; see the compiler error output for details (" + e + ")");
+                    "Moxy compilation failed; see the compiler error output for details (" + e
+                            + ")");
         }
 
         return true;
     }
 
     private boolean throwableProcess(RoundEnvironment roundEnv) {
-        checkInjectors(roundEnv, InjectPresenter.class,
+        checkInjectors(roundEnv,
                 new PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT));
 
         InjectViewStateProcessor injectViewStateProcessor = new InjectViewStateProcessor();
-        ViewStateProviderClassGenerator viewStateProviderClassGenerator = new ViewStateProviderClassGenerator();
+        ViewStateProviderClassGenerator viewStateProviderClassGenerator
+                = new ViewStateProviderClassGenerator();
 
         InjectPresenterProcessor injectPresenterProcessor = new InjectPresenterProcessor();
-        PresenterBinderClassGenerator presenterBinderClassGenerator = new PresenterBinderClassGenerator();
+        PresenterBinderClassGenerator presenterBinderClassGenerator
+                = new PresenterBinderClassGenerator();
 
-        ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor();
+        boolean disableEmptyStrategyCheck = isOptionEnabled(OPTION_DISABLE_EMPTY_STRATEGY_CHECK);
+        String defaultStrategy = getDefaultStrategy();
+        boolean enableEmptyStrategyHelper = isOptionEnabled(OPTION_ENABLE_EMPTY_STRATEGY_HELPER);
+
+        ViewInterfaceProcessor viewInterfaceProcessor = new ViewInterfaceProcessor(
+                disableEmptyStrategyCheck,
+                enableEmptyStrategyHelper,
+                getDefaultStrategy());
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
         processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
@@ -133,12 +153,31 @@ public class MvpCompiler extends AbstractProcessor {
                     viewInterfaceProcessor, viewStateClassGenerator);
         }
 
+        JavaFile migrationHelper = viewInterfaceProcessor.makeMigrationHelper(moxyReflectorPackage);
+
+        if (migrationHelper != null) {
+            createSourceFile(migrationHelper);
+        }
+
         return true;
     }
 
-    private void checkInjectors(final RoundEnvironment roundEnv, Class<? extends Annotation> clazz,
+    private String getDefaultStrategy() {
+        return sOptions.get(DEFAULT_MOXY_STRATEGY);
+    }
+
+    private boolean isOptionEnabled(final String option) {
+        return Boolean.parseBoolean(sOptions.get(option));
+    }
+
+    private boolean isUseOldDefaultStrategyEnabled() {
+        String option = sOptions.get(DEFAULT_MOXY_STRATEGY);
+        return Boolean.parseBoolean(option);
+    }
+
+    private void checkInjectors(final RoundEnvironment roundEnv,
             AnnotationRule annotationRule) {
-        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(clazz)) {
+        for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(InjectPresenter.class)) {
             annotationRule.checkAnnotation(annotatedElement);
         }
 
@@ -156,7 +195,8 @@ public class MvpCompiler extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(clazz)) {
             if (element.getKind() != kind) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
-                        element + " must be " + kind.name() + ", or not mark it as @" + clazz.getSimpleName());
+                        element + " must be " + kind.name() + ", or not mark it as @" + clazz
+                                .getSimpleName(), element);
             }
 
             generateCode(element, kind, processor, classGenerator);
@@ -168,7 +208,8 @@ public class MvpCompiler extends AbstractProcessor {
             ElementProcessor<E, R> processor,
             JavaFilesGenerator<R> classGenerator) {
         if (element.getKind() != kind) {
-            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name());
+            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name(),
+                    element);
         }
 
         //noinspection unchecked
