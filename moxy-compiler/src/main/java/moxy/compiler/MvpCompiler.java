@@ -153,7 +153,7 @@ public class MvpCompiler extends AbstractProcessor {
                     viewInterfaceProcessor, viewStateClassGenerator);
         }
 
-        JavaFile migrationHelper = viewInterfaceProcessor.makeMigrationHelper(moxyReflectorPackage);
+        JavaFile migrationHelper = viewInterfaceProcessor.makeMigrationHelper();
 
         if (migrationHelper != null) {
             createSourceFile(migrationHelper);

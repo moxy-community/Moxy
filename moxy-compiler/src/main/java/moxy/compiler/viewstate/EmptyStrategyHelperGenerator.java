@@ -11,13 +11,10 @@ import javax.lang.model.element.Name;
 
 public class EmptyStrategyHelperGenerator {
 
-
     /**
-     * @param destinationPackage package to generate EmptyStrategyHelper
      * @param migrationMethods   non empty list of methods
      */
-    public static JavaFile generate(String destinationPackage,
-            List<MigrationMethod> migrationMethods) {
+    public static JavaFile generate(List<MigrationMethod> migrationMethods) {
 
         Name firstViewSimpleName = migrationMethods.get(0).clazz.getSimpleName();
 
@@ -48,7 +45,7 @@ public class EmptyStrategyHelperGenerator {
 
         classBuilder.addMethod(methodSpecBuilder.build());
 
-        return JavaFile.builder(destinationPackage, classBuilder.build())
+        return JavaFile.builder("moxy", classBuilder.build())
                 .indent("\t")
                 .build();
     }

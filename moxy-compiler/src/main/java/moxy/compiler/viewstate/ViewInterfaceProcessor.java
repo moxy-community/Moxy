@@ -108,9 +108,9 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
         return new moxy.compiler.viewstate.ViewInterfaceInfo(element, methods);
     }
 
-    public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
+    public JavaFile makeMigrationHelper() {
         if (enableEmptyStrategyHelper && !migrationMethods.isEmpty()) {
-            return EmptyStrategyHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
+            return EmptyStrategyHelperGenerator.generate(migrationMethods);
         }
         return null;
     }
