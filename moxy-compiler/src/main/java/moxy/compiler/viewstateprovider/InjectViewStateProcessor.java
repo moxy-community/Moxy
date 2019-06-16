@@ -23,8 +23,7 @@ import moxy.compiler.Util;
 
 import static moxy.compiler.Util.fillGenerics;
 
-public class InjectViewStateProcessor
-    extends ElementProcessor<TypeElement, moxy.compiler.viewstateprovider.PresenterInfo> {
+public class InjectViewStateProcessor extends ElementProcessor<TypeElement, moxy.compiler.viewstateprovider.PresenterInfo> {
 
     private static final String MVP_PRESENTER_CLASS = MvpPresenter.class.getCanonicalName();
 
@@ -36,8 +35,7 @@ public class InjectViewStateProcessor
 
     @Override
     public moxy.compiler.viewstateprovider.PresenterInfo process(TypeElement element) {
-        return new moxy.compiler.viewstateprovider.PresenterInfo(element,
-            getViewStateClassName(element));
+        return new moxy.compiler.viewstateprovider.PresenterInfo(element, getViewStateClassName(element));
     }
 
     private String getViewStateClassName(TypeElement typeElement) {
@@ -56,8 +54,7 @@ public class InjectViewStateProcessor
 
                 TypeElement viewTypeElement = MvpCompiler.getElementUtils().getTypeElement(view);
                 if (viewTypeElement == null) {
-                    throw new IllegalArgumentException(
-                        "View \"" + view + "\" for " + typeElement + " cannot be found");
+                    throw new IllegalArgumentException("View \"" + view + "\" for " + typeElement + " cannot be found");
                 }
 
                 usedViews.add(viewTypeElement);
@@ -104,8 +101,7 @@ public class InjectViewStateProcessor
             }
         }
 
-        if (mvpViewStateClassName.isEmpty() || DefaultViewState.class.getName()
-            .equals(mvpViewStateClassName)) {
+        if (mvpViewStateClassName.isEmpty() || DefaultViewState.class.getName().equals(mvpViewStateClassName)) {
             return null;
         }
 
@@ -120,14 +116,11 @@ public class InjectViewStateProcessor
         while (superclass.getKind() != TypeKind.NONE) {
             TypeElement superclassElement = (TypeElement) ((DeclaredType) superclass).asElement();
 
-            final List<? extends TypeMirror> typeArguments =
-                ((DeclaredType) superclass).getTypeArguments();
-            final List<? extends TypeParameterElement> typeParameters =
-                superclassElement.getTypeParameters();
+            final List<? extends TypeMirror> typeArguments = ((DeclaredType) superclass).getTypeArguments();
+            final List<? extends TypeParameterElement> typeParameters = superclassElement.getTypeParameters();
 
             if (typeArguments.size() > typeParameters.size()) {
-                throw new IllegalArgumentException(
-                    "Code generation for interface "
+                throw new IllegalArgumentException("Code generation for interface "
                         + typeElement.getSimpleName()
                         + " failed. Simplify your generics. ("
                         + typeArguments
@@ -138,8 +131,7 @@ public class InjectViewStateProcessor
 
             Map<String, String> types = new HashMap<>();
             for (int i = 0; i < typeArguments.size(); i++) {
-                types.put(typeParameters.get(i).toString(),
-                    fillGenerics(parentTypes, typeArguments.get(i)));
+                types.put(typeParameters.get(i).toString(), fillGenerics(parentTypes, typeArguments.get(i)));
             }
 
             if (superclassElement.toString().equals(MVP_PRESENTER_CLASS)) {

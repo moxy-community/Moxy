@@ -6,14 +6,12 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * Command will be added to end of commands queue. If commands queue contains same type command,
- * then existing command will be removed.
+ * Command will be added to end of commands queue. If commands queue contains same type command, then existing command will be removed.
  */
 public class AddToEndSingleStrategy implements StateStrategy {
 
     @Override
-    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
-        ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand) {
         Iterator<ViewCommand<View>> iterator = currentState.iterator();
 
         while (iterator.hasNext()) {
@@ -29,8 +27,7 @@ public class AddToEndSingleStrategy implements StateStrategy {
     }
 
     @Override
-    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
-        ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand) {
         // pass
     }
 }

@@ -49,12 +49,10 @@ public class MvpDelegate<Delegated> {
 
     public void setParentDelegate(MvpDelegate delegate, String childId) {
         if (mBundle != null) {
-            throw new IllegalStateException(
-                "You should call setParentDelegate() before first onCreate()");
+            throw new IllegalStateException("You should call setParentDelegate() before first onCreate()");
         }
         if (mChildDelegates != null && mChildDelegates.size() > 0) {
-            throw new IllegalStateException(
-                "You could not set parent delegate when there are already has child presenters");
+            throw new IllegalStateException("You could not set parent delegate when there are already has child presenters");
         }
 
         mParentDelegate = delegate;
@@ -79,8 +77,7 @@ public class MvpDelegate<Delegated> {
     public void freeParentDelegate() {
 
         if (mParentDelegate == null) {
-            throw new IllegalStateException(
-                "You should call freeParentDelegate() before first setParentDelegate()");
+            throw new IllegalStateException("You should call freeParentDelegate() before first setParentDelegate()");
         }
 
         mParentDelegate.removeChildDelegate(this);
@@ -133,8 +130,7 @@ public class MvpDelegate<Delegated> {
         }
 
         //bind presenters to view
-        mPresenters =
-            MvpFacade.getInstance().getMvpProcessor().getMvpPresenters(mDelegated, mDelegateTag);
+        mPresenters = MvpFacade.getInstance().getMvpProcessor().getMvpPresenters(mDelegated, mDelegateTag);
 
         for (MvpDelegate childDelegate : mChildDelegates) {
             childDelegate.onCreate(bundle);
@@ -234,8 +230,7 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * Save presenters tag prefix to save state for restore presenters at future after delegate
-     * recreate
+     * Save presenters tag prefix to save state for restore presenters at future after delegate recreate
      *
      * @param outState out state from Android component
      */

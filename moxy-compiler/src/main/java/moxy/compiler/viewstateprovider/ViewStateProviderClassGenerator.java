@@ -15,19 +15,15 @@ import moxy.ViewStateProvider;
 import moxy.compiler.JavaFilesGenerator;
 import moxy.viewstate.MvpViewState;
 
-public final class ViewStateProviderClassGenerator
-    extends JavaFilesGenerator<moxy.compiler.viewstateprovider.PresenterInfo> {
+public final class ViewStateProviderClassGenerator extends JavaFilesGenerator<moxy.compiler.viewstateprovider.PresenterInfo> {
 
     @Override
     public List<JavaFile> generate(moxy.compiler.viewstateprovider.PresenterInfo presenterInfo) {
         TypeSpec typeSpec = TypeSpec
-            .classBuilder(
-                presenterInfo.getName().simpleName() + MvpProcessor.VIEW_STATE_PROVIDER_SUFFIX)
+            .classBuilder(presenterInfo.getName().simpleName() + MvpProcessor.VIEW_STATE_PROVIDER_SUFFIX)
             .addModifiers(Modifier.PUBLIC)
             .superclass(ViewStateProvider.class)
-            .addMethod(
-                generateGetViewStateMethod(presenterInfo.getName(),
-                    presenterInfo.getViewStateName()))
+            .addMethod(generateGetViewStateMethod(presenterInfo.getName(), presenterInfo.getViewStateName()))
             .build();
 
         JavaFile javaFile = JavaFile.builder(presenterInfo.getName().packageName(), typeSpec)
@@ -46,8 +42,7 @@ public final class ViewStateProviderClassGenerator
 
         if (viewState == null) {
             methodBuilder
-                .addStatement("throw new RuntimeException($S)",
-                    presenter.reflectionName() + " should has view");
+                .addStatement("throw new RuntimeException($S)", presenter.reflectionName() + " should has view");
         } else {
             methodBuilder.addStatement("return new $T()", viewState);
         }

@@ -12,8 +12,7 @@ import moxy.viewstate.ViewCommand;
 public class AddToEndSingleTagStrategy implements StateStrategy {
 
     @Override
-    public <View extends MvpView> void beforeApply(final List<ViewCommand<View>> currentState,
-        final ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void beforeApply(final List<ViewCommand<View>> currentState, final ViewCommand<View> incomingCommand) {
         Iterator<ViewCommand<View>> iterator = currentState.iterator();
 
         while (iterator.hasNext()) {

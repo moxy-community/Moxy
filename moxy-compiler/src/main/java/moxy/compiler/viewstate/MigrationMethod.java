@@ -9,8 +9,7 @@ class MigrationMethod {
 
     ExecutableElement method;
 
-    MigrationMethod(final TypeElement clazz,
-        final ExecutableElement method) {
+    MigrationMethod(final TypeElement clazz, final ExecutableElement method) {
         this.clazz = clazz;
         this.method = method;
     }

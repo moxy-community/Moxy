@@ -23,15 +23,10 @@ class TargetPresenterField {
 
     private String presenterTagProviderMethodName;
 
-    TargetPresenterField(TypeMirror clazz,
-        String name,
-        String tag,
-        String presenterId) {
+    TargetPresenterField(TypeMirror clazz, String name, String tag, String presenterId) {
         this.clazz = clazz;
         this.isParametrized = TypeName.get(clazz) instanceof ParameterizedTypeName;
-        this.typeName =
-            isParametrized ? ((ParameterizedTypeName) TypeName.get(clazz)).rawType
-                : TypeName.get(clazz);
+        this.typeName = isParametrized ? ((ParameterizedTypeName) TypeName.get(clazz)).rawType : TypeName.get(clazz);
         this.name = name;
         this.tag = tag;
         this.presenterId = presenterId;
@@ -46,9 +41,7 @@ class TargetPresenterField {
     }
 
     String getGeneratedClassName() {
-        return name.substring(0, 1).toUpperCase()
-            + name.substring(1)
-            + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX;
+        return name.substring(0, 1).toUpperCase() + name.substring(1) + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX;
     }
 
     String getTag() {

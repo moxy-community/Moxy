@@ -118,16 +118,13 @@ public class MvpCompiler extends AbstractProcessor {
     }
 
     private boolean throwableProcess(RoundEnvironment roundEnv) {
-        checkInjectors(roundEnv,
-            new PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT));
+        checkInjectors(roundEnv, new PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT));
 
         InjectViewStateProcessor injectViewStateProcessor = new InjectViewStateProcessor();
-        ViewStateProviderClassGenerator viewStateProviderClassGenerator
-            = new ViewStateProviderClassGenerator();
+        ViewStateProviderClassGenerator viewStateProviderClassGenerator = new ViewStateProviderClassGenerator();
 
         InjectPresenterProcessor injectPresenterProcessor = new InjectPresenterProcessor();
-        PresenterBinderClassGenerator presenterBinderClassGenerator
-            = new PresenterBinderClassGenerator();
+        PresenterBinderClassGenerator presenterBinderClassGenerator = new PresenterBinderClassGenerator();
 
         boolean disableEmptyStrategyCheck = isOptionEnabled(OPTION_DISABLE_EMPTY_STRATEGY_CHECK);
         String defaultStrategy = getDefaultStrategy();
@@ -139,14 +136,11 @@ public class MvpCompiler extends AbstractProcessor {
             getDefaultStrategy());
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
-        processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
-            injectViewStateProcessor, viewStateProviderClassGenerator);
-        processInjectors(roundEnv, InjectPresenter.class, ElementKind.FIELD,
-            injectPresenterProcessor, presenterBinderClassGenerator);
+        processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS, injectViewStateProcessor, viewStateProviderClassGenerator);
+        processInjectors(roundEnv, InjectPresenter.class, ElementKind.FIELD, injectPresenterProcessor, presenterBinderClassGenerator);
 
         for (TypeElement usedView : injectViewStateProcessor.getUsedViews()) {
-            generateCode(usedView, ElementKind.INTERFACE,
-                viewInterfaceProcessor, viewStateClassGenerator);
+            generateCode(usedView, ElementKind.INTERFACE, viewInterfaceProcessor, viewStateClassGenerator);
         }
 
         JavaFile migrationHelper = viewInterfaceProcessor.makeMigrationHelper();
@@ -171,8 +165,7 @@ public class MvpCompiler extends AbstractProcessor {
         return Boolean.parseBoolean(option);
     }
 
-    private void checkInjectors(final RoundEnvironment roundEnv,
-        AnnotationRule annotationRule) {
+    private void checkInjectors(final RoundEnvironment roundEnv, AnnotationRule annotationRule) {
         for (Element annotatedElement : roundEnv.getElementsAnnotatedWith(InjectPresenter.class)) {
             annotationRule.checkAnnotation(annotatedElement);
         }
@@ -204,8 +197,7 @@ public class MvpCompiler extends AbstractProcessor {
         ElementProcessor<E, R> processor,
         JavaFilesGenerator<R> classGenerator) {
         if (element.getKind() != kind) {
-            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name(),
-                element);
+            getMessager().printMessage(Diagnostic.Kind.ERROR, element + " must be " + kind.name(), element);
         }
 
         //noinspection unchecked

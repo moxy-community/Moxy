@@ -40,8 +40,7 @@ public abstract class MvpViewState<View extends MvpView> {
     }
 
     /**
-     * @return true if view state has one or more views, false otherwise (if view state doesn't have
-     * any view)
+     * @return true if view state has one or more views, false otherwise (if view state doesn't have any view)
      */
     protected Boolean hasNotView() {
         return (mViews == null) || mViews.isEmpty();
@@ -66,8 +65,7 @@ public abstract class MvpViewState<View extends MvpView> {
         mInRestoreState.add(view);
 
         Set<ViewCommand<View>> currentState = mViewStates.get(view);
-        currentState =
-            currentState == null ? Collections.<ViewCommand<View>>emptySet() : currentState;
+        currentState = currentState == null ? Collections.<ViewCommand<View>>emptySet() : currentState;
 
         restoreState(view, currentState);
 
@@ -87,8 +85,7 @@ public abstract class MvpViewState<View extends MvpView> {
         mViews.remove(view);
         mInRestoreState.remove(view);
 
-        Set<ViewCommand<View>> currentState =
-            Collections.newSetFromMap(new WeakHashMap<ViewCommand<View>, Boolean>());
+        Set<ViewCommand<View>> currentState = Collections.newSetFromMap(new WeakHashMap<ViewCommand<View>, Boolean>());
         currentState.addAll(mViewCommands.getCurrentState());
         mViewStates.put(view, currentState);
     }

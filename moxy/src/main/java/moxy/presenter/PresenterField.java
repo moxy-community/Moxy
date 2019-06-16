@@ -10,8 +10,7 @@ public abstract class PresenterField<PresentersContainer> {
 
     protected final Class<? extends MvpPresenter> presenterClass;
 
-    protected PresenterField(String tag, String presenterId,
-        Class<? extends MvpPresenter> presenterClass) {
+    protected PresenterField(String tag, String presenterId, Class<? extends MvpPresenter> presenterClass) {
         this.tag = tag;
         this.presenterId = presenterId;
         this.presenterClass = presenterClass;

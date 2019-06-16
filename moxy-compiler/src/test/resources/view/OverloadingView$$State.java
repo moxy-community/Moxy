@@ -4,8 +4,7 @@ import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndStrategy;
 
-public class OverloadingView$$State extends MvpViewState<OverloadingView>
-    implements OverloadingView {
+public class OverloadingView$$State extends MvpViewState<OverloadingView> implements OverloadingView {
     @Override
     public void method(String string) {
         MethodCommand methodCommand = new MethodCommand(string);

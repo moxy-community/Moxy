@@ -4,7 +4,7 @@ import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndStrategy;
 
-public class GenericView$$State<T> extends MvpViewState<GenericView<T>> implements GenericView<T> {
+public class GenericView$$State<T> extends MvpViewState<GenericView<T>>implements GenericView<T> {
     @Override
     public void testEvent(T param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);

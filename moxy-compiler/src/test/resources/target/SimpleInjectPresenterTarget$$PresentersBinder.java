@@ -7,8 +7,7 @@ import moxy.PresenterBinder;
 import moxy.presenter.PresenterField;
 import presenter.EmptyViewPresenter;
 
-public class SimpleInjectPresenterTarget$$PresentersBinder
-    extends PresenterBinder<SimpleInjectPresenterTarget> {
+public class SimpleInjectPresenterTarget$$PresentersBinder extends PresenterBinder<SimpleInjectPresenterTarget> {
     public List<PresenterField<? super SimpleInjectPresenterTarget>> getPresenterFields() {
         List<PresenterField<? super SimpleInjectPresenterTarget>> presenters = new ArrayList<>(1);
 

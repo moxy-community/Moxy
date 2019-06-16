@@ -31,9 +31,7 @@ public final class ErrorProcessor extends AbstractProcessor {
             if (element.getSimpleName().toString().equals("InjectPresenterTypeBehaviorView")) {
                 for (Element element1 : element.getEnclosedElements()) {
                     System.out.println("EnclosedElements: " + element1.getSimpleName());
-                    ImmutableList<String> of =
-                        ImmutableList.of("mPresenterIdLocalPresenter", "mTagLocalPresenter",
-                            "mFactoryLocalPresenter", "mFactoryTagPresenter");
+                    ImmutableList<String> of = ImmutableList.of("mPresenterIdLocalPresenter", "mTagLocalPresenter", "mFactoryLocalPresenter", "mFactoryTagPresenter");
                     if (of.contains(element1.getSimpleName().toString())) {
                         messager.printMessage(Diagnostic.Kind.ERROR, "expected error!", element1);
                     }

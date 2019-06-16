@@ -36,23 +36,12 @@ public class PresenterInjectorRules extends AnnotationRule {
 
         if (annotatedField.getKind() != mValidKind) {
             mErrorBuilder
-                .append(
-                    "Field "
-                        + annotatedField
-                        + " of "
-                        + annotatedField.getEnclosingElement()
-                        .getSimpleName()
-                        + " should be "
-                        + mValidKind.name()
-                        + ", or not mark it as @"
-                        + InjectPresenter.class
-                        .getSimpleName()).append("\n");
+                .append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement().getSimpleName() + " should be " + mValidKind.name() + ", or not mark it as @" + InjectPresenter.class.getSimpleName()).append("\n");
         }
 
         for (Modifier modifier : annotatedField.getModifiers()) {
             if (!mValidModifiers.contains(modifier)) {
-                mErrorBuilder.append(
-                    "Field " + annotatedField + " of " + annotatedField.getEnclosingElement()
+                mErrorBuilder.append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement()
                         .getSimpleName() + " can't be a " + modifier)
                     .append(". Use ")
                     .append(validModifiersToString())
@@ -76,28 +65,23 @@ public class PresenterInjectorRules extends AnnotationRule {
             return;
         }
 
-        TypeElement typeElement =
-            (TypeElement) ((DeclaredType) annotatedField.asType()).asElement();
-        String viewClassFromGeneric =
-            getViewClassFromGeneric(typeElement, (DeclaredType) annotatedField.asType());
+        TypeElement typeElement = (TypeElement) ((DeclaredType) annotatedField.asType()).asElement();
+        String viewClassFromGeneric = getViewClassFromGeneric(typeElement, (DeclaredType) annotatedField.asType());
 
         Collection<TypeMirror> viewsType = getViewsType(
-            (TypeElement) ((DeclaredType) annotatedField.getEnclosingElement()
-                .asType()).asElement());
+            (TypeElement) ((DeclaredType) annotatedField.getEnclosingElement().asType()).asElement());
 
         boolean result = false;
 
         for (TypeMirror typeMirror : viewsType) {
             if (Util.getFullClassName(typeMirror).equals(viewClassFromGeneric) || Util
-                .fillGenerics(Collections.<String, String>emptyMap(), typeMirror)
-                .equals(viewClassFromGeneric)) {
+                .fillGenerics(Collections.<String, String>emptyMap(), typeMirror).equals(viewClassFromGeneric)) {
                 result = true;
                 break;
             }
         }
         if (!result) {
-            MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
+            MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
                 annotatedField);
         }
     }
@@ -111,20 +95,16 @@ public class PresenterInjectorRules extends AnnotationRule {
         }
 
         Map<String, String> parentTypes = Collections.emptyMap();
-        List<? extends TypeMirror> totalTypeArguments =
-            new ArrayList<>(((DeclaredType) superclass).getTypeArguments());
+        List<? extends TypeMirror> totalTypeArguments = new ArrayList<>(((DeclaredType) superclass).getTypeArguments());
         while (superclass.getKind() != TypeKind.NONE) {
             TypeElement superclassElement = (TypeElement) ((DeclaredType) superclass).asElement();
-            List<? extends TypeMirror> typeArguments =
-                ((DeclaredType) superclass).getTypeArguments();
+            List<? extends TypeMirror> typeArguments = ((DeclaredType) superclass).getTypeArguments();
             totalTypeArguments.retainAll(typeArguments);
-            final List<? extends TypeParameterElement> typeParameters =
-                superclassElement.getTypeParameters();
+            final List<? extends TypeParameterElement> typeParameters = superclassElement.getTypeParameters();
 
             Map<String, String> types = new HashMap<>();
             for (int i = 0; i < typeArguments.size(); i++) {
-                types.put(typeParameters.get(i).toString(),
-                    fillGenerics(parentTypes, typeArguments.get(i)));
+                types.put(typeParameters.get(i).toString(), fillGenerics(parentTypes, typeArguments.get(i)));
             }
 
             if (superclassElement.toString().equals(MvpPresenter.class.getCanonicalName())) {
@@ -156,22 +136,16 @@ public class PresenterInjectorRules extends AnnotationRule {
         return "";
     }
 
-    private Map<TypeParameterElement, TypeMirror> getChildInstanceOfClassFromGeneric(
-        final TypeElement typeElement,
-        final Class<?> aClass) {
+    private Map<TypeParameterElement, TypeMirror> getChildInstanceOfClassFromGeneric(final TypeElement typeElement, final Class<?> aClass) {
         Map<TypeParameterElement, TypeMirror> result = new HashMap<>();
         for (TypeParameterElement element : typeElement.getTypeParameters()) {
             List<? extends TypeMirror> bounds = element.getBounds();
             for (TypeMirror bound : bounds) {
-                if (bound instanceof DeclaredType
-                    && ((DeclaredType) bound).asElement() instanceof TypeElement) {
-                    Collection<TypeMirror> viewsType =
-                        getViewsType((TypeElement) ((DeclaredType) bound).asElement());
+                if (bound instanceof DeclaredType && ((DeclaredType) bound).asElement() instanceof TypeElement) {
+                    Collection<TypeMirror> viewsType = getViewsType((TypeElement) ((DeclaredType) bound).asElement());
                     boolean isViewType = false;
                     for (TypeMirror viewType : viewsType) {
-                        if (((DeclaredType) viewType).asElement()
-                            .toString()
-                            .equals(aClass.getCanonicalName())) {
+                        if (((DeclaredType) viewType).asElement().toString().equals(aClass.getCanonicalName())) {
                             isViewType = true;
                         }
                     }
@@ -194,12 +168,10 @@ public class PresenterInjectorRules extends AnnotationRule {
 
         while (superclass.getKind() != TypeKind.NONE) {
             TypeElement superclassElement = (TypeElement) ((DeclaredType) superclass).asElement();
-            Collection<? extends TypeMirror> interfaces =
-                new HashSet<>(superclassElement.getInterfaces());
+            Collection<? extends TypeMirror> interfaces = new HashSet<>(superclassElement.getInterfaces());
             for (TypeMirror typeMirror : interfaces) {
                 if (typeMirror instanceof DeclaredType) {
-                    result.addAll(
-                        getViewsType((TypeElement) ((DeclaredType) typeMirror).asElement()));
+                    result.addAll(getViewsType((TypeElement) ((DeclaredType) typeMirror).asElement()));
                 }
             }
             result.addAll(interfaces);

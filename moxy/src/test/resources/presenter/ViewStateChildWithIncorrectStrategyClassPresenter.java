@@ -5,7 +5,6 @@ import moxy.MvpPresenter;
 import view.ViewStateChildWithIncorrectStrategyClassView;
 
 @InjectViewState
-public class ViewStateChildWithIncorrectStrategyClassPresenter
-    extends MvpPresenter<ViewStateChildWithIncorrectStrategyClassView> {
+public class ViewStateChildWithIncorrectStrategyClassPresenter extends MvpPresenter<ViewStateChildWithIncorrectStrategyClassView> {
 
 }

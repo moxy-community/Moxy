@@ -10,14 +10,12 @@ import moxy.viewstate.ViewCommand;
 public class SkipStrategy implements StateStrategy {
 
     @Override
-    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
-        ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand) {
         //do nothing to skip
     }
 
     @Override
-    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
-        ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand) {
         // pass
     }
 }

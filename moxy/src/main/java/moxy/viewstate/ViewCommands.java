@@ -35,11 +35,9 @@ public class ViewCommands<View extends MvpView> {
             try {
                 stateStrategy = viewCommand.getStrategyType().newInstance();
             } catch (InstantiationException e) {
-                throw new IllegalArgumentException(
-                    "Unable to create state strategy: " + viewCommand.toString());
+                throw new IllegalArgumentException("Unable to create state strategy: " + viewCommand.toString());
             } catch (IllegalAccessException e) {
-                throw new IllegalArgumentException(
-                    "Unable to create state strategy: " + viewCommand.toString());
+                throw new IllegalArgumentException("Unable to create state strategy: " + viewCommand.toString());
             }
 
             mStrategies.put(viewCommand.getStrategyType(), stateStrategy);

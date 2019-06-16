@@ -12,8 +12,7 @@ class TargetClassInfo {
 
     private final TypeElement superPresenterBinder;
 
-    TargetClassInfo(TypeElement name, List<TargetPresenterField> fields,
-        TypeElement superPresenterBinder) {
+    TargetClassInfo(TypeElement name, List<TargetPresenterField> fields, TypeElement superPresenterBinder) {
         this.name = ClassName.get(name);
         this.fields = fields;
         this.superPresenterBinder = superPresenterBinder;

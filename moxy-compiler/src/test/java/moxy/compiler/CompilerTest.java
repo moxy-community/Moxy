@@ -21,8 +21,7 @@ public abstract class CompilerTest {
 
     protected Compilation compileSources(JavaFileObject... sources) {
         return javac()
-            .withOptions(
-                "-implicit:none") // don't process or generate classes for implicitly found sources
+            .withOptions("-implicit:none") // don't process or generate classes for implicitly found sources
             .compile(sources);
     }
 
@@ -53,8 +52,7 @@ public abstract class CompilerTest {
             JavaFileObject actualClass = actualGeneratedFiles.stream()
                 .filter(input -> fileName.equals(input.getName()))
                 .findFirst()
-                .orElseThrow(
-                    () -> new AssertionFailedError("File " + fileName + " is not generated"));
+                .orElseThrow(() -> new AssertionFailedError("File " + fileName + " is not generated"));
 
             String actualBytecode = getBytecodeString(actualClass);
             String exceptedBytecode = getBytecodeString(exceptedClass);

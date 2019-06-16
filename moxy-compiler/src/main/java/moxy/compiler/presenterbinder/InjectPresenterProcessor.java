@@ -23,8 +23,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
     private static final String PROVIDE_PRESENTER_ANNOTATION = ProvidePresenter.class.getName();
 
-    private static final String PROVIDE_PRESENTER_TAG_ANNOTATION =
-        ProvidePresenterTag.class.getName();
+    private static final String PROVIDE_PRESENTER_TAG_ANNOTATION = ProvidePresenterTag.class.getName();
 
     private final List<TypeElement> presentersContainers = new ArrayList<>();
 
@@ -56,8 +55,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
         return fields;
     }
 
-    private static List<PresenterProviderMethod> collectPresenterProviders(
-        TypeElement presentersContainer) {
+    private static List<PresenterProviderMethod> collectPresenterProviders(TypeElement presentersContainer) {
         List<PresenterProviderMethod> providers = new ArrayList<>();
 
         for (Element element : presentersContainer.getEnclosedElements()) {
@@ -67,8 +65,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
             final ExecutableElement providerMethod = (ExecutableElement) element;
 
-            final AnnotationMirror annotation =
-                Util.getAnnotation(element, PROVIDE_PRESENTER_ANNOTATION);
+            final AnnotationMirror annotation = Util.getAnnotation(element, PROVIDE_PRESENTER_ANNOTATION);
 
             if (annotation == null) {
                 continue;
@@ -95,8 +92,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
             final ExecutableElement providerMethod = (ExecutableElement) element;
 
-            final AnnotationMirror annotation =
-                Util.getAnnotation(element, PROVIDE_PRESENTER_TAG_ANNOTATION);
+            final AnnotationMirror annotation = Util.getAnnotation(element, PROVIDE_PRESENTER_TAG_ANNOTATION);
 
             if (annotation == null) {
                 continue;
@@ -104,8 +100,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
             final String name = providerMethod.getSimpleName().toString();
 
-            TypeMirror presenterClass =
-                Util.getAnnotationValueAsTypeMirror(annotation, "presenterClass");
+            TypeMirror presenterClass = Util.getAnnotationValueAsTypeMirror(annotation, "presenterClass");
             String type = Util.getAnnotationValueAsString(annotation, "type");
             String presenterId = Util.getAnnotationValueAsString(annotation, "presenterId");
 
@@ -148,8 +143,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
         }
     }
 
-    private static void bindTagProvidersToFields(List<TargetPresenterField> fields,
-        List<TagProviderMethod> tagProviders) {
+    private static void bindTagProvidersToFields(List<TargetPresenterField>fields, List<TagProviderMethod> tagProviders) {
         if (fields.isEmpty() || tagProviders.isEmpty()) {
             return;
         }
@@ -161,7 +155,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                         continue;
                     }
                     if (field.getPresenterId() != null && !field.getPresenterId()
-                        .equals(tagProvider.getPresenterId())) {
+                            .equals(tagProvider.getPresenterId())) {
                         continue;
                     }
 

@@ -5,8 +5,7 @@ import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndStrategy;
 
-public class GenericWithExtendsView$$State<T extends Serializable>
-    extends MvpViewState<GenericWithExtendsView<T>> implements GenericWithExtendsView<T> {
+public class GenericWithExtendsView$$State<T extends Serializable> extends MvpViewState<GenericWithExtendsView<T>> implements GenericWithExtendsView<T> {
     @Override
     public void testEvent(T param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);

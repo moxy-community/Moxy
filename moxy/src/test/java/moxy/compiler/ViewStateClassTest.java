@@ -15,12 +15,10 @@ public class ViewStateClassTest extends CompilerTest {
     public void viewStateForClassView_throw() {
         try {
             getThat(JavaFileObjects.forResource("view/CounterTestView.java"),
-                JavaFileObjects.forResource(
-                    "presenter/InjectViewStateForClassPresenter.java")).failsToCompile();
+                JavaFileObjects.forResource("presenter/InjectViewStateForClassPresenter.java")).failsToCompile();
             fail();
         } catch (RuntimeException e) {
-            Truth.assertThat(
-                e.getLocalizedMessage().contains("must be INTERFACE, or not mark it as"));
+            Truth.assertThat(e.getLocalizedMessage().contains("must be INTERFACE, or not mark it as"));
         }
     }
 
@@ -28,8 +26,7 @@ public class ViewStateClassTest extends CompilerTest {
     public void positiveViewState() {
         try {
             assertCompilationResultIs(
-                ImmutableTable.of(),
-                ImmutableList.of(getString("view/PositiveViewStateView$$State.java"))
+                ImmutableTable.of(), ImmutableList.of(getString("view/PositiveViewStateView$$State.java"))
             );
         } catch (IOException e) {
             fail(e.getLocalizedMessage());

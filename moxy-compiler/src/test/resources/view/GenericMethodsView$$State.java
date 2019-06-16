@@ -4,8 +4,7 @@ import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndStrategy;
 
-public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView>
-    implements GenericMethodsView {
+public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> implements GenericMethodsView {
     @Override
     public <T> void generic(T param) {
         GenericCommand genericCommand = new GenericCommand(param);

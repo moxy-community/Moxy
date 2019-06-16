@@ -10,8 +10,7 @@ class TagProviderMethod {
 
     private final String presenterId;
 
-    TagProviderMethod(TypeMirror presenterClass, String methodName, String type,
-        String presenterId) {
+    TagProviderMethod(TypeMirror presenterClass, String methodName, String type, String presenterId) {
         this.presenterClass = presenterClass;
         this.methodName = methodName;
         this.presenterId = presenterId;

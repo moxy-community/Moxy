@@ -24,13 +24,11 @@ import moxy.compiler.Util;
 import moxy.viewstate.strategy.AddToEndSingleStrategy;
 import moxy.viewstate.strategy.StateStrategyType;
 
-public class ViewInterfaceProcessor
-    extends ElementProcessor<TypeElement, moxy.compiler.viewstate.ViewInterfaceInfo> {
+public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.compiler.viewstate.ViewInterfaceInfo> {
 
     private static final String STATE_STRATEGY_TYPE_ANNOTATION = StateStrategyType.class.getName();
 
-    private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
-        .getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
+    private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils().getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
 
     private final TypeElement frameworkDefaultStrategy;
 
@@ -53,13 +51,11 @@ public class ViewInterfaceProcessor
         this.enableEmptyStrategyHelper = enableEmptyStrategyHelper;
         if (defaultStrategy != null) {
 
-            TypeElement localDefaultStrategy =
-                MvpCompiler.getElementUtils().getTypeElement(defaultStrategy);
+            TypeElement localDefaultStrategy = MvpCompiler.getElementUtils().getTypeElement(defaultStrategy);
 
             if (localDefaultStrategy == null) {
                 String message = String
-                    .format("Unable to parse option %s. Check %s exists", defaultStrategy,
-                        defaultStrategy);
+                    .format("Unable to parse option %s. Check %s exists", defaultStrategy, defaultStrategy);
 
                 MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
                 localDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
@@ -184,9 +180,7 @@ public class ViewInterfaceProcessor
             }
 
             final ViewMethod method = new ViewMethod(
-                (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass,
-                methodTag
-            );
+                (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass, methodTag);
 
             if (rootMethods.contains(method)) {
                 continue;

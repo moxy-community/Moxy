@@ -57,8 +57,7 @@ public abstract class CompilerTest {
         return getThat(Collections.singletonList(new MvpCompiler()), target);
     }
 
-    protected CompileTester getThat(Collection<? extends Processor> processors,
-        final JavaFileObject... target) {
+    protected CompileTester getThat(Collection<? extends Processor> processors, final JavaFileObject... target) {
         return Truth.assert_().about(JavaSourcesSubjectFactory.javaSources())
             .that(Arrays.asList(target))
             .processedWith(processors);
@@ -77,16 +76,12 @@ public abstract class CompilerTest {
         return stringBuilder.toString();
     }
 
-    protected void assertCompilationResultIs(
-        Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics,
-        Collection<String> resources) throws IOException {
+    protected void assertCompilationResultIs(Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics, Collection<String> resources) throws IOException {
         assertCompilationResultIs(expectedDiagnostics, resources, MvpCompiler.class);
     }
 
     //For more info see https://github.com/google/auto/blob/master/value/src/test/java/com/google/auto/value/processor/CompilationErrorsTest.java
-    protected void assertCompilationResultIs(
-        Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics,
-        Collection<String> resources, final Class<? extends Processor> processor)
+    protected void assertCompilationResultIs(Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics, Collection<String> resources, final Class<? extends Processor> processor)
         throws IOException {
         StringWriter compilerOut = new StringWriter();
 
@@ -117,8 +112,7 @@ public abstract class CompilerTest {
         assertEquals(classNames.size(), sourceFiles.size());
 
         // Compile the classes.
-        JavaCompiler.CompilationTask javacTask = javac.getTask(
-            compilerOut, fileManager, diagnosticCollector, options, classNames, sourceFiles);
+        JavaCompiler.CompilationTask javacTask = javac.getTask(compilerOut, fileManager, diagnosticCollector, options, classNames, sourceFiles);
         boolean compiledOk = javacTask.call();
 
         // Check that there were no compilation errors unless we were expecting there to be.
@@ -157,8 +151,7 @@ public abstract class CompilerTest {
                     break;
                 }
             }
-            assertTrue("Diagnostics should contain " + expectedDiagnostic + ": " + diagnostics,
-                match);
+            assertTrue("Diagnostics should contain " + expectedDiagnostic + ": " + diagnostics, match);
         }
     }
 
@@ -183,8 +176,7 @@ public abstract class CompilerTest {
             } else {
                 pkg = "";
             }
-            String cls =
-                sourceUnit.replaceAll("(?s).*?(class|interface|enum) ([A-Za-z0-9_$]+).*", "$2");
+            String cls = sourceUnit.replaceAll("(?s).*?(class|interface|enum) ([A-Za-z0-9_$]+).*", "$2");
             assertTrue(cls, cls.matches("[A-Za-z0-9_$]+"));
             return new ClassName(pkg, cls);
         }

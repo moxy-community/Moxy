@@ -7,8 +7,7 @@ import moxy.presenter.InjectViewStatePresenter;
 import moxy.presenter.PresenterType;
 import params.IncorrectCountOfParametersParams;
 
-public class IncorrectCountOfParametersParamsView
-    implements MvpView, IncorrectCountOfParametersParams {
+public class IncorrectCountOfParametersParamsView implements MvpView, IncorrectCountOfParametersParams {
 
     @InjectPresenter(factory = MockPresenterFactory.class, presenterId = "Test", type = PresenterType.LOCAL)
     public InjectViewStatePresenter mInjectViewStatePresenter;

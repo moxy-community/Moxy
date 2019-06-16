@@ -40,13 +40,11 @@ public final class Util {
         return fillGenerics(types, Collections.singletonList(param));
     }
 
-    public static String fillGenerics(Map<String, String> types,
-        List<? extends TypeMirror> params) {
+    public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params) {
         return fillGenerics(types, params, ", ");
     }
 
-    public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params,
-        String separator) {
+    public static String fillGenerics(Map<String, String> types, List<? extends TypeMirror> params, String separator) {
         String result = "";
 
         for (TypeMirror param : params) {
@@ -77,8 +75,7 @@ public final class Util {
             } else if (param instanceof DeclaredType) {
                 result += ((DeclaredType) param).asElement();
 
-                final List<? extends TypeMirror> typeArguments =
-                    ((DeclaredType) param).getTypeArguments();
+                final List<? extends TypeMirror> typeArguments = ((DeclaredType) param).getTypeArguments();
                 if (!typeArguments.isEmpty()) {
                     final String s = fillGenerics(types, typeArguments);
 
@@ -108,8 +105,7 @@ public final class Util {
     }
 
     public static String getFullClassName(TypeElement typeElement) {
-        String packageName =
-            MvpCompiler.getElementUtils().getPackageOf(typeElement).getQualifiedName().toString();
+        String packageName = MvpCompiler.getElementUtils().getPackageOf(typeElement).getQualifiedName().toString();
         if (packageName.length() > 0) {
             packageName += ".";
         }
@@ -120,10 +116,7 @@ public final class Util {
 
     public static AnnotationMirror getAnnotation(Element element, String annotationClass) {
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
-            if (annotationMirror.getAnnotationType()
-                .asElement()
-                .toString()
-                .equals(annotationClass)) {
+            if (annotationMirror.getAnnotationType().asElement().toString().equals(annotationClass)) {
                 return annotationMirror;
             }
         }
@@ -131,8 +124,7 @@ public final class Util {
         return null;
     }
 
-    public static TypeMirror getAnnotationValueAsTypeMirror(AnnotationMirror annotationMirror,
-        String key) {
+    public static TypeMirror getAnnotationValueAsTypeMirror(AnnotationMirror annotationMirror, String key) {
         AnnotationValue av = getAnnotationValue(annotationMirror, key);
 
         if (av != null) {
@@ -152,14 +144,12 @@ public final class Util {
         }
     }
 
-    public static AnnotationValue getAnnotationValue(AnnotationMirror annotationMirror,
-        String key) {
+    public static AnnotationValue getAnnotationValue(AnnotationMirror annotationMirror, String key) {
         if (annotationMirror == null) {
             return null;
         }
 
-        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
-            .getElementValues().entrySet()) {
+        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             if (entry.getKey().getSimpleName().toString().equals(key)) {
                 return entry.getValue();
             }
@@ -168,16 +158,14 @@ public final class Util {
         return null;
     }
 
-    public static Map<String, AnnotationValue> getAnnotationValues(
-        AnnotationMirror annotationMirror) {
+    public static Map<String, AnnotationValue> getAnnotationValues(AnnotationMirror annotationMirror) {
         if (annotationMirror == null) {
             return Collections.emptyMap();
         }
 
         Map<String, AnnotationValue> result = new HashMap<>();
 
-        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
-            .getElementValues().entrySet()) {
+        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             String key = entry.getKey().getSimpleName().toString();
             if (entry.getValue() != null) {
                 result.put(key, entry.getValue());
@@ -190,8 +178,7 @@ public final class Util {
     public static boolean hasEmptyConstructor(TypeElement element) {
         for (Element enclosedElement : element.getEnclosedElements()) {
             if (enclosedElement.getKind() == ElementKind.CONSTRUCTOR) {
-                List<? extends VariableElement> parameters =
-                    ((ExecutableElement) enclosedElement).getParameters();
+                List<? extends VariableElement> parameters = ((ExecutableElement) enclosedElement).getParameters();
                 if (parameters == null || parameters.isEmpty()) {
                     return true;
                 }
@@ -201,7 +188,6 @@ public final class Util {
     }
 
     public static String decapitalizeString(String string) {
-        return string == null || string.isEmpty() ? "" : string.length() == 1 ? string.toLowerCase()
-            : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+        return string == null || string.isEmpty() ? "" : string.length() == 1 ? string.toLowerCase() : Character.toLowerCase(string.charAt(0)) + string.substring(1);
     }
 }
