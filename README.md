@@ -180,8 +180,10 @@ Brave people how created library
 You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
 
 ## Contributing
-Install [SquareAndroid code style](https://github.com/square/java-code-styles)
-Use it for the project.
+Install code style to your IntelliJ or Android Studio. `MoxyAndroid.xml`
+For import file use or Mac OS:
+Preferences -> Editor -> Code style -> Scheme -> Import Scheme and choose the `MoxyAndroid.xml` file.   
+
 
 ## License
 ```
