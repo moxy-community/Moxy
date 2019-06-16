@@ -5,6 +5,6 @@ import moxy.presenter.InjectPresenter;
 
 public class ObjectInjectPresenterView implements MvpView {
 
-  @InjectPresenter
-  public Object mObject;
+    @InjectPresenter
+    public Object mObject;
 }

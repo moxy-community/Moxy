@@ -4,5 +4,5 @@ import moxy.MvpDelegate;
 
 public class ViewWithoutInject {
 
-  public MvpDelegate<? extends ViewWithoutInject> delegate;
+    public MvpDelegate<? extends ViewWithoutInject> delegate;
 }

@@ -11,16 +11,16 @@ import moxy.viewstate.ViewCommand;
  */
 public class SingleStateStrategy implements StateStrategy {
 
-  @Override
-  public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
-    ViewCommand<View> incomingCommand) {
-    currentState.clear();
-    currentState.add(incomingCommand);
-  }
+    @Override
+    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
+        ViewCommand<View> incomingCommand) {
+        currentState.clear();
+        currentState.add(incomingCommand);
+    }
 
-  @Override
-  public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
-    ViewCommand<View> incomingCommand) {
-    // pass
-  }
+    @Override
+    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
+        ViewCommand<View> incomingCommand) {
+        // pass
+    }
 }

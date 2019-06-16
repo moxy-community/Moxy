@@ -7,74 +7,75 @@ import moxy.MvpProcessor;
 
 class TargetPresenterField {
 
-  private final TypeMirror clazz;
+    private final TypeMirror clazz;
 
-  private final boolean isParametrized;
+    private final boolean isParametrized;
 
-  private final TypeName typeName;
+    private final TypeName typeName;
 
-  private final String name;
+    private final String name;
 
-  private final String tag;
+    private final String tag;
 
-  private final String presenterId;
+    private final String presenterId;
 
-  private String presenterProviderMethodName;
+    private String presenterProviderMethodName;
 
-  private String presenterTagProviderMethodName;
+    private String presenterTagProviderMethodName;
 
-  TargetPresenterField(TypeMirror clazz,
-    String name,
-    String tag,
-    String presenterId) {
-    this.clazz = clazz;
-    this.isParametrized = TypeName.get(clazz) instanceof ParameterizedTypeName;
-    this.typeName =
-      isParametrized ? ((ParameterizedTypeName) TypeName.get(clazz)).rawType : TypeName.get(clazz);
-    this.name = name;
-    this.tag = tag;
-    this.presenterId = presenterId;
-  }
+    TargetPresenterField(TypeMirror clazz,
+        String name,
+        String tag,
+        String presenterId) {
+        this.clazz = clazz;
+        this.isParametrized = TypeName.get(clazz) instanceof ParameterizedTypeName;
+        this.typeName =
+            isParametrized ? ((ParameterizedTypeName) TypeName.get(clazz)).rawType
+                : TypeName.get(clazz);
+        this.name = name;
+        this.tag = tag;
+        this.presenterId = presenterId;
+    }
 
-  TypeMirror getClazz() {
-    return clazz;
-  }
+    TypeMirror getClazz() {
+        return clazz;
+    }
 
-  TypeName getTypeName() {
-    return typeName;
-  }
+    TypeName getTypeName() {
+        return typeName;
+    }
 
-  String getGeneratedClassName() {
-    return name.substring(0, 1).toUpperCase()
-      + name.substring(1)
-      + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX;
-  }
+    String getGeneratedClassName() {
+        return name.substring(0, 1).toUpperCase()
+            + name.substring(1)
+            + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX;
+    }
 
-  String getTag() {
-    return tag;
-  }
+    String getTag() {
+        return tag;
+    }
 
-  String getName() {
-    return name;
-  }
+    String getName() {
+        return name;
+    }
 
-  String getPresenterId() {
-    return presenterId;
-  }
+    String getPresenterId() {
+        return presenterId;
+    }
 
-  String getPresenterProviderMethodName() {
-    return presenterProviderMethodName;
-  }
+    String getPresenterProviderMethodName() {
+        return presenterProviderMethodName;
+    }
 
-  void setPresenterProviderMethodName(String presenterProviderMethodName) {
-    this.presenterProviderMethodName = presenterProviderMethodName;
-  }
+    void setPresenterProviderMethodName(String presenterProviderMethodName) {
+        this.presenterProviderMethodName = presenterProviderMethodName;
+    }
 
-  String getPresenterTagProviderMethodName() {
-    return presenterTagProviderMethodName;
-  }
+    String getPresenterTagProviderMethodName() {
+        return presenterTagProviderMethodName;
+    }
 
-  void setPresenterTagProviderMethodName(String presenterTagProviderMethodName) {
-    this.presenterTagProviderMethodName = presenterTagProviderMethodName;
-  }
+    void setPresenterTagProviderMethodName(String presenterTagProviderMethodName) {
+        this.presenterTagProviderMethodName = presenterTagProviderMethodName;
+    }
 }

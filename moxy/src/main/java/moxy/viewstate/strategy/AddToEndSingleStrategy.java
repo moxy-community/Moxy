@@ -11,26 +11,26 @@ import moxy.viewstate.ViewCommand;
  */
 public class AddToEndSingleStrategy implements StateStrategy {
 
-  @Override
-  public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
-    ViewCommand<View> incomingCommand) {
-    Iterator<ViewCommand<View>> iterator = currentState.iterator();
+    @Override
+    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
+        ViewCommand<View> incomingCommand) {
+        Iterator<ViewCommand<View>> iterator = currentState.iterator();
 
-    while (iterator.hasNext()) {
-      ViewCommand<View> entry = iterator.next();
+        while (iterator.hasNext()) {
+            ViewCommand<View> entry = iterator.next();
 
-      if (entry.getClass() == incomingCommand.getClass()) {
-        iterator.remove();
-        break;
-      }
+            if (entry.getClass() == incomingCommand.getClass()) {
+                iterator.remove();
+                break;
+            }
+        }
+
+        currentState.add(incomingCommand);
     }
 
-    currentState.add(incomingCommand);
-  }
-
-  @Override
-  public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
-    ViewCommand<View> incomingCommand) {
-    // pass
-  }
+    @Override
+    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
+        ViewCommand<View> incomingCommand) {
+        // pass
+    }
 }

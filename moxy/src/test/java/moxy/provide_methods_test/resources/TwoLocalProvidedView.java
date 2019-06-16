@@ -6,16 +6,16 @@ import moxy.presenter.ProvidePresenter;
 
 public class TwoLocalProvidedView implements TestView {
 
-  @InjectPresenter
-  public TestPresenter oneLocalPresenter;
+    @InjectPresenter
+    public TestPresenter oneLocalPresenter;
 
-  @InjectPresenter
-  public TestPresenter secondLocalPresenter;
+    @InjectPresenter
+    public TestPresenter secondLocalPresenter;
 
-  public MvpDelegate<TwoLocalProvidedView> delegate;
+    public MvpDelegate<TwoLocalProvidedView> delegate;
 
-  @ProvidePresenter
-  TestPresenter provideLocalPresenter() {
-    return new TestPresenter();
-  }
+    @ProvidePresenter
+    TestPresenter provideLocalPresenter() {
+        return new TestPresenter();
+    }
 }

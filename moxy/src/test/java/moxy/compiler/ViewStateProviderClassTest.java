@@ -11,15 +11,15 @@ import static org.junit.Assert.fail;
 
 public class ViewStateProviderClassTest extends CompilerTest {
 
-  @Test
-  public void positiveViewStateProvider() {
-    try {
-      assertCompilationResultIs(ImmutableTable.<Diagnostic.Kind, Integer, Pattern>of(),
-        ImmutableList
-          .of(getString(
-            "presenter/PositiveViewStateProviderPresenter$$ViewStateProvider.java")));
-    } catch (IOException e) {
-      fail(e.getLocalizedMessage());
+    @Test
+    public void positiveViewStateProvider() {
+        try {
+            assertCompilationResultIs(ImmutableTable.<Diagnostic.Kind, Integer, Pattern>of(),
+                ImmutableList
+                    .of(getString(
+                        "presenter/PositiveViewStateProviderPresenter$$ViewStateProvider.java")));
+        } catch (IOException e) {
+            fail(e.getLocalizedMessage());
+        }
     }
-  }
 }

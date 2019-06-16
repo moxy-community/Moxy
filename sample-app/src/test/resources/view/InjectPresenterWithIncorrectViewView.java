@@ -6,6 +6,6 @@ import moxy.presenter.TestViewPresenter;
 
 public class InjectPresenterWithIncorrectViewView implements MvpView {
 
-  @InjectPresenter
-  public TestViewPresenter mTestViewPresenter;
+    @InjectPresenter
+    public TestViewPresenter mTestViewPresenter;
 }

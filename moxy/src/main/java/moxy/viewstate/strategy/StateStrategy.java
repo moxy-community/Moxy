@@ -16,33 +16,33 @@ import moxy.viewstate.ViewCommand;
  */
 public interface StateStrategy {
 
-  /**
-   * Called immediately after
-   * {@link MvpViewState} receive some
-   * command. Will not be called before re-apply to some other
-   * {@link MvpView}
-   *
-   * @param currentState current state of
-   * {@link MvpViewState}. Each {@link ViewCommand}
-   * contains self parameters.
-   * @param incomingCommand command for apply to {@link MvpView} This
-   * {@link ViewCommand} contains params of this command.
-   * @param <View> type of incoming view
-   */
-  <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
-    ViewCommand<View> incomingCommand);
+    /**
+     * Called immediately after
+     * {@link MvpViewState} receive some
+     * command. Will not be called before re-apply to some other
+     * {@link MvpView}
+     *
+     * @param currentState current state of
+     * {@link MvpViewState}. Each {@link ViewCommand}
+     * contains self parameters.
+     * @param incomingCommand command for apply to {@link MvpView} This
+     * {@link ViewCommand} contains params of this command.
+     * @param <View> type of incoming view
+     */
+    <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
+        ViewCommand<View> incomingCommand);
 
-  /**
-   * Called immediately after command applied to {@link MvpView}. Also called
-   * after re-apply to other views.
-   *
-   * @param currentState current state of
-   * {@link MvpViewState}. Each {@link ViewCommand}
-   * contains self parameters.
-   * @param incomingCommand applied command to {@link MvpView} This
-   * {@link ViewCommand} contains params of this command.
-   * @param <View> type of incoming view
-   */
-  <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
-    ViewCommand<View> incomingCommand);
+    /**
+     * Called immediately after command applied to {@link MvpView}. Also called
+     * after re-apply to other views.
+     *
+     * @param currentState current state of
+     * {@link MvpViewState}. Each {@link ViewCommand}
+     * contains self parameters.
+     * @param incomingCommand applied command to {@link MvpView} This
+     * {@link ViewCommand} contains params of this command.
+     * @param <View> type of incoming view
+     */
+    <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
+        ViewCommand<View> incomingCommand);
 }

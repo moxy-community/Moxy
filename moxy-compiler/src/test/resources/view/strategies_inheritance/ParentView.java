@@ -7,12 +7,12 @@ import view.strategies_inheritance.strategies.Strategy1;
 
 @StateStrategyType(ParentDefaultStrategy.class)
 public interface ParentView extends MvpView {
-  void parentMethod1(); // ParentDefaultStrategy
+    void parentMethod1(); // ParentDefaultStrategy
 
-  void parentMethod2(); // ParentDefaultStrategy
+    void parentMethod2(); // ParentDefaultStrategy
 
-  void parentMethod3(); // ParentDefaultStrategy
+    void parentMethod3(); // ParentDefaultStrategy
 
-  @StateStrategyType(Strategy1.class)
-  void parentMethodWithStrategy(); // Strategy1
+    @StateStrategyType(Strategy1.class)
+    void parentMethodWithStrategy(); // Strategy1
 }

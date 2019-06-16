@@ -9,6 +9,6 @@ import params.EmptyParams;
 
 public class EmptyParamsView implements MvpView, EmptyParams {
 
-  @InjectPresenter(factory = MockPresenterFactory.class, presenterId = "Test", type = PresenterType.LOCAL)
-  public MvpPresenter<MvpView> mInjectViewStatePresenter;
+    @InjectPresenter(factory = MockPresenterFactory.class, presenterId = "Test", type = PresenterType.LOCAL)
+    public MvpPresenter<MvpView> mInjectViewStatePresenter;
 }

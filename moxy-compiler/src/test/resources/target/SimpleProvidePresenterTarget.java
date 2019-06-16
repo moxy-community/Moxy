@@ -6,11 +6,11 @@ import presenter.EmptyViewPresenter;
 import view.EmptyView;
 
 public class SimpleProvidePresenterTarget implements EmptyView {
-  @InjectPresenter
-  EmptyViewPresenter presenter;
+    @InjectPresenter
+    EmptyViewPresenter presenter;
 
-  @ProvidePresenter
-  EmptyViewPresenter providePresenter() {
-    return new EmptyViewPresenter();
-  }
+    @ProvidePresenter
+    EmptyViewPresenter providePresenter() {
+        return new EmptyViewPresenter();
+    }
 }

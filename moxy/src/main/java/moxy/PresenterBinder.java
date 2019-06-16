@@ -5,5 +5,5 @@ import moxy.presenter.PresenterField;
 
 public abstract class PresenterBinder<PresentersContainer> {
 
-  public abstract List<PresenterField<? super PresentersContainer>> getPresenterFields();
+    public abstract List<PresenterField<? super PresentersContainer>> getPresenterFields();
 }

@@ -14,24 +14,24 @@ import org.robolectric.annotation.Config;
 @Config(manifest = Config.NONE)
 public class ProvideMethodsTest {
 
-  @Test
-  public void testLocalIsProvided() {
-    LocalProvidedView view = new LocalProvidedView();
+    @Test
+    public void testLocalIsProvided() {
+        LocalProvidedView view = new LocalProvidedView();
 
-    view.delegate = new MvpDelegate<>(view);
-    view.delegate.onCreate(new Bundle());
+        view.delegate = new MvpDelegate<>(view);
+        view.delegate.onCreate(new Bundle());
 
-    Assert.assertNotNull(view.oneLocalPresenter);
-    Assert.assertSame(view.oneLocalPresenter, view.oneLocalProvidedPresenter);
-  }
+        Assert.assertNotNull(view.oneLocalPresenter);
+        Assert.assertSame(view.oneLocalPresenter, view.oneLocalProvidedPresenter);
+    }
 
-  @Test
-  public void testTwoLocalUseDifferentProvided() {
-    TwoLocalProvidedView view = new TwoLocalProvidedView();
+    @Test
+    public void testTwoLocalUseDifferentProvided() {
+        TwoLocalProvidedView view = new TwoLocalProvidedView();
 
-    view.delegate = new MvpDelegate<>(view);
-    view.delegate.onCreate(new Bundle());
+        view.delegate = new MvpDelegate<>(view);
+        view.delegate.onCreate(new Bundle());
 
-    Assert.assertNotSame(view.oneLocalPresenter, view.secondLocalPresenter);
-  }
+        Assert.assertNotSame(view.oneLocalPresenter, view.secondLocalPresenter);
+    }
 }

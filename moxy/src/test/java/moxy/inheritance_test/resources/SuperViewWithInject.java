@@ -4,6 +4,6 @@ import moxy.presenter.InjectPresenter;
 
 public class SuperViewWithInject extends ViewWithoutInject implements TestView {
 
-  @InjectPresenter
-  public TestPresenter presenter;
+    @InjectPresenter
+    public TestPresenter presenter;
 }

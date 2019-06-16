@@ -23,9 +23,9 @@ import moxy.PresenterStore;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProvidePresenterTag {
 
-  String EMPTY = "";
+    String EMPTY = "";
 
-  Class<? extends MvpPresenter<?>> presenterClass();
+    Class<? extends MvpPresenter<?>> presenterClass();
 
-  String presenterId() default EMPTY;
+    String presenterId() default EMPTY;
 }

@@ -6,6 +6,6 @@ import view.WithoutGenerateViewAnnotationView;
 
 @InjectViewState
 public class ViewStateProviderForViewWithoutGenerateViewAnnotationPresenter
-  extends MvpPresenter<WithoutGenerateViewAnnotationView> {
+    extends MvpPresenter<WithoutGenerateViewAnnotationView> {
 
 }

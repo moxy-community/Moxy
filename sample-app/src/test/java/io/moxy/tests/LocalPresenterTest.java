@@ -25,107 +25,107 @@ import static org.mockito.Mockito.mock;
 @Config(manifest = Config.NONE)
 public class LocalPresenterTest {
 
-  @Mock
-  TestView mTestView;
+    @Mock
+    TestView mTestView;
 
-  DelegateLocalPresenterTestView mDelegateLocalPresenterTestView =
-    new DelegateLocalPresenterTestView();
+    DelegateLocalPresenterTestView mDelegateLocalPresenterTestView =
+        new DelegateLocalPresenterTestView();
 
-  DelegateLocalPresenterTestView mDelegateLocalPresenter2TestView =
-    new DelegateLocalPresenterTestView();
+    DelegateLocalPresenterTestView mDelegateLocalPresenter2TestView =
+        new DelegateLocalPresenterTestView();
 
-  MvpDelegate<? extends TestView> mTestViewMvpDelegate =
-    new MvpDelegate<>(mDelegateLocalPresenterTestView);
+    MvpDelegate<? extends TestView> mTestViewMvpDelegate =
+        new MvpDelegate<>(mDelegateLocalPresenterTestView);
 
-  MvpDelegate<? extends TestView> mTestViewMvpDelegate2 =
-    new MvpDelegate<>(mDelegateLocalPresenter2TestView);
+    MvpDelegate<? extends TestView> mTestViewMvpDelegate2 =
+        new MvpDelegate<>(mDelegateLocalPresenter2TestView);
 
-  @Before
-  public void setup() {
-    mTestView = mock(TestView.class);
+    @Before
+    public void setup() {
+        mTestView = mock(TestView.class);
 
-    mTestViewMvpDelegate.onCreate(null);
-    mTestViewMvpDelegate.onAttach();
+        mTestViewMvpDelegate.onCreate(null);
+        mTestViewMvpDelegate.onAttach();
 
-    mTestViewMvpDelegate2.onCreate(null);
-    mTestViewMvpDelegate2.onAttach();
-  }
-
-  @After
-  public void reset() {
-    mTestViewMvpDelegate.onDetach();
-    mTestViewMvpDelegate.onDestroy();
-
-    mTestViewMvpDelegate2.onDetach();
-    mTestViewMvpDelegate2.onDestroy();
-  }
-
-  @Test
-  public void checkWithInjectViewState() {
-    InjectViewStatePresenter injectViewStatePresenter = new InjectViewStatePresenter();
-    injectViewStatePresenter.attachView(mTestView);
-    try {
-      Field mViewState = MvpPresenter.class.getDeclaredField("mViewState");
-
-      mViewState.setAccessible(true);
-      assertTrue("ViewState is null for InjectViewStatePresenter",
-        mViewState.get(injectViewStatePresenter) != null);
-    } catch (IllegalAccessException | NoSuchFieldException e) {
-      assertFalse(e.getLocalizedMessage(), true);
+        mTestViewMvpDelegate2.onCreate(null);
+        mTestViewMvpDelegate2.onAttach();
     }
-  }
 
-  @Test
-  public void checkWithoutViewState() {
-    NoViewStatePresenter noViewStatePresenter = new NoViewStatePresenter();
-    noViewStatePresenter.attachView(mTestView);
-    try {
-      Field mViewState = MvpPresenter.class.getDeclaredField("mViewState");
+    @After
+    public void reset() {
+        mTestViewMvpDelegate.onDetach();
+        mTestViewMvpDelegate.onDestroy();
 
-      mViewState.setAccessible(true);
-      assertTrue("ViewState is not null for NoViewStatePresenter",
-        mViewState.get(noViewStatePresenter) == null);
-    } catch (IllegalAccessException | NoSuchFieldException e) {
-      assertFalse(e.getLocalizedMessage(), true);
+        mTestViewMvpDelegate2.onDetach();
+        mTestViewMvpDelegate2.onDestroy();
     }
-  }
 
-  @Test
-  public void checkDelegatePresenter() {
-    assertTrue("Presenter is null for delegate",
-      mDelegateLocalPresenterTestView.mInjectViewStatePresenter != null);
-  }
+    @Test
+    public void checkWithInjectViewState() {
+        InjectViewStatePresenter injectViewStatePresenter = new InjectViewStatePresenter();
+        injectViewStatePresenter.attachView(mTestView);
+        try {
+            Field mViewState = MvpPresenter.class.getDeclaredField("mViewState");
 
-  @Test
-  public void checkLocalPresenters() {
-    assertNotEquals("Local Presenters for two different view is equal",
-      mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode(),
-      mDelegateLocalPresenter2TestView.mInjectViewStatePresenter.hashCode());
-  }
+            mViewState.setAccessible(true);
+            assertTrue("ViewState is null for InjectViewStatePresenter",
+                mViewState.get(injectViewStatePresenter) != null);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            assertFalse(e.getLocalizedMessage(), true);
+        }
+    }
 
-  @Test
-  public void checkSaveState() {
-    int hashCode = mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode();
+    @Test
+    public void checkWithoutViewState() {
+        NoViewStatePresenter noViewStatePresenter = new NoViewStatePresenter();
+        noViewStatePresenter.attachView(mTestView);
+        try {
+            Field mViewState = MvpPresenter.class.getDeclaredField("mViewState");
 
-    Bundle bundle = new Bundle();
+            mViewState.setAccessible(true);
+            assertTrue("ViewState is not null for NoViewStatePresenter",
+                mViewState.get(noViewStatePresenter) == null);
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            assertFalse(e.getLocalizedMessage(), true);
+        }
+    }
 
-    mTestViewMvpDelegate.onSaveInstanceState(bundle);
-    mTestViewMvpDelegate.onDetach();
-    mTestViewMvpDelegate.onDestroy();
+    @Test
+    public void checkDelegatePresenter() {
+        assertTrue("Presenter is null for delegate",
+            mDelegateLocalPresenterTestView.mInjectViewStatePresenter != null);
+    }
 
-    mTestViewMvpDelegate.onCreate(bundle);
-    mTestViewMvpDelegate.onAttach();
+    @Test
+    public void checkLocalPresenters() {
+        assertNotEquals("Local Presenters for two different view is equal",
+            mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode(),
+            mDelegateLocalPresenter2TestView.mInjectViewStatePresenter.hashCode());
+    }
 
-    //TODO: should be passed! Or change test
-    //assertTrue("Local presenter has different hashCode after recreate", hashCode == mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode());
+    @Test
+    public void checkSaveState() {
+        int hashCode = mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode();
 
-    mTestViewMvpDelegate.onDetach();
-    mTestViewMvpDelegate.onDestroy();
+        Bundle bundle = new Bundle();
 
-    mTestViewMvpDelegate.onCreate();
-    mTestViewMvpDelegate.onAttach();
+        mTestViewMvpDelegate.onSaveInstanceState(bundle);
+        mTestViewMvpDelegate.onDetach();
+        mTestViewMvpDelegate.onDestroy();
 
-    assertFalse("Local presenter has same hashCode after creating new view",
-      hashCode == mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode());
-  }
+        mTestViewMvpDelegate.onCreate(bundle);
+        mTestViewMvpDelegate.onAttach();
+
+        //TODO: should be passed! Or change test
+        //assertTrue("Local presenter has different hashCode after recreate", hashCode == mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode());
+
+        mTestViewMvpDelegate.onDetach();
+        mTestViewMvpDelegate.onDestroy();
+
+        mTestViewMvpDelegate.onCreate();
+        mTestViewMvpDelegate.onAttach();
+
+        assertFalse("Local presenter has same hashCode after creating new view",
+            hashCode == mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode());
+    }
 }

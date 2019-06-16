@@ -5,20 +5,20 @@ import javax.lang.model.element.TypeElement;
 
 class PresenterInfo {
 
-  private final ClassName name;
+    private final ClassName name;
 
-  private final ClassName viewStateName;
+    private final ClassName viewStateName;
 
-  PresenterInfo(TypeElement name, String viewStateName) {
-    this.name = ClassName.get(name);
-    this.viewStateName = ClassName.bestGuess(viewStateName);
-  }
+    PresenterInfo(TypeElement name, String viewStateName) {
+        this.name = ClassName.get(name);
+        this.viewStateName = ClassName.bestGuess(viewStateName);
+    }
 
-  ClassName getName() {
-    return name;
-  }
+    ClassName getName() {
+        return name;
+    }
 
-  ClassName getViewStateName() {
-    return viewStateName;
-  }
+    ClassName getViewStateName() {
+        return viewStateName;
+    }
 }

@@ -5,6 +5,6 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class InjectViewStateForGenericViewPresenter
-  extends MvpPresenter<ViewStateForGenericView<Object>> {
+    extends MvpPresenter<ViewStateForGenericView<Object>> {
 
 }

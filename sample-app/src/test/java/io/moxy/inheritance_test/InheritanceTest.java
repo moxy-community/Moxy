@@ -17,34 +17,34 @@ import org.robolectric.annotation.Config;
 @Config(manifest = Config.NONE)
 public class InheritanceTest {
 
-  @Test
-  public void testWithoutInject() {
-    ViewWithoutInject view = new ViewWithoutInject();
+    @Test
+    public void testWithoutInject() {
+        ViewWithoutInject view = new ViewWithoutInject();
 
-    view.delegate = new MvpDelegate<>(view);
+        view.delegate = new MvpDelegate<>(view);
 
-    view.delegate.onCreate(new Bundle());
-  }
+        view.delegate.onCreate(new Bundle());
+    }
 
-  @Test
-  public void testInjectInInherited() {
-    SuperViewWithInject view = new SuperViewWithInject();
+    @Test
+    public void testInjectInInherited() {
+        SuperViewWithInject view = new SuperViewWithInject();
 
-    view.delegate = new MvpDelegate<>(view);
+        view.delegate = new MvpDelegate<>(view);
 
-    view.delegate.onCreate(new Bundle());
+        view.delegate.onCreate(new Bundle());
 
-    Assert.assertNotNull(view.presenter);
-  }
+        Assert.assertNotNull(view.presenter);
+    }
 
-  @Test
-  public void testInjectOnlyInSuper() {
-    ChildViewWithoutInject view = new ChildViewWithoutInject();
+    @Test
+    public void testInjectOnlyInSuper() {
+        ChildViewWithoutInject view = new ChildViewWithoutInject();
 
-    view.delegate = new MvpDelegate<>(view);
+        view.delegate = new MvpDelegate<>(view);
 
-    view.delegate.onCreate();
+        view.delegate.onCreate();
 
-    Assert.assertNotNull(view.presenter);
-  }
+        Assert.assertNotNull(view.presenter);
+    }
 }

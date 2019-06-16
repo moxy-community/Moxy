@@ -7,5 +7,5 @@ import moxy.viewstate.strategy.StateStrategyType;
 @StateStrategyType(OneExecutionStateStrategy.class)
 public interface ViewWithoutStrategy extends MvpView {
 
-  void noStrategyMethod();
+    void noStrategyMethod();
 }

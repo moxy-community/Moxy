@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface StateStrategyType {
 
-  Class<? extends StateStrategy> value();
+    Class<? extends StateStrategy> value();
 
-  String tag() default "";
+    String tag() default "";
 }

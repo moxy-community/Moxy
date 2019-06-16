@@ -21,104 +21,105 @@ import moxy.viewstate.ViewCommand;
 import static moxy.compiler.Util.decapitalizeString;
 
 public final class ViewStateClassGenerator
-  extends JavaFilesGenerator<moxy.compiler.viewstate.ViewInterfaceInfo> {
+    extends JavaFilesGenerator<moxy.compiler.viewstate.ViewInterfaceInfo> {
 
-  @Override
-  public List<JavaFile> generate(moxy.compiler.viewstate.ViewInterfaceInfo viewInterfaceInfo) {
-    ClassName viewName = viewInterfaceInfo.getName();
-    TypeName nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables();
-    DeclaredType viewInterfaceType = (DeclaredType) viewInterfaceInfo.getElement().asType();
+    @Override
+    public List<JavaFile> generate(moxy.compiler.viewstate.ViewInterfaceInfo viewInterfaceInfo) {
+        ClassName viewName = viewInterfaceInfo.getName();
+        TypeName nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables();
+        DeclaredType viewInterfaceType = (DeclaredType) viewInterfaceInfo.getElement().asType();
 
-    TypeSpec.Builder classBuilder =
-      TypeSpec.classBuilder(viewName.simpleName() + MvpProcessor.VIEW_STATE_SUFFIX)
-        .addModifiers(Modifier.PUBLIC)
-        .superclass(
-          ParameterizedTypeName.get(ClassName.get(MvpViewState.class), nameWithTypeVariables))
-        .addSuperinterface(nameWithTypeVariables)
-        .addTypeVariables(viewInterfaceInfo.getTypeVariables());
+        TypeSpec.Builder classBuilder =
+            TypeSpec.classBuilder(viewName.simpleName() + MvpProcessor.VIEW_STATE_SUFFIX)
+                .addModifiers(Modifier.PUBLIC)
+                .superclass(
+                    ParameterizedTypeName.get(ClassName.get(MvpViewState.class),
+                        nameWithTypeVariables))
+                .addSuperinterface(nameWithTypeVariables)
+                .addTypeVariables(viewInterfaceInfo.getTypeVariables());
 
-    for (moxy.compiler.viewstate.ViewMethod method : viewInterfaceInfo.getMethods()) {
-      TypeSpec commandClass = generateCommandClass(method, nameWithTypeVariables);
-      classBuilder.addType(commandClass);
-      classBuilder.addMethod(
-        generateMethod(viewInterfaceType, method, nameWithTypeVariables, commandClass));
+        for (moxy.compiler.viewstate.ViewMethod method : viewInterfaceInfo.getMethods()) {
+            TypeSpec commandClass = generateCommandClass(method, nameWithTypeVariables);
+            classBuilder.addType(commandClass);
+            classBuilder.addMethod(
+                generateMethod(viewInterfaceType, method, nameWithTypeVariables, commandClass));
+        }
+
+        JavaFile javaFile = JavaFile.builder(viewName.packageName(), classBuilder.build())
+            .indent("\t")
+            .build();
+        return Collections.singletonList(javaFile);
     }
 
-    JavaFile javaFile = JavaFile.builder(viewName.packageName(), classBuilder.build())
-      .indent("\t")
-      .build();
-    return Collections.singletonList(javaFile);
-  }
+    private TypeSpec generateCommandClass(moxy.compiler.viewstate.ViewMethod method,
+        TypeName viewTypeName) {
+        MethodSpec applyMethod = MethodSpec.methodBuilder("apply")
+            .addAnnotation(Override.class)
+            .addModifiers(Modifier.PUBLIC)
+            .addParameter(viewTypeName, "mvpView")
+            .addExceptions(method.getExceptions())
+            .addStatement("mvpView.$L($L)", method.getName(), method.getArgumentsString())
+            .build();
 
-  private TypeSpec generateCommandClass(moxy.compiler.viewstate.ViewMethod method,
-    TypeName viewTypeName) {
-    MethodSpec applyMethod = MethodSpec.methodBuilder("apply")
-      .addAnnotation(Override.class)
-      .addModifiers(Modifier.PUBLIC)
-      .addParameter(viewTypeName, "mvpView")
-      .addExceptions(method.getExceptions())
-      .addStatement("mvpView.$L($L)", method.getName(), method.getArgumentsString())
-      .build();
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(method.getCommandClassName())
+            .addModifiers(Modifier.PUBLIC) // TODO: private and static
+            .addTypeVariables(method.getTypeVariables())
+            .superclass(ParameterizedTypeName.get(ClassName.get(ViewCommand.class), viewTypeName))
+            .addMethod(generateCommandConstructor(method))
+            .addMethod(applyMethod);
 
-    TypeSpec.Builder classBuilder = TypeSpec.classBuilder(method.getCommandClassName())
-      .addModifiers(Modifier.PUBLIC) // TODO: private and static
-      .addTypeVariables(method.getTypeVariables())
-      .superclass(ParameterizedTypeName.get(ClassName.get(ViewCommand.class), viewTypeName))
-      .addMethod(generateCommandConstructor(method))
-      .addMethod(applyMethod);
+        for (ParameterSpec parameter : method.getParameterSpecs()) {
+            // TODO: private field
+            classBuilder.addField(parameter.type, parameter.name, Modifier.PUBLIC, Modifier.FINAL);
+        }
 
-    for (ParameterSpec parameter : method.getParameterSpecs()) {
-      // TODO: private field
-      classBuilder.addField(parameter.type, parameter.name, Modifier.PUBLIC, Modifier.FINAL);
+        return classBuilder.build();
     }
 
-    return classBuilder.build();
-  }
+    private MethodSpec generateMethod(DeclaredType enclosingType,
+        moxy.compiler.viewstate.ViewMethod method,
+        TypeName viewTypeName, TypeSpec commandClass) {
+        // TODO: String commandFieldName = "$cmd";
+        String commandFieldName = decapitalizeString(method.getCommandClassName());
 
-  private MethodSpec generateMethod(DeclaredType enclosingType,
-    moxy.compiler.viewstate.ViewMethod method,
-    TypeName viewTypeName, TypeSpec commandClass) {
-    // TODO: String commandFieldName = "$cmd";
-    String commandFieldName = decapitalizeString(method.getCommandClassName());
+        // Add salt if contains argument with same name
+        Random random = new Random();
+        while (method.getArgumentsString().contains(commandFieldName)) {
+            commandFieldName += random.nextInt(10);
+        }
 
-    // Add salt if contains argument with same name
-    Random random = new Random();
-    while (method.getArgumentsString().contains(commandFieldName)) {
-      commandFieldName += random.nextInt(10);
+        return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
+            .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName,
+                method.getArgumentsString())
+            .addStatement("mViewCommands.beforeApply($L)", commandFieldName)
+            .addCode("\n")
+            .beginControlFlow("if (hasNotView())")
+            .addStatement("return")
+            .endControlFlow()
+            .addCode("\n")
+            .beginControlFlow("for ($T view : mViews)", viewTypeName)
+            .addStatement("view.$L($L)", method.getName(), method.getArgumentsString())
+            .endControlFlow()
+            .addCode("\n")
+            .addStatement("mViewCommands.afterApply($L)", commandFieldName)
+            .build();
     }
 
-    return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
-      .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName,
-        method.getArgumentsString())
-      .addStatement("mViewCommands.beforeApply($L)", commandFieldName)
-      .addCode("\n")
-      .beginControlFlow("if (hasNotView())")
-      .addStatement("return")
-      .endControlFlow()
-      .addCode("\n")
-      .beginControlFlow("for ($T view : mViews)", viewTypeName)
-      .addStatement("view.$L($L)", method.getName(), method.getArgumentsString())
-      .endControlFlow()
-      .addCode("\n")
-      .addStatement("mViewCommands.afterApply($L)", commandFieldName)
-      .build();
-  }
+    private MethodSpec generateCommandConstructor(moxy.compiler.viewstate.ViewMethod method) {
+        List<ParameterSpec> parameters = method.getParameterSpecs();
 
-  private MethodSpec generateCommandConstructor(moxy.compiler.viewstate.ViewMethod method) {
-    List<ParameterSpec> parameters = method.getParameterSpecs();
+        MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+            .addParameters(parameters)
+            .addStatement("super($S, $T.class)", method.getTag(), method.getStrategy());
 
-    MethodSpec.Builder builder = MethodSpec.constructorBuilder()
-      .addParameters(parameters)
-      .addStatement("super($S, $T.class)", method.getTag(), method.getStrategy());
+        if (parameters.size() > 0) {
+            builder.addCode("\n");
+        }
 
-    if (parameters.size() > 0) {
-      builder.addCode("\n");
+        for (ParameterSpec parameter : parameters) {
+            builder.addStatement("this.$1N = $1N", parameter);
+        }
+
+        return builder.build();
     }
-
-    for (ParameterSpec parameter : parameters) {
-      builder.addStatement("this.$1N = $1N", parameter);
-    }
-
-    return builder.build();
-  }
 }

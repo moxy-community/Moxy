@@ -9,16 +9,16 @@ import static com.google.testing.compile.JavaFileObjects.forResource;
 
 public class PresentersBinderErrorTest extends CompilerTest {
 
-  @Test
-  public void testNotImplementViewInterface() throws Exception {
-    JavaFileObject target = forResource("target/NotImplementViewInterfaceTarget.java");
+    @Test
+    public void testNotImplementViewInterface() throws Exception {
+        JavaFileObject target = forResource("target/NotImplementViewInterfaceTarget.java");
 
-    Compilation targetCompilation = compileSourcesWithProcessor(target);
+        Compilation targetCompilation = compileSourcesWithProcessor(target);
 
-    assertThat(targetCompilation)
-      .hadErrorContaining(
-        "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter")
-      .inFile(target)
-      .onLineContaining("EmptyViewPresenter presenter");
-  }
+        assertThat(targetCompilation)
+            .hadErrorContaining(
+                "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter")
+            .inFile(target)
+            .onLineContaining("EmptyViewPresenter presenter");
+    }
 }

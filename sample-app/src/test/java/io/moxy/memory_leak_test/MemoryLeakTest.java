@@ -16,43 +16,43 @@ import static org.junit.Assert.assertTrue;
 @Config(manifest = Config.NONE)
 public class MemoryLeakTest {
 
-  @Test
-  public void test() {
-    TestViewImplementation viewImplementation = new TestViewImplementation();
+    @Test
+    public void test() {
+        TestViewImplementation viewImplementation = new TestViewImplementation();
 
-    viewImplementation.delegate = new MvpDelegate<>(viewImplementation);
+        viewImplementation.delegate = new MvpDelegate<>(viewImplementation);
 
-    viewImplementation.delegate.onCreate(new Bundle());
+        viewImplementation.delegate.onCreate(new Bundle());
 
-    viewImplementation.delegate.onDestroy();
+        viewImplementation.delegate.onDestroy();
 
-    WeakReference viewImplementationReference = new WeakReference(viewImplementation);
-    WeakReference presenterReference = new WeakReference(viewImplementation.presenter);
+        WeakReference viewImplementationReference = new WeakReference(viewImplementation);
+        WeakReference presenterReference = new WeakReference(viewImplementation.presenter);
 
-    /**
-     * Remove local reference to this object. Test will been failed if reference to the implemented view or
-     * to presenter was being saved in Moxy
-     */
-    //noinspection UnusedAssignment
-    viewImplementation = null;
+        /**
+         * Remove local reference to this object. Test will been failed if reference to the implemented view or
+         * to presenter was being saved in Moxy
+         */
+        //noinspection UnusedAssignment
+        viewImplementation = null;
 
-    long delay = 0;
+        long delay = 0;
 
-    while (delay < TimeUnit.SECONDS.toMillis(2)) {
-      System.gc();
+        while (delay < TimeUnit.SECONDS.toMillis(2)) {
+            System.gc();
 
-      if (viewImplementationReference.get() == null && presenterReference.get() == null) {
-        return;
-      }
+            if (viewImplementationReference.get() == null && presenterReference.get() == null) {
+                return;
+            }
 
-      try {
-        TimeUnit.MILLISECONDS.sleep(100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      delay += 100;
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            delay += 100;
+        }
+
+        assertTrue(false);
     }
-
-    assertTrue(false);
-  }
 }

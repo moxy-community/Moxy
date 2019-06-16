@@ -10,48 +10,48 @@ import javax.lang.model.element.TypeElement;
 
 class ViewInterfaceInfo {
 
-  private final TypeElement element;
+    private final TypeElement element;
 
-  private final ClassName name;
+    private final ClassName name;
 
-  private final List<TypeVariableName> typeVariables;
+    private final List<TypeVariableName> typeVariables;
 
-  private final List<ViewMethod> methods;
+    private final List<ViewMethod> methods;
 
-  ViewInterfaceInfo(TypeElement element, List<ViewMethod> methods) {
-    this.element = element;
-    this.name = ClassName.get(element);
-    this.methods = methods;
+    ViewInterfaceInfo(TypeElement element, List<ViewMethod> methods) {
+        this.element = element;
+        this.name = ClassName.get(element);
+        this.methods = methods;
 
-    this.typeVariables = element.getTypeParameters().stream()
-      .map(TypeVariableName::get)
-      .collect(Collectors.toList());
-  }
-
-  public TypeElement getElement() {
-    return element;
-  }
-
-  ClassName getName() {
-    return name;
-  }
-
-  TypeName getNameWithTypeVariables() {
-    if (typeVariables.isEmpty()) {
-      return name;
-    } else {
-      TypeVariableName[] names = new TypeVariableName[typeVariables.size()];
-      typeVariables.toArray(names);
-
-      return ParameterizedTypeName.get(name, names);
+        this.typeVariables = element.getTypeParameters().stream()
+            .map(TypeVariableName::get)
+            .collect(Collectors.toList());
     }
-  }
 
-  List<TypeVariableName> getTypeVariables() {
-    return typeVariables;
-  }
+    public TypeElement getElement() {
+        return element;
+    }
 
-  List<ViewMethod> getMethods() {
-    return methods;
-  }
+    ClassName getName() {
+        return name;
+    }
+
+    TypeName getNameWithTypeVariables() {
+        if (typeVariables.isEmpty()) {
+            return name;
+        } else {
+            TypeVariableName[] names = new TypeVariableName[typeVariables.size()];
+            typeVariables.toArray(names);
+
+            return ParameterizedTypeName.get(name, names);
+        }
+    }
+
+    List<TypeVariableName> getTypeVariables() {
+        return typeVariables;
+    }
+
+    List<ViewMethod> getMethods() {
+        return methods;
+    }
 }

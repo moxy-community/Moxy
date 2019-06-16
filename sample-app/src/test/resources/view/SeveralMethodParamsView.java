@@ -8,16 +8,16 @@ import moxy.presenter.PresenterType;
 
 public class SeveralMethodParamsView implements MvpView, params.SeveralMethodParams {
 
-  @InjectPresenter(factory = MockPresenterFactory.class, presenterId = "Test", type = PresenterType.LOCAL)
-  public InjectViewStatePresenter mInjectViewStatePresenter;
+    @InjectPresenter(factory = MockPresenterFactory.class, presenterId = "Test", type = PresenterType.LOCAL)
+    public InjectViewStatePresenter mInjectViewStatePresenter;
 
-  @Override
-  public void method1() {
+    @Override
+    public void method1() {
 
-  }
+    }
 
-  @Override
-  public void method2() {
+    @Override
+    public void method2() {
 
-  }
+    }
 }
