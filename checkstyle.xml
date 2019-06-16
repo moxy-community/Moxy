@@ -106,7 +106,6 @@
     <!--module name="AvoidInlineConditionals"/-->
     <!--module name="HiddenField"/-->
     <!--module name="InnerAssignment"/-->
-    <!--module name="MagicNumber"/-->
     <!--module name="MissingSwitchDefault"/-->
     <!--<module name="RedundantThrows"/>-->
     <!--<module name="EqualsAvoidNull"/>-->
