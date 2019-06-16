@@ -8,10 +8,10 @@ import presenter.WithViewGenericPresenter;
 
 public class InjectPresenterWithGenericViewIncorrect extends TestViewChild2<MvpView> {
 
-    @InjectPresenter
-    WithViewGenericPresenter<CounterTestView, InjectPresenterWithGenericViewIncorrect> mPresenter;
+  @InjectPresenter
+  WithViewGenericPresenter<CounterTestView, InjectPresenterWithGenericViewIncorrect> mPresenter;
 
-    public void testEvent() {
+  public void testEvent() {
 
-    }
+  }
 }

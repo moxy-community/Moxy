@@ -4,5 +4,5 @@ import moxy.MvpView;
 
 public interface TestView extends MvpView {
 
-    void testEvent();
+  void testEvent();
 }

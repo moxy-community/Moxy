@@ -12,30 +12,30 @@ import ${packageName}.presentation.presenter${dotSubpackage}.${presenterName}
 import ${superClassFqcn};
 
 <#if createProvidesMethod>
-import moxy.presenter.ProvidePresenter;
+  import moxy.presenter.ProvidePresenter;
 </#if>
 
 
 class ${className} : ${superClassName}(), ${viewName} {
-    companion object {
-        const val TAG = "${className}"
-	<#if includeFactory>
-        fun getIntent(context: Context): Intent = Intent(context, ${className}::class.java)
-	</#if>
-    }
+companion object {
+const val TAG = "${className}"
+<#if includeFactory>
+  fun getIntent(context: Context): Intent = Intent(context, ${className}::class.java)
+</#if>
+}
 
-	@InjectPresenter
-	lateinit var m${presenterName}: ${presenterName}
+@InjectPresenter
+lateinit var m${presenterName}: ${presenterName}
 
-    <#if createProvidesMethod>
-        @ProvidePresenter
-        fun providePresenter() : ${presenterName} = ${presenterName}()
-    </#if>
+<#if createProvidesMethod>
+  @ProvidePresenter
+  fun providePresenter() : ${presenterName} = ${presenterName}()
+</#if>
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-	<#if includeLayout>
-		setContentView(R.layout.${activityName})
-	</#if>
-	}
+override fun onCreate(savedInstanceState: Bundle?) {
+super.onCreate(savedInstanceState)
+<#if includeLayout>
+  setContentView(R.layout.${activityName})
+</#if>
+}
 }

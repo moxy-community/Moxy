@@ -179,6 +179,10 @@ Brave people how created library
 
 You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
 
+## Contributing
+Install [SquareAndroid code style](https://github.com/square/java-code-styles)
+Use it for the project.
+
 ## License
 ```
 The MIT License (MIT)

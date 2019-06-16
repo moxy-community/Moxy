@@ -5,8 +5,8 @@ import moxy.ViewStateProvider;
 import moxy.viewstate.MvpViewState;
 
 public class Lib1Presenter$$ViewStateProvider extends ViewStateProvider {
-	@Override
-	public MvpViewState<? extends MvpView> getViewState() {
-		return new Lib1View$$State();
-	}
+  @Override
+  public MvpViewState<? extends MvpView> getViewState() {
+    return new Lib1View$$State();
+  }
 }

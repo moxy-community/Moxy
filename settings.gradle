@@ -1,4 +1,5 @@
-include ':moxy', ':moxy-android', ':moxy-compiler', ':moxy-app-compat', ':moxy-androidx', ':moxy-material'
+include ':moxy', ':moxy-android', ':moxy-compiler', ':moxy-app-compat', ':moxy-androidx',
+    ':moxy-material'
 
 include ':stub-android', ':stub-appcompat', ':stub-androidx', ':stub-material'
 

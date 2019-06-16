@@ -6,6 +6,6 @@ import moxy.presenter.InjectPresenter;
 
 public class InjectPresenterAnnotationInsideNotMvpViewClass {
 
-    @InjectPresenter
-    public MvpPresenter<MvpView> mObject;
+  @InjectPresenter
+  public MvpPresenter<MvpView> mObject;
 }

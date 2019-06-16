@@ -5,8 +5,8 @@ import moxy.presenter.InjectPresenter;
 
 public class TestViewImplementation implements TestView {
 
-    @InjectPresenter
-    public TestPresenter presenter;
+  @InjectPresenter
+  public TestPresenter presenter;
 
-    public MvpDelegate<TestViewImplementation> delegate;
+  public MvpDelegate<TestViewImplementation> delegate;
 }

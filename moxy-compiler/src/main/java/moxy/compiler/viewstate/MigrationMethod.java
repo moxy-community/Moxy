@@ -5,13 +5,13 @@ import javax.lang.model.element.TypeElement;
 
 class MigrationMethod {
 
-    TypeElement clazz;
+  TypeElement clazz;
 
-    ExecutableElement method;
+  ExecutableElement method;
 
-    MigrationMethod(final TypeElement clazz,
-            final ExecutableElement method) {
-        this.clazz = clazz;
-        this.method = method;
-    }
+  MigrationMethod(final TypeElement clazz,
+    final ExecutableElement method) {
+    this.clazz = clazz;
+    this.method = method;
+  }
 }

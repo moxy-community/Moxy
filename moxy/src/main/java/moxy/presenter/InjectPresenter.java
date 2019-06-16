@@ -9,9 +9,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InjectPresenter {
 
-    String EMPTY = "";
+  String EMPTY = "";
 
-    String tag() default EMPTY;
+  String tag() default EMPTY;
 
-    String presenterId() default EMPTY;
+  String presenterId() default EMPTY;
 }

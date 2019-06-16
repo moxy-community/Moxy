@@ -1,0 +1,19 @@
+language: android
+jdk: oraclejdk8
+android:
+  components:
+    - android-28
+    - build-tools-27.0.3
+
+env:
+  global:
+    - ADB_INSTALL_TIMEOUT=8
+
+before_install:
+  - touch local.properties
+  - yes | sdkmanager "platforms;android-27"
+  - chmod +x gradlew
+
+# Run code style
+script:
+  - ./gradlew clean checkstyle

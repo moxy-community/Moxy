@@ -6,11 +6,11 @@ import moxy.MvpView;
 @GenerateViewState
 public class ViewStateForClassView implements MvpView {
 
-    public void showProgress() {
+  public void showProgress() {
 
-    }
+  }
 
-    public void hideProgress() {
+  public void hideProgress() {
 
-    }
+  }
 }

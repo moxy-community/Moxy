@@ -5,5 +5,5 @@ import moxy.factory.MockPresenterFactory;
 
 @ParamsProvider(MockPresenterFactory.class)
 public interface Params1 {
-	String mockParams1(String presenterId);
+  String mockParams1(String presenterId);
 }
