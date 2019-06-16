@@ -1,21 +1,29 @@
-apply plugin: 'java'
+apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-dependencies {
-    compileOnly deps.android
+android {
+    compileSdkVersion 28
 
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+}
+
+dependencies {
+    testImplementation project(':moxy-compiler')
     testImplementation deps.junit
     testImplementation deps.mockito
     testImplementation deps.truth
-    testImplementation deps.android
     testImplementation deps.robolectric
     testImplementation deps.androidJunit
     testImplementation deps.compiletesting
-    testImplementation project(':moxy-compiler')
     testImplementation deps.javapoet
 }
 
@@ -26,7 +34,7 @@ install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom.project {
-            packaging 'jar'
+            packaging 'aar'
             groupId rootProject.ext.groupId
             artifactId 'moxy'
             version rootProject.ext.targetVersion
@@ -84,10 +92,12 @@ bintray {
                 passphrase = properties.getProperty("gpgPassphrase")
             }
             mavenCentralSync {
-                sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+                sync = true
+                //[Default: true] Determines whether to sync the version to Maven Central.
                 user = properties.getProperty("mavenUser") //OSS user token: mandatory
                 password = properties.getProperty("mavenToken") //OSS user password: mandatory
-                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                close = '1'
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
             }
         }
     }
@@ -98,15 +108,21 @@ bintrayUpload.dependsOn install
 
 // Tasks for sources and javadocs jars
 task sourcesJar(type: Jar) {
-    from sourceSets.main.java.srcDirs
+    from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
+// TODO javadoc for android module
+//task javadoc(type: Javadoc) {
+//    source = android.sourceSets.main.java.srcDirs
+//}
+//
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    from javadoc.destinationDir
+//    classifier = 'javadoc'
+//}
+
 artifacts {
-    archives javadocJar
+//    archives javadocJar
     archives sourcesJar
 }
