@@ -29,10 +29,10 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
         DeclaredType viewInterfaceType = (DeclaredType) viewInterfaceInfo.getElement().asType();
 
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(viewName.simpleName() + MvpProcessor.VIEW_STATE_SUFFIX)
-                .addModifiers(Modifier.PUBLIC)
-                .superclass(ParameterizedTypeName.get(ClassName.get(MvpViewState.class), nameWithTypeVariables))
-                .addSuperinterface(nameWithTypeVariables)
-                .addTypeVariables(viewInterfaceInfo.getTypeVariables());
+            .addModifiers(Modifier.PUBLIC)
+            .superclass(ParameterizedTypeName.get(ClassName.get(MvpViewState.class), nameWithTypeVariables))
+            .addSuperinterface(nameWithTypeVariables)
+            .addTypeVariables(viewInterfaceInfo.getTypeVariables());
 
         for (moxy.compiler.viewstate.ViewMethod method : viewInterfaceInfo.getMethods()) {
             TypeSpec commandClass = generateCommandClass(method, nameWithTypeVariables);

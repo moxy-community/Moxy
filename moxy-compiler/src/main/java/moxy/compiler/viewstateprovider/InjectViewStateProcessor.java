@@ -121,12 +121,12 @@ public class InjectViewStateProcessor extends ElementProcessor<TypeElement, moxy
 
             if (typeArguments.size() > typeParameters.size()) {
                 throw new IllegalArgumentException("Code generation for interface "
-                        + typeElement.getSimpleName()
-                        + " failed. Simplify your generics. ("
-                        + typeArguments
-                        + " vs "
-                        + typeParameters
-                        + ")");
+                    + typeElement.getSimpleName()
+                    + " failed. Simplify your generics. ("
+                    + typeArguments
+                    + " vs "
+                    + typeParameters
+                    + ")");
             }
 
             Map<String, String> types = new HashMap<>();

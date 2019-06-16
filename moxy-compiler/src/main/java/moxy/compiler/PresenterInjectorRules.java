@@ -42,7 +42,7 @@ public class PresenterInjectorRules extends AnnotationRule {
         for (Modifier modifier : annotatedField.getModifiers()) {
             if (!mValidModifiers.contains(modifier)) {
                 mErrorBuilder.append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement()
-                        .getSimpleName() + " can't be a " + modifier)
+                    .getSimpleName() + " can't be a " + modifier)
                     .append(". Use ")
                     .append(validModifiersToString())
                     .append("\n");

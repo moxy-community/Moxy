@@ -15,7 +15,7 @@ public class ViewStateProviderClassTest extends CompilerTest {
     public void positiveViewStateProvider() {
         try {
             assertCompilationResultIs(ImmutableTable.<Diagnostic.Kind, Integer, Pattern>of(), ImmutableList
-                    .of(getString("presenter/PositiveViewStateProviderPresenter$$ViewStateProvider.java")));
+                .of(getString("presenter/PositiveViewStateProviderPresenter$$ViewStateProvider.java")));
         } catch (IOException e) {
             fail(e.getLocalizedMessage());
         }

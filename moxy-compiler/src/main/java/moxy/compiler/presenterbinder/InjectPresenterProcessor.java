@@ -143,7 +143,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
         }
     }
 
-    private static void bindTagProvidersToFields(List<TargetPresenterField>fields, List<TagProviderMethod> tagProviders) {
+    private static void bindTagProvidersToFields(List<TargetPresenterField> fields, List<TagProviderMethod> tagProviders) {
         if (fields.isEmpty() || tagProviders.isEmpty()) {
             return;
         }
@@ -155,7 +155,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                         continue;
                     }
                     if (field.getPresenterId() != null && !field.getPresenterId()
-                            .equals(tagProvider.getPresenterId())) {
+                        .equals(tagProvider.getPresenterId())) {
                         continue;
                     }
 
