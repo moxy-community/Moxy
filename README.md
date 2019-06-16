@@ -182,8 +182,7 @@ You may also find them in [contributors page of old project](https://github.com/
 ## Contributing
 Install code style to your IntelliJ or Android Studio. `MoxyAndroid.xml`
 For import file use or Mac OS:
-Preferences -> Editor -> Code style -> Scheme -> Import Scheme and choose the `MoxyAndroid.xml` file.   
-
+Preferences -> Editor -> Code style -> Scheme -> Import Scheme -> IntelliJ IDEA code style XML -> choose the `MoxyAndroid.xml` file in finder   
 
 ## License
 ```
