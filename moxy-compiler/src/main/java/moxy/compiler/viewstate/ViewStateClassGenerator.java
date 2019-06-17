@@ -85,17 +85,17 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
         return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
             .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName,
                 method.getArgumentsString())
-            .addStatement("mViewCommands.beforeApply($L)", commandFieldName)
+            .addStatement("viewCommands.beforeApply($L)", commandFieldName)
             .addCode("\n")
             .beginControlFlow("if (hasNotView())")
             .addStatement("return")
             .endControlFlow()
             .addCode("\n")
-            .beginControlFlow("for ($T view : mViews)", viewTypeName)
+            .beginControlFlow("for ($T view : views)", viewTypeName)
             .addStatement("view.$L($L)", method.getName(), method.getArgumentsString())
             .endControlFlow()
             .addCode("\n")
-            .addStatement("mViewCommands.afterApply($L)", commandFieldName)
+            .addStatement("viewCommands.afterApply($L)", commandFieldName)
             .build();
     }
 
