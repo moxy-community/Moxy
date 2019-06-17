@@ -42,7 +42,7 @@ subprojects { project ->
 
   task checkstyle(type: Checkstyle) {
     description 'Runs Checkstyle inspection against ICanPlayer sourcesets.'
-    group = 'Code Quality'
+    group = 'verification'
     configFile rootProject.file('checkstyle.xml')
     ignoreFailures false
     showViolations true

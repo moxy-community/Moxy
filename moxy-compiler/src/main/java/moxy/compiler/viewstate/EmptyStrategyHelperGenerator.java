@@ -9,6 +9,10 @@ import javax.lang.model.element.Name;
 
 public class EmptyStrategyHelperGenerator {
 
+    private EmptyStrategyHelperGenerator() {
+
+    }
+
     /**
      * @param migrationMethods non empty list of methods
      */

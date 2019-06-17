@@ -123,17 +123,14 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                     if (field.getTag() == null && presenterProvider.getTag() != null) {
                         continue;
                     }
-                    if (field.getTag() != null && !field.getTag()
-                        .equals(presenterProvider.getTag())) {
+                    if (field.getTag() != null && !field.getTag().equals(presenterProvider.getTag())) {
                         continue;
                     }
 
-                    if (field.getPresenterId() == null
-                        && presenterProvider.getPresenterId() != null) {
+                    if (field.getPresenterId() == null && presenterProvider.getPresenterId() != null) {
                         continue;
                     }
-                    if (field.getPresenterId() != null && !field.getPresenterId()
-                        .equals(presenterProvider.getPresenterId())) {
+                    if (field.getPresenterId() != null && !field.getPresenterId().equals(presenterProvider.getPresenterId())) {
                         continue;
                     }
 
@@ -171,8 +168,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
         if (!(enclosingElement instanceof TypeElement)) {
             throw new RuntimeException(
-                "Only class fields could be annotated as @InjectPresenter: " +
-                    variableElement + " at " + enclosingElement);
+                "Only class fields could be annotated as @InjectPresenter: " + variableElement + " at " + enclosingElement);
         }
 
         if (presentersContainers.contains(enclosingElement)) {
@@ -205,8 +201,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
 
             if (currentTypeElement != null) {
                 for (Element enclosedElement : currentTypeElement.getEnclosedElements()) {
-                    if (enclosedElement.getKind() == ElementKind.FIELD &&
-                        enclosedElement.getAnnotation(InjectPresenter.class) != null) {
+                    if (enclosedElement.getKind() == ElementKind.FIELD && enclosedElement.getAnnotation(InjectPresenter.class) != null) {
                         return currentTypeElement;
                     }
                 }

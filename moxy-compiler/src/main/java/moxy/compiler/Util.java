@@ -36,6 +36,10 @@ import javax.lang.model.type.WildcardType;
 @SuppressWarnings("WeakerAccess")
 public final class Util {
 
+    private Util() {
+
+    }
+
     public static String fillGenerics(Map<String, String> types, TypeMirror param) {
         return fillGenerics(types, Collections.singletonList(param));
     }

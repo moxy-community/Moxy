@@ -29,70 +29,70 @@ public class MvpDelegate<Delegated> {
 
     public static final String MOXY_DELEGATE_TAGS_KEY = "MoxyDelegateBundle";
     private static final String KEY_TAG = "moxy.MvpDelegate.KEY_TAG";
-    private final Delegated mDelegated;
-    private String mKeyTag = KEY_TAG;
-    private String mDelegateTag;
-    private boolean mIsAttached;
+    private final Delegated delegated;
+    private String keyTag = KEY_TAG;
+    private String delegateTag;
+    private boolean isAttached;
 
-    private MvpDelegate mParentDelegate;
+    private MvpDelegate parentDelegate;
 
-    private List<MvpPresenter<? super Delegated>> mPresenters = Collections.emptyList();
+    private List<MvpPresenter<? super Delegated>> presenters = Collections.emptyList();
 
-    private List<MvpDelegate> mChildDelegates;
+    private List<MvpDelegate> childDelegates;
 
-    private Bundle mBundle;
+    private Bundle bundle;
 
     public MvpDelegate(Delegated delegated) {
-        mDelegated = delegated;
-        mChildDelegates = new ArrayList<>();
+        this.delegated = delegated;
+        childDelegates = new ArrayList<>();
     }
 
     public void setParentDelegate(MvpDelegate delegate, String childId) {
-        if (mBundle != null) {
+        if (bundle != null) {
             throw new IllegalStateException("You should call setParentDelegate() before first onCreate()");
         }
-        if (mChildDelegates != null && mChildDelegates.size() > 0) {
+        if (childDelegates != null && childDelegates.size() > 0) {
             throw new IllegalStateException("You could not set parent delegate when there are already has child presenters");
         }
 
-        mParentDelegate = delegate;
-        mKeyTag = mParentDelegate.mKeyTag + "$" + childId;
+        parentDelegate = delegate;
+        keyTag = parentDelegate.keyTag + "$" + childId;
 
         delegate.addChildDelegate(this);
     }
 
     private void addChildDelegate(MvpDelegate delegate) {
-        mChildDelegates.add(delegate);
+        childDelegates.add(delegate);
     }
 
     private void removeChildDelegate(MvpDelegate delegate) {
-        mChildDelegates.remove(delegate);
+        childDelegates.remove(delegate);
     }
 
     /**
-     * Free self link from children list (mChildDelegates) in parent delegate
-     * property mParentDelegate stay keep link to parent delegate for access to
+     * Free self link from children list (childDelegates) in parent delegate
+     * property parentDelegate stay keep link to parent delegate for access to
      * parent bundle for save state in {@link #onSaveInstanceState()}
      */
     public void freeParentDelegate() {
 
-        if (mParentDelegate == null) {
+        if (parentDelegate == null) {
             throw new IllegalStateException("You should call freeParentDelegate() before first setParentDelegate()");
         }
 
-        mParentDelegate.removeChildDelegate(this);
+        parentDelegate.removeChildDelegate(this);
     }
 
     public void removeAllChildDelegates() {
         // For avoiding ConcurrentModificationException when removing by removeChildDelegate()
-        List<MvpDelegate> childDelegatesClone = new ArrayList<MvpDelegate>(mChildDelegates.size());
-        childDelegatesClone.addAll(mChildDelegates);
+        List<MvpDelegate> childDelegatesClone = new ArrayList<MvpDelegate>(childDelegates.size());
+        childDelegatesClone.addAll(childDelegates);
 
         for (MvpDelegate childDelegate : childDelegatesClone) {
             childDelegate.freeParentDelegate();
         }
 
-        mChildDelegates = new ArrayList<>();
+        childDelegates = new ArrayList<>();
     }
 
     /**
@@ -101,8 +101,8 @@ public class MvpDelegate<Delegated> {
      */
     public void onCreate() {
         Bundle bundle = new Bundle();
-        if (mParentDelegate != null) {
-            bundle = mParentDelegate.mBundle;
+        if (parentDelegate != null) {
+            bundle = parentDelegate.bundle;
         }
 
         onCreate(bundle);
@@ -115,24 +115,24 @@ public class MvpDelegate<Delegated> {
      * @param bundle with saved state
      */
     public void onCreate(Bundle bundle) {
-        if (mParentDelegate == null && bundle != null) {
+        if (parentDelegate == null && bundle != null) {
             bundle = bundle.getBundle(MOXY_DELEGATE_TAGS_KEY);
         }
 
-        mIsAttached = false;
-        mBundle = bundle != null ? bundle : new Bundle();
+        isAttached = false;
+        this.bundle = bundle != null ? bundle : new Bundle();
 
         //get base tag for presenters
-        if (bundle == null || !mBundle.containsKey(mKeyTag)) {
-            mDelegateTag = generateTag();
+        if (bundle == null || !this.bundle.containsKey(keyTag)) {
+            delegateTag = generateTag();
         } else {
-            mDelegateTag = bundle.getString(mKeyTag);
+            delegateTag = bundle.getString(keyTag);
         }
 
         //bind presenters to view
-        mPresenters = MvpFacade.getInstance().getMvpProcessor().getMvpPresenters(mDelegated, mDelegateTag);
+        presenters = MvpFacade.getInstance().getMvpProcessor().getMvpPresenters(delegated, delegateTag);
 
-        for (MvpDelegate childDelegate : mChildDelegates) {
+        for (MvpDelegate childDelegate : childDelegates) {
             childDelegate.onCreate(bundle);
         }
     }
@@ -144,36 +144,36 @@ public class MvpDelegate<Delegated> {
      * presenters</p>
      */
     public void onAttach() {
-        for (MvpPresenter<? super Delegated> presenter : mPresenters) {
-            if (mIsAttached && presenter.getAttachedViews().contains(mDelegated)) {
+        for (MvpPresenter<? super Delegated> presenter : presenters) {
+            if (isAttached && presenter.getAttachedViews().contains(delegated)) {
                 continue;
             }
 
-            presenter.attachView(mDelegated);
+            presenter.attachView(delegated);
         }
 
-        for (MvpDelegate<?> childDelegate : mChildDelegates) {
+        for (MvpDelegate<?> childDelegate : childDelegates) {
             childDelegate.onAttach();
         }
 
-        mIsAttached = true;
+        isAttached = true;
     }
 
     /**
      * <p>Detach delegated object from their presenters.</p>
      */
     public void onDetach() {
-        for (MvpPresenter<? super Delegated> presenter : mPresenters) {
-            if (!mIsAttached && !presenter.getAttachedViews().contains(mDelegated)) {
+        for (MvpPresenter<? super Delegated> presenter : presenters) {
+            if (!isAttached && !presenter.getAttachedViews().contains(delegated)) {
                 continue;
             }
 
-            presenter.detachView(mDelegated);
+            presenter.detachView(delegated);
         }
 
-        mIsAttached = false;
+        isAttached = false;
 
-        for (MvpDelegate<?> childDelegate : mChildDelegates) {
+        for (MvpDelegate<?> childDelegate : childDelegates) {
             childDelegate.onDetach();
         }
     }
@@ -182,19 +182,19 @@ public class MvpDelegate<Delegated> {
      * <p>View was being destroyed, but logical unit still alive</p>
      */
     public void onDestroyView() {
-        for (MvpPresenter<? super Delegated> presenter : mPresenters) {
-            presenter.destroyView(mDelegated);
+        for (MvpPresenter<? super Delegated> presenter : presenters) {
+            presenter.destroyView(delegated);
         }
 
-        // For avoiding ConcurrentModificationException when removing from mChildDelegates
-        List<MvpDelegate> childDelegatesClone = new ArrayList<MvpDelegate>(mChildDelegates.size());
-        childDelegatesClone.addAll(mChildDelegates);
+        // For avoiding ConcurrentModificationException when removing from childDelegates
+        List<MvpDelegate> childDelegatesClone = new ArrayList<MvpDelegate>(childDelegates.size());
+        childDelegatesClone.addAll(childDelegates);
 
         for (MvpDelegate childDelegate : childDelegatesClone) {
             childDelegate.onDestroyView();
         }
 
-        if (mParentDelegate != null) {
+        if (parentDelegate != null) {
             freeParentDelegate();
         }
     }
@@ -206,9 +206,9 @@ public class MvpDelegate<Delegated> {
         PresentersCounter presentersCounter = MvpFacade.getInstance().getPresentersCounter();
         PresenterStore presenterStore = MvpFacade.getInstance().getPresenterStore();
 
-        Set<MvpPresenter> allChildPresenters = presentersCounter.getAll(mDelegateTag);
+        Set<MvpPresenter> allChildPresenters = presentersCounter.getAll(delegateTag);
         for (MvpPresenter presenter : allChildPresenters) {
-            boolean isRejected = presentersCounter.rejectPresenter(presenter, mDelegateTag);
+            boolean isRejected = presentersCounter.rejectPresenter(presenter, delegateTag);
             if (isRejected) {
                 presenterStore.remove(presenter.getTag());
                 presenter.onDestroy();
@@ -222,8 +222,8 @@ public class MvpDelegate<Delegated> {
      */
     public void onSaveInstanceState() {
         Bundle bundle = new Bundle();
-        if (mParentDelegate != null && mParentDelegate.mBundle != null) {
-            bundle = mParentDelegate.mBundle;
+        if (parentDelegate != null && parentDelegate.bundle != null) {
+            bundle = parentDelegate.bundle;
         }
 
         onSaveInstanceState(bundle);
@@ -235,22 +235,22 @@ public class MvpDelegate<Delegated> {
      * @param outState out state from Android component
      */
     public void onSaveInstanceState(Bundle outState) {
-        if (mParentDelegate == null) {
+        if (parentDelegate == null) {
             Bundle moxyDelegateBundle = new Bundle();
             outState.putBundle(MOXY_DELEGATE_TAGS_KEY, moxyDelegateBundle);
             outState = moxyDelegateBundle;
         }
 
-        outState.putAll(mBundle);
-        outState.putString(mKeyTag, mDelegateTag);
+        outState.putAll(bundle);
+        outState.putString(keyTag, delegateTag);
 
-        for (MvpDelegate childDelegate : mChildDelegates) {
+        for (MvpDelegate childDelegate : childDelegates) {
             childDelegate.onSaveInstanceState(outState);
         }
     }
 
     public Bundle getChildrenSaveState() {
-        return mBundle;
+        return bundle;
     }
 
     /**
@@ -259,8 +259,8 @@ public class MvpDelegate<Delegated> {
      * example: moxy.sample.SampleFragment$MvpDelegate@32649b0
      */
     private String generateTag() {
-        String tag = mParentDelegate != null ? mParentDelegate.mDelegateTag + " " : "";
-        tag += mDelegated.getClass().getSimpleName() + "$" + getClass().getSimpleName() + toString()
+        String tag = parentDelegate != null ? parentDelegate.delegateTag + " " : "";
+        tag += delegated.getClass().getSimpleName() + "$" + getClass().getSimpleName() + toString()
             .replace(getClass().getName(), "");
         return tag;
     }

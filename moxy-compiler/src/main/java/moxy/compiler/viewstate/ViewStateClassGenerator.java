@@ -22,6 +22,8 @@ import static moxy.compiler.Util.decapitalizeString;
 
 public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compiler.viewstate.ViewInterfaceInfo> {
 
+    private static final int COMMAND_FIELD_NAME_RANDOM_BOUND = 10;
+
     @Override
     public List<JavaFile> generate(moxy.compiler.viewstate.ViewInterfaceInfo viewInterfaceInfo) {
         ClassName viewName = viewInterfaceInfo.getName();
@@ -77,7 +79,7 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
         // Add salt if contains argument with same name
         Random random = new Random();
         while (method.getArgumentsString().contains(commandFieldName)) {
-            commandFieldName += random.nextInt(10);
+            commandFieldName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND);
         }
 
         return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
