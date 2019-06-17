@@ -7,6 +7,5 @@ import presenter.PresenterWithoutEmptyConstructor;
 public class InjectPresenterWithoutEmptyConstructorView implements MvpView {
 
     @InjectPresenter
-    public PresenterWithoutEmptyConstructor<InjectPresenterWithoutEmptyConstructorView>
-            mPresenterWithoutEmptyConstructorViewPresenterWithoutEmptyConstructor;
+    public PresenterWithoutEmptyConstructor<InjectPresenterWithoutEmptyConstructorView> mPresenterWithoutEmptyConstructorViewPresenterWithoutEmptyConstructor;
 }

@@ -24,7 +24,8 @@ public class InjectPresenterTypeBehaviorView implements MvpView {
     private PositiveParamsViewPresenter<InjectPresenterTypeBehaviorView> mFactoryLocalPresenter2;
 
     @InjectPresenter(presenterId = "")
-    private PositiveParamsViewPresenter<InjectPresenterTypeBehaviorView> mPresenterIdLocalPresenter2;
+    private PositiveParamsViewPresenter<InjectPresenterTypeBehaviorView>
+        mPresenterIdLocalPresenter2;
 
     @InjectPresenter(tag = "", factory = MockPresenterFactory.class)
     private PositiveParamsViewPresenter<InjectPresenterTypeBehaviorView> mFactoryTagPresenter;

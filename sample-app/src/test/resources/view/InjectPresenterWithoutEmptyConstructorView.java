@@ -8,5 +8,5 @@ public class InjectPresenterWithoutEmptyConstructorView implements MvpView {
 
     @InjectPresenter
     public PresenterWithoutEmptyConstructor<InjectPresenterWithoutEmptyConstructorView>
-            mPresenterWithoutEmptyConstructorViewPresenterWithoutEmptyConstructor;
+        mPresenterWithoutEmptyConstructorViewPresenterWithoutEmptyConstructor;
 }

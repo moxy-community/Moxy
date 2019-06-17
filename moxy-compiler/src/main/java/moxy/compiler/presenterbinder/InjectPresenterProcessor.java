@@ -1,17 +1,21 @@
 package moxy.compiler.presenterbinder;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
 import moxy.compiler.ElementProcessor;
 import moxy.compiler.Util;
 import moxy.presenter.InjectPresenter;
 import moxy.presenter.ProvidePresenter;
 import moxy.presenter.ProvidePresenterTag;
-
-import javax.lang.model.element.*;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
-import java.util.ArrayList;
-import java.util.List;
 
 public class InjectPresenterProcessor extends ElementProcessor<VariableElement, TargetClassInfo> {
 
@@ -22,30 +26,6 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
     private static final String PROVIDE_PRESENTER_TAG_ANNOTATION = ProvidePresenterTag.class.getName();
 
     private final List<TypeElement> presentersContainers = new ArrayList<>();
-
-    @Override
-    public TargetClassInfo process(VariableElement variableElement) {
-        final Element enclosingElement = variableElement.getEnclosingElement();
-
-        if (!(enclosingElement instanceof TypeElement)) {
-            throw new RuntimeException("Only class fields could be annotated as @InjectPresenter: " +
-                    variableElement + " at " + enclosingElement);
-        }
-
-        if (presentersContainers.contains(enclosingElement)) {
-            return null;
-        }
-
-        final TypeElement presentersContainer = (TypeElement) enclosingElement;
-        presentersContainers.add(presentersContainer);
-
-        // gather presenter fields info
-        List<TargetPresenterField> fields = collectFields(presentersContainer);
-        bindProvidersToFields(fields, collectPresenterProviders(presentersContainer));
-        bindTagProvidersToFields(fields, collectTagProviders(presentersContainer));
-
-        return new TargetClassInfo(presentersContainer, fields, findSuperPresenterContainer(presentersContainer));
-    }
 
     private static List<TargetPresenterField> collectFields(TypeElement presentersContainer) {
         List<TargetPresenterField> fields = new ArrayList<>();
@@ -130,7 +110,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
     }
 
     private static void bindProvidersToFields(List<TargetPresenterField> fields,
-            List<PresenterProviderMethod> presenterProviders) {
+        List<PresenterProviderMethod> presenterProviders) {
         if (fields.isEmpty() || presenterProviders.isEmpty()) {
             return;
         }
@@ -143,27 +123,27 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                     if (field.getTag() == null && presenterProvider.getTag() != null) {
                         continue;
                     }
-                    if (field.getTag() != null && !field.getTag().equals(presenterProvider.getTag())) {
+                    if (field.getTag() != null && !field.getTag()
+                        .equals(presenterProvider.getTag())) {
                         continue;
                     }
 
-                    if (field.getPresenterId() == null && presenterProvider.getPresenterId() != null) {
+                    if (field.getPresenterId() == null
+                        && presenterProvider.getPresenterId() != null) {
                         continue;
                     }
                     if (field.getPresenterId() != null && !field.getPresenterId()
-                            .equals(presenterProvider.getPresenterId())) {
+                        .equals(presenterProvider.getPresenterId())) {
                         continue;
                     }
 
                     field.setPresenterProviderMethodName(presenterProvider.getName());
                 }
             }
-
         }
     }
 
-    private static void bindTagProvidersToFields(List<TargetPresenterField> fields,
-            List<TagProviderMethod> tagProviders) {
+    private static void bindTagProvidersToFields(List<TargetPresenterField> fields, List<TagProviderMethod> tagProviders) {
         if (fields.isEmpty() || tagProviders.isEmpty()) {
             return;
         }
@@ -175,7 +155,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                         continue;
                     }
                     if (field.getPresenterId() != null && !field.getPresenterId()
-                            .equals(tagProvider.getPresenterId())) {
+                        .equals(tagProvider.getPresenterId())) {
                         continue;
                     }
 
@@ -183,6 +163,32 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                 }
             }
         }
+    }
+
+    @Override
+    public TargetClassInfo process(VariableElement variableElement) {
+        final Element enclosingElement = variableElement.getEnclosingElement();
+
+        if (!(enclosingElement instanceof TypeElement)) {
+            throw new RuntimeException(
+                "Only class fields could be annotated as @InjectPresenter: " +
+                    variableElement + " at " + enclosingElement);
+        }
+
+        if (presentersContainers.contains(enclosingElement)) {
+            return null;
+        }
+
+        final TypeElement presentersContainer = (TypeElement) enclosingElement;
+        presentersContainers.add(presentersContainer);
+
+        // gather presenter fields info
+        List<TargetPresenterField> fields = collectFields(presentersContainer);
+        bindProvidersToFields(fields, collectPresenterProviders(presentersContainer));
+        bindTagProvidersToFields(fields, collectTagProviders(presentersContainer));
+
+        return new TargetClassInfo(presentersContainer, fields,
+            findSuperPresenterContainer(presentersContainer));
     }
 
     private TypeElement findSuperPresenterContainer(TypeElement typeElement) {
@@ -200,7 +206,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
             if (currentTypeElement != null) {
                 for (Element enclosedElement : currentTypeElement.getEnclosedElements()) {
                     if (enclosedElement.getKind() == ElementKind.FIELD &&
-                            enclosedElement.getAnnotation(InjectPresenter.class) != null) {
+                        enclosedElement.getAnnotation(InjectPresenter.class) != null) {
                         return currentTypeElement;
                     }
                 }

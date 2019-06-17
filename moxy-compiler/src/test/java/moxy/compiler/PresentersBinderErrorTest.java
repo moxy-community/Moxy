@@ -1,10 +1,8 @@
 package moxy.compiler;
 
 import com.google.testing.compile.Compilation;
-
-import org.junit.Test;
-
 import javax.tools.JavaFileObject;
+import org.junit.Test;
 
 import static com.google.testing.compile.CompilationSubject.assertThat;
 import static com.google.testing.compile.JavaFileObjects.forResource;
@@ -18,9 +16,9 @@ public class PresentersBinderErrorTest extends CompilerTest {
         Compilation targetCompilation = compileSourcesWithProcessor(target);
 
         assertThat(targetCompilation)
-                .hadErrorContaining(
-                        "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter")
-                .inFile(target)
-                .onLineContaining("EmptyViewPresenter presenter");
+            .hadErrorContaining(
+                "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter")
+            .inFile(target)
+            .onLineContaining("EmptyViewPresenter presenter");
     }
 }

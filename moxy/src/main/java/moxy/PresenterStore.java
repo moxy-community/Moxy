@@ -1,7 +1,6 @@
 package moxy;
 
 import android.util.Log;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +12,9 @@ public class PresenterStore {
     /**
      * Add presenter to storage
      *
-     * @param tag      Tag of presenter. Local presenters contains also delegate's tag as prefix
+     * @param tag Tag of presenter. Local presenters contains also delegate's tag as prefix
      * @param instance Instance of MvpPresenter implementation to store
-     * @param <T>      Type of presenter
+     * @param <T> Type of presenter
      */
     public <T extends MvpPresenter> void add(String tag, T instance) {
         mPresenters.put(tag, instance);
@@ -44,7 +43,7 @@ public class PresenterStore {
     public void logPresenters() {
         for (Map.Entry<String, MvpPresenter> currentEntry : mPresenters.entrySet()) {
             Log.d("PresenterStore", currentEntry.getKey() + " -> " +
-                    currentEntry.getValue());
+                currentEntry.getValue());
         }
     }
 }

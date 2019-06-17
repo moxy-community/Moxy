@@ -5,10 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
-
 import moxy.MvpView;
 import moxy.viewstate.strategy.StateStrategy;
-
 
 @SuppressWarnings("WeakerAccess")
 public abstract class MvpViewState<View extends MvpView> {
@@ -30,7 +28,7 @@ public abstract class MvpViewState<View extends MvpView> {
     /**
      * Apply saved state to attached view
      *
-     * @param view         mvp view to restore state
+     * @param view mvp view to restore state
      * @param currentState commands that was applied already
      */
     protected void restoreState(View view, Set<ViewCommand<View>> currentState) {
@@ -40,7 +38,6 @@ public abstract class MvpViewState<View extends MvpView> {
 
         mViewCommands.reapply(view, currentState);
     }
-
 
     /**
      * @return true if view state has one or more views, false otherwise (if view state doesn't have any view)

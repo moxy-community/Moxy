@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDialogFragment;
 
-import moxy.MvpDelegate;
-
-@SuppressWarnings({"ConstantConditions", "unused"})
+@SuppressWarnings({ "ConstantConditions", "unused" })
 public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
 
     private boolean mIsStateSaved;

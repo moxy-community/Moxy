@@ -1,9 +1,7 @@
 package moxy;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
-import moxy.MvpDelegate;
 
 @SuppressWarnings("unused")
 public class MvpAppCompatActivity extends AppCompatActivity {

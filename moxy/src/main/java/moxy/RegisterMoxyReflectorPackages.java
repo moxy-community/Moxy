@@ -12,5 +12,5 @@ import static java.lang.annotation.ElementType.TYPE;
 @Deprecated
 @Target(value = TYPE)
 public @interface RegisterMoxyReflectorPackages {
-	String[] value();
+    String[] value();
 }

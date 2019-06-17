@@ -3,9 +3,7 @@ package moxy;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import moxy.MvpDelegate;
-
-@SuppressWarnings({"ConstantConditions", "unused"})
+@SuppressWarnings({ "ConstantConditions", "unused" })
 public class MvpAppCompatFragment extends Fragment {
 
     private boolean mIsStateSaved;

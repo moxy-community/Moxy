@@ -1,7 +1,6 @@
 package moxy;
 
 import android.os.Bundle;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,16 +27,11 @@ import java.util.Set;
  */
 public class MvpDelegate<Delegated> {
 
-    private static final String KEY_TAG = "moxy.MvpDelegate.KEY_TAG";
-
     public static final String MOXY_DELEGATE_TAGS_KEY = "MoxyDelegateBundle";
-
-    private String mKeyTag = KEY_TAG;
-
-    private String mDelegateTag;
-
+    private static final String KEY_TAG = "moxy.MvpDelegate.KEY_TAG";
     private final Delegated mDelegated;
-
+    private String mKeyTag = KEY_TAG;
+    private String mDelegateTag;
     private boolean mIsAttached;
 
     private MvpDelegate mParentDelegate;
@@ -58,8 +52,7 @@ public class MvpDelegate<Delegated> {
             throw new IllegalStateException("You should call setParentDelegate() before first onCreate()");
         }
         if (mChildDelegates != null && mChildDelegates.size() > 0) {
-            throw new IllegalStateException(
-                    "You could not set parent delegate when there are already has child presenters");
+            throw new IllegalStateException("You could not set parent delegate when there are already has child presenters");
         }
 
         mParentDelegate = delegate;
@@ -268,7 +261,7 @@ public class MvpDelegate<Delegated> {
     private String generateTag() {
         String tag = mParentDelegate != null ? mParentDelegate.mDelegateTag + " " : "";
         tag += mDelegated.getClass().getSimpleName() + "$" + getClass().getSimpleName() + toString()
-                .replace(getClass().getName(), "");
+            .replace(getClass().getName(), "");
         return tag;
     }
 }

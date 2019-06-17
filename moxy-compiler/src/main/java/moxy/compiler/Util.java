@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -150,8 +149,7 @@ public final class Util {
             return null;
         }
 
-        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
-                .getElementValues().entrySet()) {
+        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             if (entry.getKey().getSimpleName().toString().equals(key)) {
                 return entry.getValue();
             }
@@ -167,8 +165,7 @@ public final class Util {
 
         Map<String, AnnotationValue> result = new HashMap<>();
 
-        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror
-                .getElementValues().entrySet()) {
+        for (Map.Entry<? extends ExecutableElement, ? extends AnnotationValue> entry : annotationMirror.getElementValues().entrySet()) {
             String key = entry.getKey().getSimpleName().toString();
             if (entry.getValue() != null) {
                 result.put(key, entry.getValue());
@@ -191,7 +188,6 @@ public final class Util {
     }
 
     public static String decapitalizeString(String string) {
-        return string == null || string.isEmpty() ? "" : string.length() == 1 ? string.toLowerCase()
-                : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+        return string == null || string.isEmpty() ? "" : string.length() == 1 ? string.toLowerCase() : Character.toLowerCase(string.charAt(0)) + string.substring(1);
     }
 }

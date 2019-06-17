@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import moxy.MvpView;
 import moxy.locators.StrategyLocator;
 import moxy.viewstate.strategy.StateStrategy;
 
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings({ "unused", "WeakerAccess" })
 public class ViewCommands<View extends MvpView> {
 
     private List<ViewCommand<View>> mState = new ArrayList<>();

@@ -1,7 +1,6 @@
 package moxy;
 
 import java.lang.annotation.Target;
-
 import moxy.viewstate.MvpViewState;
 
 import static java.lang.annotation.ElementType.TYPE;

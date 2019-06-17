@@ -1,12 +1,11 @@
 package moxy.locators;
 
+import java.util.HashMap;
+import java.util.Map;
 import moxy.viewstate.strategy.AddToEndSingleStrategy;
 import moxy.viewstate.strategy.AddToEndStrategy;
 import moxy.viewstate.strategy.OneExecutionStateStrategy;
 import moxy.viewstate.strategy.StateStrategy;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class StrategyLocator {
 

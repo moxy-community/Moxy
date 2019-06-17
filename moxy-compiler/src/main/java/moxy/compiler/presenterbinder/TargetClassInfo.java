@@ -1,9 +1,8 @@
 package moxy.compiler.presenterbinder;
 
 import com.squareup.javapoet.ClassName;
-
-import javax.lang.model.element.TypeElement;
 import java.util.List;
+import javax.lang.model.element.TypeElement;
 
 class TargetClassInfo {
 

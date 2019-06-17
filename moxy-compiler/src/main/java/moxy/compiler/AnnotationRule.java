@@ -3,7 +3,6 @@ package moxy.compiler;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;

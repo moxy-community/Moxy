@@ -1,11 +1,19 @@
 package moxy;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({ "WeakerAccess", "unused" })
 public final class MvpFacade {
 
-    private static volatile MvpFacade sInstance;
-
     private static final Object sLock = new Object();
+    private static volatile MvpFacade sInstance;
+    private PresenterStore mPresenterStore;
+    private MvpProcessor mMvpProcessor;
+    private PresentersCounter mPresentersCounter;
+
+    private MvpFacade() {
+        mPresentersCounter = new PresentersCounter();
+        mPresenterStore = new PresenterStore();
+        mMvpProcessor = new MvpProcessor();
+    }
 
     public static MvpFacade getInstance() {
         if (sInstance == null) {
@@ -21,18 +29,6 @@ public final class MvpFacade {
     public static void init() {
         getInstance();
     }
-
-    private MvpFacade() {
-        mPresentersCounter = new PresentersCounter();
-        mPresenterStore = new PresenterStore();
-        mMvpProcessor = new MvpProcessor();
-    }
-
-    private PresenterStore mPresenterStore;
-
-    private MvpProcessor mMvpProcessor;
-
-    private PresentersCounter mPresentersCounter;
 
     public PresenterStore getPresenterStore() {
         return mPresenterStore;

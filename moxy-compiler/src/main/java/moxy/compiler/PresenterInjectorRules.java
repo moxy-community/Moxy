@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
@@ -18,7 +17,6 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
 import javax.tools.Diagnostic;
-
 import moxy.MvpPresenter;
 import moxy.MvpView;
 import moxy.presenter.InjectPresenter;
@@ -38,16 +36,16 @@ public class PresenterInjectorRules extends AnnotationRule {
 
         if (annotatedField.getKind() != mValidKind) {
             mErrorBuilder
-                    .append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement().getSimpleName()
-                            + " should be " + mValidKind.name() + ", or not mark it as @" + InjectPresenter.class
-                            .getSimpleName()).append("\n");
+                .append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement().getSimpleName() + " should be " + mValidKind.name() + ", or not mark it as @" + InjectPresenter.class.getSimpleName()).append("\n");
         }
 
         for (Modifier modifier : annotatedField.getModifiers()) {
             if (!mValidModifiers.contains(modifier)) {
                 mErrorBuilder.append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement()
-                        .getSimpleName() + " can't be a " + modifier).append(". Use ").append(validModifiersToString())
-                        .append("\n");
+                    .getSimpleName() + " can't be a " + modifier)
+                    .append(". Use ")
+                    .append(validModifiersToString())
+                    .append("\n");
             }
         }
 
@@ -71,21 +69,20 @@ public class PresenterInjectorRules extends AnnotationRule {
         String viewClassFromGeneric = getViewClassFromGeneric(typeElement, (DeclaredType) annotatedField.asType());
 
         Collection<TypeMirror> viewsType = getViewsType(
-                (TypeElement) ((DeclaredType) annotatedField.getEnclosingElement().asType()).asElement());
+            (TypeElement) ((DeclaredType) annotatedField.getEnclosingElement().asType()).asElement());
 
         boolean result = false;
 
         for (TypeMirror typeMirror : viewsType) {
             if (Util.getFullClassName(typeMirror).equals(viewClassFromGeneric) || Util
-                    .fillGenerics(Collections.<String, String>emptyMap(), typeMirror).equals(viewClassFromGeneric)) {
+                .fillGenerics(Collections.<String, String>emptyMap(), typeMirror).equals(viewClassFromGeneric)) {
                 result = true;
                 break;
             }
         }
         if (!result) {
-            MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
-                    annotatedField);
+            MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
+                annotatedField);
         }
     }
 
@@ -139,8 +136,7 @@ public class PresenterInjectorRules extends AnnotationRule {
         return "";
     }
 
-    private Map<TypeParameterElement, TypeMirror> getChildInstanceOfClassFromGeneric(final TypeElement typeElement,
-            final Class<?> aClass) {
+    private Map<TypeParameterElement, TypeMirror> getChildInstanceOfClassFromGeneric(final TypeElement typeElement, final Class<?> aClass) {
         Map<TypeParameterElement, TypeMirror> result = new HashMap<>();
         for (TypeParameterElement element : typeElement.getTypeParameters()) {
             List<? extends TypeMirror> bounds = element.getBounds();

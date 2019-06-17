@@ -2,7 +2,6 @@ package moxy.viewstate.strategy;
 
 import java.util.Iterator;
 import java.util.List;
-
 import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
@@ -12,8 +11,7 @@ import moxy.viewstate.ViewCommand;
 public class AddToEndSingleStrategy implements StateStrategy {
 
     @Override
-    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState,
-            ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand) {
         Iterator<ViewCommand<View>> iterator = currentState.iterator();
 
         while (iterator.hasNext()) {
@@ -29,8 +27,7 @@ public class AddToEndSingleStrategy implements StateStrategy {
     }
 
     @Override
-    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState,
-            ViewCommand<View> incomingCommand) {
+    public <View extends MvpView> void afterApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand) {
         // pass
     }
 }

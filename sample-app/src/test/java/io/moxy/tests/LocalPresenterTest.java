@@ -1,5 +1,13 @@
 package moxy.tests;
 
+import android.os.Bundle;
+import java.lang.reflect.Field;
+import moxy.MvpDelegate;
+import moxy.MvpPresenter;
+import moxy.presenter.InjectViewStatePresenter;
+import moxy.presenter.NoViewStatePresenter;
+import moxy.view.DelegateLocalPresenterTestView;
+import moxy.view.TestView;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,17 +15,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import android.os.Bundle;
-
-import java.lang.reflect.Field;
-
-import moxy.MvpDelegate;
-import moxy.MvpPresenter;
-import moxy.presenter.InjectViewStatePresenter;
-import moxy.presenter.NoViewStatePresenter;
-import moxy.view.DelegateLocalPresenterTestView;
-import moxy.view.TestView;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -31,14 +28,17 @@ public class LocalPresenterTest {
     @Mock
     TestView mTestView;
 
-    DelegateLocalPresenterTestView mDelegateLocalPresenterTestView = new DelegateLocalPresenterTestView();
+    DelegateLocalPresenterTestView mDelegateLocalPresenterTestView =
+        new DelegateLocalPresenterTestView();
 
-    DelegateLocalPresenterTestView mDelegateLocalPresenter2TestView = new DelegateLocalPresenterTestView();
+    DelegateLocalPresenterTestView mDelegateLocalPresenter2TestView =
+        new DelegateLocalPresenterTestView();
 
-    MvpDelegate<? extends TestView> mTestViewMvpDelegate = new MvpDelegate<>(mDelegateLocalPresenterTestView);
+    MvpDelegate<? extends TestView> mTestViewMvpDelegate =
+        new MvpDelegate<>(mDelegateLocalPresenterTestView);
 
-    MvpDelegate<? extends TestView> mTestViewMvpDelegate2 = new MvpDelegate<>(mDelegateLocalPresenter2TestView);
-
+    MvpDelegate<? extends TestView> mTestViewMvpDelegate2 =
+        new MvpDelegate<>(mDelegateLocalPresenter2TestView);
 
     @Before
     public void setup() {
@@ -69,7 +69,7 @@ public class LocalPresenterTest {
 
             mViewState.setAccessible(true);
             assertTrue("ViewState is null for InjectViewStatePresenter",
-                    mViewState.get(injectViewStatePresenter) != null);
+                mViewState.get(injectViewStatePresenter) != null);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             assertFalse(e.getLocalizedMessage(), true);
         }
@@ -83,7 +83,8 @@ public class LocalPresenterTest {
             Field mViewState = MvpPresenter.class.getDeclaredField("mViewState");
 
             mViewState.setAccessible(true);
-            assertTrue("ViewState is not null for NoViewStatePresenter", mViewState.get(noViewStatePresenter) == null);
+            assertTrue("ViewState is not null for NoViewStatePresenter",
+                mViewState.get(noViewStatePresenter) == null);
         } catch (IllegalAccessException | NoSuchFieldException e) {
             assertFalse(e.getLocalizedMessage(), true);
         }
@@ -91,14 +92,15 @@ public class LocalPresenterTest {
 
     @Test
     public void checkDelegatePresenter() {
-        assertTrue("Presenter is null for delegate", mDelegateLocalPresenterTestView.mInjectViewStatePresenter != null);
+        assertTrue("Presenter is null for delegate",
+            mDelegateLocalPresenterTestView.mInjectViewStatePresenter != null);
     }
 
     @Test
     public void checkLocalPresenters() {
         assertNotEquals("Local Presenters for two different view is equal",
-                mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode(),
-                mDelegateLocalPresenter2TestView.mInjectViewStatePresenter.hashCode());
+            mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode(),
+            mDelegateLocalPresenter2TestView.mInjectViewStatePresenter.hashCode());
     }
 
     @Test
@@ -124,6 +126,6 @@ public class LocalPresenterTest {
         mTestViewMvpDelegate.onAttach();
 
         assertFalse("Local presenter has same hashCode after creating new view",
-                hashCode == mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode());
+            hashCode == mDelegateLocalPresenterTestView.mInjectViewStatePresenter.hashCode());
     }
 }

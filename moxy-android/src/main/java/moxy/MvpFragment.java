@@ -4,8 +4,6 @@ import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 
-import moxy.MvpDelegate;
-
 @SuppressWarnings("ConstantConditions")
 public class MvpFragment extends Fragment {
 

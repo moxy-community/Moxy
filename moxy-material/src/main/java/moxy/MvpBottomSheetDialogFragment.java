@@ -1,11 +1,8 @@
 package moxy;
 
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-import moxy.MvpDelegate;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment {
 

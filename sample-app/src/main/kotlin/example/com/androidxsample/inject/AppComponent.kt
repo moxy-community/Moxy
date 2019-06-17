@@ -10,16 +10,16 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = [AppBindingModule::class])
 interface AppComponent : AndroidInjector<DaggerApplication> {
-	
-	override fun inject(app: DaggerApplication)
-	
-	@Component.Builder
-	interface Builder {
-		
-		@BindsInstance
-		fun application(application: App): Builder
-		
-		fun build(): AppComponent
-	}
-	
+
+  override fun inject(app: DaggerApplication)
+
+  @Component.Builder
+  interface Builder {
+
+    @BindsInstance
+    fun application(application: App): Builder
+
+    fun build(): AppComponent
+  }
+
 }

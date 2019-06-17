@@ -16,7 +16,7 @@ public class PresentersCounter {
     /**
      * Save delegate tag when it inject presenter to delegate's object
      *
-     * @param presenter   Injected presenter
+     * @param presenter Injected presenter
      * @param delegateTag Delegate tag
      */
     public void injectPresenter(MvpPresenter<?> presenter, String delegateTag) {
@@ -39,9 +39,10 @@ public class PresentersCounter {
     /**
      * Remove tag when delegate's object was fully destroyed
      *
-     * @param presenter   Rejected presenter
+     * @param presenter Rejected presenter
      * @param delegateTag Delegate tag
-     * @return True if there are no links to this presenter and presenter be able to destroy. False otherwise
+     * @return True if there are no links to this presenter and presenter be able to destroy. False
+     * otherwise
      */
     public boolean rejectPresenter(MvpPresenter<?> presenter, String delegateTag) {
         Set<MvpPresenter> presenters = mTags.get(delegateTag);

@@ -1,12 +1,10 @@
 package moxy;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
-import moxy.MvpDelegate;
 
-@SuppressWarnings({"unused"})
+@SuppressWarnings({ "unused" })
 public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
 
     private boolean mIsStateSaved;

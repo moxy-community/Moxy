@@ -6,14 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-
 import moxy.DefaultView;
 import moxy.DefaultViewState;
 import moxy.InjectViewState;
@@ -25,8 +23,7 @@ import moxy.compiler.Util;
 
 import static moxy.compiler.Util.fillGenerics;
 
-public class InjectViewStateProcessor
-        extends ElementProcessor<TypeElement, moxy.compiler.viewstateprovider.PresenterInfo> {
+public class InjectViewStateProcessor extends ElementProcessor<TypeElement, moxy.compiler.viewstateprovider.PresenterInfo> {
 
     private static final String MVP_PRESENTER_CLASS = MvpPresenter.class.getCanonicalName();
 
@@ -123,8 +120,13 @@ public class InjectViewStateProcessor
             final List<? extends TypeParameterElement> typeParameters = superclassElement.getTypeParameters();
 
             if (typeArguments.size() > typeParameters.size()) {
-                throw new IllegalArgumentException("Code generation for interface " + typeElement.getSimpleName()
-                        + " failed. Simplify your generics. (" + typeArguments + " vs " + typeParameters + ")");
+                throw new IllegalArgumentException("Code generation for interface "
+                    + typeElement.getSimpleName()
+                    + " failed. Simplify your generics. ("
+                    + typeArguments
+                    + " vs "
+                    + typeParameters
+                    + ")");
             }
 
             Map<String, String> types = new HashMap<>();

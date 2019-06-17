@@ -10,41 +10,41 @@ import ${packageName}.presentation.presenter${dotSubpackage}.${presenterName};
 import ${superClassFqcn};
 
 <#if packageName??>
-import ${packageName}.R;
+  import ${packageName}.R;
 </#if>
 
 import moxy.presenter.InjectPresenter;
 <#if createProvidesMethod>
-import moxy.presenter.ProvidePresenter;
+  import moxy.presenter.ProvidePresenter;
 </#if>
 
 public class ${className} extends ${superClassName} implements ${viewName} {
-    public static final String TAG = "${className}";
-	@InjectPresenter
-	${presenterName} m${presenterName};
+public static final String TAG = "${className}";
+@InjectPresenter
+${presenterName} m${presenterName};
 
-    <#if createProvidesMethod>
-    @ProvidePresenter
+<#if createProvidesMethod>
+  @ProvidePresenter
     ${presenterName} providePresenter() {
-        return new ${presenterName}();
-    }
-    </#if>
+  return new ${presenterName}();
+  }
+</#if>
 
-	<#if includeFactory>
-    public static Intent getIntent(final Context context) {
-        Intent intent = new Intent(context, ${className}.class);
+<#if includeFactory>
+  public static Intent getIntent(final Context context) {
+  Intent intent = new Intent(context, ${className}.class);
 
-        return intent;
-    }
-	</#if>
+  return intent;
+  }
+</#if>
 
-	<#if includeLayout>
+<#if includeLayout>
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.${activityName});
-	}
-	</#if>
+  @Override
+  protected void onCreate(Bundle savedInstanceState)
+  {
+  super.onCreate(savedInstanceState);
+  setContentView(R.layout.${activityName});
+  }
+</#if>
 }
