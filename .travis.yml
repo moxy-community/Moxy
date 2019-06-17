@@ -39,4 +39,4 @@ before_script:
   - chmod +x gradlew
 
 script:
-  - ./gradlew clean checkstyle
+  - ./gradlew clean checkstyle assembleDebug
