@@ -7,7 +7,7 @@ import java.util.Map;
 @SuppressWarnings("WeakerAccess")
 public class PresenterStore {
 
-    private Map<String, MvpPresenter> mPresenters = new HashMap<>();
+    private Map<String, MvpPresenter> presenters = new HashMap<>();
 
     /**
      * Add presenter to storage
@@ -17,7 +17,7 @@ public class PresenterStore {
      * @param <T> Type of presenter
      */
     public <T extends MvpPresenter> void add(String tag, T instance) {
-        mPresenters.put(tag, instance);
+        presenters.put(tag, instance);
     }
 
     /**
@@ -27,7 +27,7 @@ public class PresenterStore {
      * @return Presenter if it's exists. Null otherwise (if it's no exists)
      */
     public MvpPresenter get(String tag) {
-        return mPresenters.get(tag);
+        return presenters.get(tag);
     }
 
     /**
@@ -37,13 +37,12 @@ public class PresenterStore {
      * @return Presenter which was removed
      */
     public MvpPresenter remove(String tag) {
-        return mPresenters.remove(tag);
+        return presenters.remove(tag);
     }
 
     public void logPresenters() {
-        for (Map.Entry<String, MvpPresenter> currentEntry : mPresenters.entrySet()) {
-            Log.d("PresenterStore", currentEntry.getKey() + " -> " +
-                currentEntry.getValue());
+        for (Map.Entry<String, MvpPresenter> currentEntry : presenters.entrySet()) {
+            Log.d("PresenterStore", currentEntry.getKey() + " -> " + currentEntry.getValue());
         }
     }
 }

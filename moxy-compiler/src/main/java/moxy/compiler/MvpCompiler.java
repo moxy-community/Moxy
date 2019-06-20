@@ -44,34 +44,34 @@ public class MvpCompiler extends AbstractProcessor {
 
     private static final String OPTION_ENABLE_EMPTY_STRATEGY_HELPER = "enableEmptyStrategyHelper";
 
-    private static Messager sMessager;
+    private static Messager messager;
 
-    private static Types sTypeUtils;
+    private static Types typeUtils;
 
-    private static Elements sElementUtils;
+    private static Elements elementUtils;
 
-    private static Map<String, String> sOptions;
+    private static Map<String, String> options;
 
     public static Messager getMessager() {
-        return sMessager;
+        return messager;
     }
 
     public static Types getTypeUtils() {
-        return sTypeUtils;
+        return typeUtils;
     }
 
     public static Elements getElementUtils() {
-        return sElementUtils;
+        return elementUtils;
     }
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
 
-        sMessager = processingEnv.getMessager();
-        sTypeUtils = processingEnv.getTypeUtils();
-        sElementUtils = processingEnv.getElementUtils();
-        sOptions = processingEnv.getOptions();
+        messager = processingEnv.getMessager();
+        typeUtils = processingEnv.getTypeUtils();
+        elementUtils = processingEnv.getElementUtils();
+        options = processingEnv.getOptions();
     }
 
     @Override
@@ -136,8 +136,10 @@ public class MvpCompiler extends AbstractProcessor {
             getDefaultStrategy());
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
-        processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS, injectViewStateProcessor, viewStateProviderClassGenerator);
-        processInjectors(roundEnv, InjectPresenter.class, ElementKind.FIELD, injectPresenterProcessor, presenterBinderClassGenerator);
+        processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
+            injectViewStateProcessor, viewStateProviderClassGenerator);
+        processInjectors(roundEnv, InjectPresenter.class, ElementKind.FIELD,
+            injectPresenterProcessor, presenterBinderClassGenerator);
 
         for (TypeElement usedView : injectViewStateProcessor.getUsedViews()) {
             generateCode(usedView, ElementKind.INTERFACE, viewInterfaceProcessor, viewStateClassGenerator);
@@ -153,15 +155,15 @@ public class MvpCompiler extends AbstractProcessor {
     }
 
     private String getDefaultStrategy() {
-        return sOptions.get(DEFAULT_MOXY_STRATEGY);
+        return options.get(DEFAULT_MOXY_STRATEGY);
     }
 
     private boolean isOptionEnabled(final String option) {
-        return Boolean.parseBoolean(sOptions.get(option));
+        return Boolean.parseBoolean(options.get(option));
     }
 
     private boolean isUseOldDefaultStrategyEnabled() {
-        String option = sOptions.get(DEFAULT_MOXY_STRATEGY);
+        String option = options.get(DEFAULT_MOXY_STRATEGY);
         return Boolean.parseBoolean(option);
     }
 

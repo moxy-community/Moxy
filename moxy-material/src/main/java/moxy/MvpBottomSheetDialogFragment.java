@@ -6,7 +6,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
-    private boolean mIsStateSaved;
+    private boolean isStateSaved;
 
     private MvpDelegate<? extends MvpBottomSheetDialogFragment> mvpDelegate;
 
@@ -21,7 +21,7 @@ public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment {
     public void onResume() {
         super.onResume();
 
-        mIsStateSaved = false;
+        isStateSaved = false;
 
         getMvpDelegate().onAttach();
     }
@@ -30,7 +30,7 @@ public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        mIsStateSaved = true;
+        isStateSaved = true;
 
         getMvpDelegate().onSaveInstanceState(outState);
         getMvpDelegate().onDetach();
@@ -63,8 +63,8 @@ public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         // When we rotate device isRemoving() return true for fragment placed in backstack
         // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-        if (mIsStateSaved) {
-            mIsStateSaved = false;
+        if (isStateSaved) {
+            isStateSaved = false;
             return;
         }
 

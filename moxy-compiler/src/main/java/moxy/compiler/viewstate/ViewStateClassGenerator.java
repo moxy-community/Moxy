@@ -22,6 +22,8 @@ import static moxy.compiler.Util.decapitalizeString;
 
 public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compiler.viewstate.ViewInterfaceInfo> {
 
+    private static final int COMMAND_FIELD_NAME_RANDOM_BOUND = 10;
+
     @Override
     public List<JavaFile> generate(moxy.compiler.viewstate.ViewInterfaceInfo viewInterfaceInfo) {
         ClassName viewName = viewInterfaceInfo.getName();
@@ -70,30 +72,31 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
         return classBuilder.build();
     }
 
-    private MethodSpec generateMethod(DeclaredType enclosingType, moxy.compiler.viewstate.ViewMethod method, TypeName viewTypeName, TypeSpec commandClass) {
+    private MethodSpec generateMethod(DeclaredType enclosingType, ViewMethod method,
+        TypeName viewTypeName, TypeSpec commandClass) {
         // TODO: String commandFieldName = "$cmd";
         String commandFieldName = decapitalizeString(method.getCommandClassName());
 
         // Add salt if contains argument with same name
         Random random = new Random();
         while (method.getArgumentsString().contains(commandFieldName)) {
-            commandFieldName += random.nextInt(10);
+            commandFieldName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND);
         }
 
         return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
             .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName,
                 method.getArgumentsString())
-            .addStatement("mViewCommands.beforeApply($L)", commandFieldName)
+            .addStatement("viewCommands.beforeApply($L)", commandFieldName)
             .addCode("\n")
             .beginControlFlow("if (hasNotView())")
             .addStatement("return")
             .endControlFlow()
             .addCode("\n")
-            .beginControlFlow("for ($T view : mViews)", viewTypeName)
+            .beginControlFlow("for ($T view : views)", viewTypeName)
             .addStatement("view.$L($L)", method.getName(), method.getArgumentsString())
             .endControlFlow()
             .addCode("\n")
-            .addStatement("mViewCommands.afterApply($L)", commandFieldName)
+            .addStatement("viewCommands.afterApply($L)", commandFieldName)
             .build();
     }
 

@@ -15,7 +15,8 @@ import moxy.PresenterStore;
  * <li>Presenter Types should be same</li>
  * <li>Presenter IDs should be equals</li>
  * </ul>
- * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation parameters.</p>
+ * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation
+ * parameters.</p>
  * <br>
  */
 @Target(ElementType.METHOD)

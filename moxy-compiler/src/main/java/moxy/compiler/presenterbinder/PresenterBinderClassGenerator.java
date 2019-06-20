@@ -138,10 +138,9 @@ public final class PresenterBinderClassGenerator extends JavaFilesGenerator<Targ
             if (hasEmptyConstructor) {
                 builder.addStatement("return new $T()", field.getTypeName());
             } else {
-                builder.addStatement(
-                    "throw new $T($S + $S)", IllegalStateException.class,
-                    field.getClazz(),
-                    " has not default constructor. You can apply @ProvidePresenter to some method which will construct Presenter. Also you can make it default constructor");
+                builder.addStatement("throw new $T($S + $S)", IllegalStateException.class, field.getClazz(),
+                    " has not default constructor. You can apply @ProvidePresenter to some method which will "
+                        + "construct Presenter. Also you can make it default constructor");
             }
         }
 

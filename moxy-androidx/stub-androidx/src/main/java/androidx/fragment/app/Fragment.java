@@ -32,7 +32,7 @@ public class Fragment {
         throw new RuntimeException("Stub!");
     }
 
-    final public boolean isRemoving() {
+    public final boolean isRemoving() {
         throw new RuntimeException("Stub!");
     }
 

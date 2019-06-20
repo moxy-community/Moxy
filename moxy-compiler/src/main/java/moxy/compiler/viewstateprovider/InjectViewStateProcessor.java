@@ -23,7 +23,7 @@ import moxy.compiler.Util;
 
 import static moxy.compiler.Util.fillGenerics;
 
-public class InjectViewStateProcessor extends ElementProcessor<TypeElement, moxy.compiler.viewstateprovider.PresenterInfo> {
+public class InjectViewStateProcessor extends ElementProcessor<TypeElement, PresenterInfo> {
 
     private static final String MVP_PRESENTER_CLASS = MvpPresenter.class.getCanonicalName();
 
