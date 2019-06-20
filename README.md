@@ -122,6 +122,7 @@ Moxy is completely without reflection! No special ProGuard rules required.
 * Provide migration mechanic from com.arello-mobile.moxy and its default strategy
 * Kotlin incremental compilation support
 * Remove reflectors and common presenter store
+* Provide Runtime Implementation
 
 ## Moxy Community
 Brave people how created library
@@ -129,9 +130,7 @@ Brave people how created library
 [@senneco](https://github.com/senneco)
 [@ekursakov](https://github.com/ekursakov)
 [@jordan1997](https://github.com/jordan1997)
-[@dependabot-bot](https://github.com/dependabot-bot)
 [@xanderblinov](https://github.com/xanderblinov)
-[@VovaStelmashchuk](https://github.com/VovaStelmashchuk)
 [@SavinMike](https://github.com/SavinMike)
 [@AlexeyKorshun](https://github.com/AlexeyKorshun)
 [@dmdevgo](https://github.com/dmdevgo)

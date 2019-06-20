@@ -60,7 +60,7 @@ private String getArtifactVersion(String module) {
 
 ext {
     groupId = 'com.github.moxy-community'
-    targetVersion = "1.0.13"
+    targetVersion = "1.0.14"
 
     deps = [
             android       : 'com.google.android:android:1.6_r2',
