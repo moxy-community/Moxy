@@ -36,7 +36,14 @@ public class PresenterInjectorRules extends AnnotationRule {
 
         if (annotatedField.getKind() != validKind) {
             errorBuilder
-                .append("Field " + annotatedField + " of " + annotatedField.getEnclosingElement().getSimpleName() + " should be " + validKind.name() + ", or not mark it as @" + InjectPresenter.class.getSimpleName()).append("\n");
+                .append("Field "
+                    + annotatedField
+                    + " of "
+                    + annotatedField.getEnclosingElement().getSimpleName()
+                    + " should be "
+                    + validKind.name()
+                    + ", or not mark it as @"
+                    + InjectPresenter.class.getSimpleName()).append("\n");
         }
 
         for (Modifier modifier : annotatedField.getModifiers()) {
@@ -81,7 +88,8 @@ public class PresenterInjectorRules extends AnnotationRule {
             }
         }
         if (!result) {
-            MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
+            MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR,
+                "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
                 annotatedField);
         }
     }
@@ -136,7 +144,8 @@ public class PresenterInjectorRules extends AnnotationRule {
         return "";
     }
 
-    private Map<TypeParameterElement, TypeMirror> getChildInstanceOfClassFromGeneric(final TypeElement typeElement, final Class<?> aClass) {
+    private Map<TypeParameterElement, TypeMirror> getChildInstanceOfClassFromGeneric(final TypeElement typeElement,
+        final Class<?> aClass) {
         Map<TypeParameterElement, TypeMirror> result = new HashMap<>();
         for (TypeParameterElement element : typeElement.getTypeParameters()) {
             List<? extends TypeMirror> bounds = element.getBounds();

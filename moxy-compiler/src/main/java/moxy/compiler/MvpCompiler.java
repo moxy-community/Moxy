@@ -136,8 +136,10 @@ public class MvpCompiler extends AbstractProcessor {
             getDefaultStrategy());
         ViewStateClassGenerator viewStateClassGenerator = new ViewStateClassGenerator();
 
-        processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS, injectViewStateProcessor, viewStateProviderClassGenerator);
-        processInjectors(roundEnv, InjectPresenter.class, ElementKind.FIELD, injectPresenterProcessor, presenterBinderClassGenerator);
+        processInjectors(roundEnv, InjectViewState.class, ElementKind.CLASS,
+            injectViewStateProcessor, viewStateProviderClassGenerator);
+        processInjectors(roundEnv, InjectPresenter.class, ElementKind.FIELD,
+            injectPresenterProcessor, presenterBinderClassGenerator);
 
         for (TypeElement usedView : injectViewStateProcessor.getUsedViews()) {
             generateCode(usedView, ElementKind.INTERFACE, viewInterfaceProcessor, viewStateClassGenerator);

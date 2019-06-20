@@ -28,7 +28,8 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
 
     private static final String STATE_STRATEGY_TYPE_ANNOTATION = StateStrategyType.class.getName();
 
-    private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils().getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
+    private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
+        .getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
 
     private final TypeElement frameworkDefaultStrategy;
 
@@ -123,7 +124,8 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
             final ExecutableElement methodElement = (ExecutableElement) element;
 
             if (methodElement.getReturnType().getKind() != TypeKind.VOID) {
-                String message = String.format("You are trying generate ViewState for %s. " + "But %s contains non-void method \"%s\" that return type is %s. ",
+                String message = String.format("You are trying generate ViewState for %s. "
+                        + "But %s contains non-void method \"%s\" that return type is %s. ",
                     typeElement.getSimpleName(),
                     typeElement.getSimpleName(),
                     methodElement.getSimpleName(),
@@ -213,7 +215,23 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
 
             String parts = differentParts.stream().collect(Collectors.joining(" and "));
 
-            throw new IllegalStateException("Both " + existingMethod.getEnclosedClassName() + " and " + method.getEnclosedClassName() + " has method " + method.getName() + "(" + arguments + ")" + " with different " + parts + "." + " Override this method in " + viewInterfaceName + " or make " + parts + " equals");
+            throw new IllegalStateException("Both "
+                + existingMethod.getEnclosedClassName()
+                + " and "
+                + method.getEnclosedClassName()
+                + " has method "
+                + method.getName()
+                + "("
+                + arguments
+                + ")"
+                + " with different "
+                + parts
+                + "."
+                + " Override this method in "
+                + viewInterfaceName
+                + " or make "
+                + parts
+                + " equals");
         }
     }
 

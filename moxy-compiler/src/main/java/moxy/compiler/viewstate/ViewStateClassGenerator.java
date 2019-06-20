@@ -72,7 +72,8 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
         return classBuilder.build();
     }
 
-    private MethodSpec generateMethod(DeclaredType enclosingType, moxy.compiler.viewstate.ViewMethod method, TypeName viewTypeName, TypeSpec commandClass) {
+    private MethodSpec generateMethod(DeclaredType enclosingType, ViewMethod method,
+        TypeName viewTypeName, TypeSpec commandClass) {
         // TODO: String commandFieldName = "$cmd";
         String commandFieldName = decapitalizeString(method.getCommandClassName());
 

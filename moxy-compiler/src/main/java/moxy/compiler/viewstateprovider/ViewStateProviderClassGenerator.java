@@ -15,7 +15,7 @@ import moxy.ViewStateProvider;
 import moxy.compiler.JavaFilesGenerator;
 import moxy.viewstate.MvpViewState;
 
-public final class ViewStateProviderClassGenerator extends JavaFilesGenerator<moxy.compiler.viewstateprovider.PresenterInfo> {
+public final class ViewStateProviderClassGenerator extends JavaFilesGenerator<PresenterInfo> {
 
     @Override
     public List<JavaFile> generate(moxy.compiler.viewstateprovider.PresenterInfo presenterInfo) {

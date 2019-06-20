@@ -52,7 +52,8 @@ public class MvpDelegate<Delegated> {
             throw new IllegalStateException("You should call setParentDelegate() before first onCreate()");
         }
         if (childDelegates != null && childDelegates.size() > 0) {
-            throw new IllegalStateException("You could not set parent delegate when there are already has child presenters");
+            throw new IllegalStateException(
+                "You could not set parent delegate when there are already has child presenters");
         }
 
         parentDelegate = delegate;
@@ -79,7 +80,6 @@ public class MvpDelegate<Delegated> {
         if (parentDelegate == null) {
             throw new IllegalStateException("You should call freeParentDelegate() before first setParentDelegate()");
         }
-
         parentDelegate.removeChildDelegate(this);
     }
 
@@ -254,7 +254,8 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * @return generated tag in format: &lt;parent_delegate_tag&gt; &lt;delegated_class_full_name&gt;$MvpDelegate@&lt;hashCode&gt;
+     * @return generated tag in format:
+     * &lt;parent_delegate_tag&gt; &lt;delegated_class_full_name&gt;$MvpDelegate@&lt;hashCode&gt;
      * <p>
      * example: moxy.sample.SampleFragment$MvpDelegate@32649b0
      */
