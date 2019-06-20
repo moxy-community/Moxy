@@ -8,8 +8,8 @@ targetCompatibility = JavaVersion.VERSION_1_8
 dependencies {
   //implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
   implementation project(':moxy')
-  implementation deps.javapoet
 
+  implementation deps.javapoet
   compileOnly deps.autocommon
   compileOnly deps.autoservice
   compileOnly deps.guava
@@ -92,7 +92,8 @@ bintray {
         passphrase = properties.getProperty("gpgPassphrase")
       }
       mavenCentralSync {
-        sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+        sync = true
+        //[Default: true] Determines whether to sync the version to Maven Central.
         user = properties.getProperty("mavenUser") //OSS user token: mandatory
         password = properties.getProperty("mavenToken") //OSS user password: mandatory
         close = '1'
