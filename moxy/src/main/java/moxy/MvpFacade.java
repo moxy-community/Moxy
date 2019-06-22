@@ -1,60 +1,56 @@
 package moxy;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings({ "WeakerAccess", "unused" })
 public final class MvpFacade {
 
-    private static volatile MvpFacade sInstance;
+    private static final Object lock = new Object();
+    private static volatile MvpFacade instance;
+    private PresenterStore presenterStore;
+    private MvpProcessor mvpProcessor;
+    private PresentersCounter presentersCounter;
 
-    private static final Object sLock = new Object();
+    private MvpFacade() {
+        presentersCounter = new PresentersCounter();
+        presenterStore = new PresenterStore();
+        mvpProcessor = new MvpProcessor();
+    }
 
     public static MvpFacade getInstance() {
-        if (sInstance == null) {
-            synchronized (sLock) {
-                if (sInstance == null) {
-                    sInstance = new MvpFacade();
+        if (instance == null) {
+            synchronized (lock) {
+                if (instance == null) {
+                    instance = new MvpFacade();
                 }
             }
         }
-        return sInstance;
+        return instance;
     }
 
     public static void init() {
         getInstance();
     }
 
-    private MvpFacade() {
-        mPresentersCounter = new PresentersCounter();
-        mPresenterStore = new PresenterStore();
-        mMvpProcessor = new MvpProcessor();
-    }
-
-    private PresenterStore mPresenterStore;
-
-    private MvpProcessor mMvpProcessor;
-
-    private PresentersCounter mPresentersCounter;
-
     public PresenterStore getPresenterStore() {
-        return mPresenterStore;
+        return presenterStore;
     }
 
     public void setPresenterStore(PresenterStore presenterStore) {
-        mPresenterStore = presenterStore;
+        this.presenterStore = presenterStore;
     }
 
     public MvpProcessor getMvpProcessor() {
-        return mMvpProcessor;
+        return mvpProcessor;
     }
 
     public void setMvpProcessor(MvpProcessor mvpProcessor) {
-        mMvpProcessor = mvpProcessor;
+        this.mvpProcessor = mvpProcessor;
     }
 
     public PresentersCounter getPresentersCounter() {
-        return mPresentersCounter;
+        return presentersCounter;
     }
 
     public void setPresentersCounter(PresentersCounter presentersCounter) {
-        mPresentersCounter = presentersCounter;
+        this.presentersCounter = presentersCounter;
     }
 }

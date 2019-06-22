@@ -2,9 +2,7 @@ package moxy.compiler.presenterbinder;
 
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
-
 import javax.lang.model.type.TypeMirror;
-
 import moxy.MvpProcessor;
 
 class TargetPresenterField {
@@ -25,10 +23,7 @@ class TargetPresenterField {
 
     private String presenterTagProviderMethodName;
 
-    TargetPresenterField(TypeMirror clazz,
-            String name,
-            String tag,
-            String presenterId) {
+    TargetPresenterField(TypeMirror clazz, String name, String tag, String presenterId) {
         this.clazz = clazz;
         this.isParametrized = TypeName.get(clazz) instanceof ParameterizedTypeName;
         this.typeName = isParametrized ? ((ParameterizedTypeName) TypeName.get(clazz)).rawType : TypeName.get(clazz);

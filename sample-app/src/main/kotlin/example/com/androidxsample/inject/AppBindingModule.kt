@@ -8,8 +8,8 @@ import example.com.androidxsample.view.MainActivity
 
 @Module(includes = [AndroidInjectionModule::class, AndroidSupportInjectionModule::class])
 abstract class AppBindingModule {
-	
-	@ContributesAndroidInjector
-	abstract fun bindMainActivity() : MainActivity
-	
+
+  @ContributesAndroidInjector
+  abstract fun bindMainActivity(): MainActivity
+
 }

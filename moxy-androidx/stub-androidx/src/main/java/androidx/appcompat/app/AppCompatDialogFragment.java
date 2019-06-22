@@ -1,7 +1,6 @@
 package androidx.appcompat.app;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -31,7 +30,7 @@ public class AppCompatDialogFragment {
         throw new RuntimeException("Stub!");
     }
 
-    final public boolean isRemoving() {
+    public final boolean isRemoving() {
         throw new RuntimeException("Stub!");
     }
 
@@ -42,5 +41,4 @@ public class AppCompatDialogFragment {
     public Fragment getParentFragment() {
         throw new RuntimeException("Stub!");
     }
-
 }

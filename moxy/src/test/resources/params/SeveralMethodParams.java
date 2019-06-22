@@ -5,7 +5,7 @@ import moxy.factory.MockPresenterFactory;
 
 @ParamsProvider(MockPresenterFactory.class)
 public interface SeveralMethodParams {
-	void method1();
+    void method1();
 
-	void method2();
+    void method2();
 }

@@ -16,9 +16,9 @@ dependencies {
     compileOnly deps.android
     compileOnly project(':stub-androidx')
 
-//    javadocDeps project(':moxy')
-//    javadocDeps deps.android
-//    javadocDeps project(':stub-androidx')
+    //    javadocDeps project(':moxy')
+    //    javadocDeps deps.android
+    //    javadocDeps project(':stub-androidx')
 }
 def artifact = 'moxy-androidx'
 project.archivesBaseName = artifact
@@ -61,7 +61,6 @@ install {
     }
 }
 
-
 version = getArtifactVersion('moxy-androidx') // Library version
 
 Properties properties = new Properties()
@@ -97,7 +96,6 @@ bintray {
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
-
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs

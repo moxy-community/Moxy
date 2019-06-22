@@ -1,9 +1,8 @@
 package view;
 
+import java.io.Serializable;
 import moxy.MvpView;
 
-import java.io.Serializable;
-
 public interface GenericWithExtendsView<T extends Serializable> extends MvpView {
-	void testEvent(T param);
+    void testEvent(T param);
 }

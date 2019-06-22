@@ -3,11 +3,9 @@ package moxy.compiler.viewstate;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -15,7 +13,6 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
-
 import moxy.compiler.MvpCompiler;
 
 class ViewMethod {
@@ -39,9 +36,9 @@ class ViewMethod {
     private String uniqueSuffix;
 
     ViewMethod(DeclaredType targetInterfaceElement,
-            ExecutableElement methodElement,
-            TypeElement strategy,
-            String tag) {
+        ExecutableElement methodElement,
+        TypeElement strategy,
+        String tag) {
         this.methodElement = methodElement;
         this.name = methodElement.getSimpleName().toString();
         this.strategy = strategy;
@@ -50,7 +47,8 @@ class ViewMethod {
         this.parameterSpecs = new ArrayList<>();
 
         Types typeUtils = MvpCompiler.getTypeUtils();
-        ExecutableType executableType = (ExecutableType) typeUtils.asMemberOf(targetInterfaceElement, methodElement);
+        ExecutableType executableType =
+            (ExecutableType) typeUtils.asMemberOf(targetInterfaceElement, methodElement);
         List<? extends VariableElement> parameters = methodElement.getParameters();
         List<? extends TypeMirror> resolvedParameterTypes = executableType.getParameterTypes();
 
@@ -60,23 +58,23 @@ class ViewMethod {
             String name = element.getSimpleName().toString();
 
             parameterSpecs.add(ParameterSpec.builder(type, name)
-                    .addModifiers(element.getModifiers())
-                    .build()
+                .addModifiers(element.getModifiers())
+                .build()
             );
         }
 
         this.exceptions = methodElement.getThrownTypes().stream()
-                .map(TypeName::get)
-                .collect(Collectors.toList());
+            .map(TypeName::get)
+            .collect(Collectors.toList());
 
         this.typeVariables = methodElement.getTypeParameters()
-                .stream()
-                .map(TypeVariableName::get)
-                .collect(Collectors.toList());
+            .stream()
+            .map(TypeVariableName::get)
+            .collect(Collectors.toList());
 
         this.argumentsString = this.parameterSpecs.stream()
-                .map(parameterSpec -> parameterSpec.name)
-                .collect(Collectors.joining(", "));
+            .map(parameterSpec -> parameterSpec.name)
+            .collect(Collectors.joining(", "));
 
         this.uniqueSuffix = "";
     }

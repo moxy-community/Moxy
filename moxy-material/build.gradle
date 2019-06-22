@@ -17,10 +17,10 @@ dependencies {
     compileOnly project(':stub-androidx')
     compileOnly project(':stub-material')
 
-//    javadocDeps project(':moxy')
-//    javadocDeps deps.android
-//    javadocDeps project(':stub-androidx')
-//    javadocDeps project(':stub-material')
+    //    javadocDeps project(':moxy')
+    //    javadocDeps deps.android
+    //    javadocDeps project(':stub-androidx')
+    //    javadocDeps project(':stub-material')
 }
 
 def artifact = 'moxy-material'
@@ -64,8 +64,6 @@ install {
     }
 }
 
-
-
 version = getArtifactVersion('moxy-material') // Library version
 
 Properties properties = new Properties()
@@ -101,7 +99,6 @@ bintray {
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
-
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs

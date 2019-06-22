@@ -29,9 +29,9 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
-                        disableEmptyStrategyCheck: 'false',
-                        enableEmptyStrategyHelper: 'true',
-                        defaultMoxyStrategy      : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
+                    disableEmptyStrategyCheck: 'false',
+                    enableEmptyStrategyHelper: 'true',
+                    defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy'
                 ]
             }
         }

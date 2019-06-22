@@ -1,7 +1,6 @@
 package moxy.compiler;
 
 import com.squareup.javapoet.JavaFile;
-
 import java.util.List;
 
 public abstract class JavaFilesGenerator<T> {

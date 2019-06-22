@@ -1,11 +1,9 @@
-
 package view;
 
+import java.io.Serializable;
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndStrategy;
-import java.io.Serializable;
-import java.lang.Override;
 
 public class ExtendsOfGenericView$$State extends MvpViewState<ExtendsOfGenericView> implements ExtendsOfGenericView {
     @Override

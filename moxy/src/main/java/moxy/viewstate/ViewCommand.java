@@ -3,7 +3,6 @@ package moxy.viewstate;
 import moxy.MvpView;
 import moxy.viewstate.strategy.StateStrategy;
 
-
 public abstract class ViewCommand<View extends MvpView> {
 
     private final String tag;

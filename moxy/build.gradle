@@ -67,7 +67,6 @@ install {
     }
 }
 
-
 version = getArtifactVersion('moxy') // Library version
 
 Properties properties = new Properties()

@@ -16,9 +16,9 @@ dependencies {
     compileOnly deps.android
     compileOnly project(':stub-android')
 
-//    javadocDeps project(':moxy')
-//    javadocDeps deps.android
-//    javadocDeps project(':stub-android')
+    //    javadocDeps project(':moxy')
+    //    javadocDeps deps.android
+    //    javadocDeps project(':stub-android')
 }
 def artifact = 'moxy-android'
 project.archivesBaseName = artifact

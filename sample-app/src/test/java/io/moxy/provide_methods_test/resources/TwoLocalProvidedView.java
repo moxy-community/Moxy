@@ -3,8 +3,6 @@ package moxy.provide_methods_test.resources;
 import moxy.MvpDelegate;
 import moxy.presenter.InjectPresenter;
 import moxy.presenter.ProvidePresenter;
-import moxy.provide_methods_test.resources.TestPresenter;
-import moxy.provide_methods_test.resources.TestView;
 
 public class TwoLocalProvidedView implements TestView {
 

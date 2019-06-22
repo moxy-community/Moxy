@@ -37,6 +37,25 @@ allprojects {
     }
 }
 
+subprojects { project ->
+    apply plugin: 'checkstyle'
+
+    task checkstyle(type: Checkstyle) {
+        description 'Runs Checkstyle inspection against ICanPlayer sourcesets.'
+        group = 'moxy'
+        configFile rootProject.file('checkstyle.xml')
+        ignoreFailures false
+        showViolations true
+        classpath = files()
+        source 'src/main/java'
+    }
+
+    // check code style after project evaluation
+    afterEvaluate {
+        check.dependsOn('checkstyle')
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
@@ -63,17 +82,17 @@ ext {
     targetVersion = "1.0.13"
 
     deps = [
-            android       : 'com.google.android:android:1.6_r2',
-            javapoet      : 'com.squareup:javapoet:1.11.1',
-            junit         : 'junit:junit:4.12',
-            mockito       : 'org.mockito:mockito-core:2.27.0',
-            truth         : 'androidx.test.ext:truth:1.1.0',
-            robolectric   : 'org.robolectric:robolectric:4.2.1',
-            androidJunit  : 'androidx.test.ext:junit:1.1.0',
-            compiletesting: 'com.google.testing.compile:compile-testing:0.17',
-            asm           : ['org.ow2.asm:asm:7.1', 'org.ow2.asm:asm-util:7.1'],
-            autoservice   : 'com.google.auto.service:auto-service:1.0-rc5',
-            autocommon    : 'com.google.auto:auto-common:0.10',
-            guava         : 'com.google.guava:guava:23.0',
+        android: 'com.google.android:android:1.6_r2',
+        javapoet: 'com.squareup:javapoet:1.11.1',
+        junit: 'junit:junit:4.12',
+        mockito: 'org.mockito:mockito-core:2.27.0',
+        truth: 'androidx.test.ext:truth:1.1.0',
+        robolectric: 'org.robolectric:robolectric:4.2.1',
+        androidJunit: 'androidx.test.ext:junit:1.1.0',
+        compiletesting: 'com.google.testing.compile:compile-testing:0.17',
+        asm: ['org.ow2.asm:asm:7.1', 'org.ow2.asm:asm-util:7.1'],
+        autoservice: 'com.google.auto.service:auto-service:1.0-rc5',
+        autocommon: 'com.google.auto:auto-common:0.10',
+        guava: 'com.google.guava:guava:23.0',
     ]
 }
