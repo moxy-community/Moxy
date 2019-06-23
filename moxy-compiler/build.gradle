@@ -1,3 +1,7 @@
+plugins {
+    id 'com.stepango.aar2jar' version "0.4"
+}
+
 apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
@@ -7,7 +11,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     //implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
-    implementation project(':moxy')
+    implementationAar project(path: ':moxy',  configuration: 'default')
 
     implementation deps.javapoet
     compileOnly deps.autocommon
