@@ -142,9 +142,8 @@ enableEmptyStrategyHelper : 'true'
 
 How to correctly use compilation flags see at [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
 
-## ProGuard
-ProGuard users must manually include rules from
-[this file](https://github.com/moxy-community/Moxy/blob/develop/moxy/proguard-rules.pro).
+## ProGuard\R8
+Moxy project already includes ProGuard rule files, no additional configuration required.
 
 ## Road Map
 * [✓] ~~Provide a migration tool from com.arello-mobile.moxy and its default strategy~~
