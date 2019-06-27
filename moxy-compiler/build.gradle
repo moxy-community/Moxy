@@ -9,6 +9,11 @@ apply plugin: 'com.jfrog.bintray'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+def impAar = project.configurations.getByName("implementationAar")
+def testSourceSet = project.convention.getPlugin(JavaPluginConvention.class).sourceSets.findByName("test")
+testSourceSet.compileClasspath += impAar
+testSourceSet.runtimeClasspath += impAar
+
 dependencies {
     //implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
     implementationAar project(path: ':moxy',  configuration: 'default')
