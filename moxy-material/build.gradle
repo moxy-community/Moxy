@@ -81,7 +81,7 @@ bintray {
         name = artifact
         licenses = ['MIT']
         vcsUrl = 'https://github.com/moxy-community/Moxy'
-        publish = true
+        publish = getPublishToMaven()
         version {
             gpg {
                 sign = true
