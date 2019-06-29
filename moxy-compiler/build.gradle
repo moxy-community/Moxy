@@ -94,14 +94,14 @@ bintray {
         name = artifact
         licenses = ['MIT']
         vcsUrl = 'https://github.com/moxy-community/Moxy'
-        publish = getPublishToMaven()
+        publish = true
         version {
             gpg {
                 sign = true
                 passphrase = properties.getProperty("gpgPassphrase")
             }
             mavenCentralSync {
-                sync = true
+                sync = getPublishToMaven()
                 //[Default: true] Determines whether to sync the version to Maven Central.
                 user = properties.getProperty("mavenUser") //OSS user token: mandatory
                 password = properties.getProperty("mavenToken") //OSS user password: mandatory
