@@ -88,7 +88,7 @@ bintray {
                 passphrase = properties.getProperty("gpgPassphrase")
             }
             mavenCentralSync {
-                sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+                sync = getPublishToMaven() //[Default: true] Determines whether to sync the version to Maven Central.
                 user = properties.getProperty("mavenUser") //OSS user token: mandatory
                 password = properties.getProperty("mavenToken") //OSS user password: mandatory
                 close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.

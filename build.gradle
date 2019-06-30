@@ -77,6 +77,12 @@ private String getArtifactVersion(String module) {
     return developSettings.getOrDefault(module + "_version", '0.1')
 }
 
+private boolean getPublishToMaven() {
+    Properties developSettings = new Properties()
+    developSettings.load(project.rootProject.file('publish.properties').newDataInputStream())
+    return developSettings.getOrDefault("publish_to_maven", 'false').toBoolean()
+}
+
 ext {
     groupId = 'com.github.moxy-community'
     targetVersion = "1.0.14"
