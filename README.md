@@ -19,6 +19,8 @@ Moxy has a few killer features in other ways:
 View interface
 ```kotlin
 interface MainView : MvpView {
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
 	fun printLog(msg: String)
 }
 
@@ -147,8 +149,8 @@ Moxy project already includes ProGuard rule files, no additional configuration r
 
 ## Road Map
 * [✓] ~~Provide a migration tool from com.arello-mobile.moxy and its default strategy~~
-* [ ]Kotlin incremental compilation support
-* [ ]Remove reflectors and common presenter store
+* [✓] ~~Kotlin incremental compilation support~~
+* [✓] ~~Remove reflectors and common presenter store~~
 * [ ]Provide Runtime Implementation
 
 ## Moxy Community
