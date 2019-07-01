@@ -2,7 +2,6 @@ package presenter;
 
 import moxy.InjectViewState;
 import moxy.MvpPresenter;
-
 import view.GenericView;
 
 @InjectViewState

@@ -3,7 +3,7 @@ package moxy;
 import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
-
+import moxy.locators.ViewStateLocator;
 import moxy.viewstate.MvpViewState;
 
 public abstract class MvpPresenter<View extends MvpView> {
@@ -98,6 +98,17 @@ public abstract class MvpPresenter<View extends MvpView> {
     }
 
     /**
+     * Set view state to presenter
+     *
+     * @param viewState that implements type, setted as View generic param
+     */
+    @SuppressWarnings({ "unchecked", "unused" })
+    public void setViewState(MvpViewState<View> viewState) {
+        viewStateAsView = (View) viewState;
+        this.viewState = viewState;
+    }
+
+    /**
      * Check if view is in restore state or not
      *
      * @param view view for check
@@ -112,17 +123,6 @@ public abstract class MvpPresenter<View extends MvpView> {
         return false;
     }
 
-    /**
-     * Set view state to presenter
-     *
-     * @param viewState that implements type, setted as View generic param
-     */
-    @SuppressWarnings({"unchecked", "unused"})
-    public void setViewState(MvpViewState<View> viewState) {
-        viewStateAsView = (View) viewState;
-        this.viewState = viewState;
-    }
-
     String getTag() {
         return tag;
     }
@@ -131,12 +131,12 @@ public abstract class MvpPresenter<View extends MvpView> {
         this.tag = tag;
     }
 
-    void setPresenterClass(Class<? extends MvpPresenter> presenterClass) {
-        this.presenterClass = presenterClass;
-    }
-
     Class<? extends MvpPresenter> getPresenterClass() {
         return presenterClass;
+    }
+
+    void setPresenterClass(Class<? extends MvpPresenter> presenterClass) {
+        this.presenterClass = presenterClass;
     }
 
     /**
@@ -149,10 +149,10 @@ public abstract class MvpPresenter<View extends MvpView> {
     private static class Binder {
 
         static void bind(MvpPresenter presenter) {
-            MvpView viewState = (MvpView) MoxyReflector.getViewState(presenter.getClass());
+            MvpViewState viewState = ViewStateLocator.getViewState(presenter.getClass());
 
-            presenter.viewStateAsView = viewState;
-            presenter.viewState = (MvpViewState) viewState;
+            presenter.viewStateAsView = (MvpView) viewState;
+            presenter.viewState = viewState;
         }
     }
 }

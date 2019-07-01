@@ -142,8 +142,8 @@ enableEmptyStrategyHelper : 'true'
 
 How to correctly use compilation flags see at [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
 
-## ProGuard
-Moxy is completely without reflection! No special ProGuard rules required.
+## ProGuard\R8
+Moxy project already includes ProGuard rule files, no additional configuration required.
 
 ## Road Map
 * [✓] ~~Provide a migration tool from com.arello-mobile.moxy and its default strategy~~
@@ -177,6 +177,11 @@ Brave people how created library
 
 
 You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
+
+## Contributing
+Install code style to your IntelliJ or Android Studio. `MoxyAndroid.xml`
+For import file use or Mac OS:
+Preferences -> Editor -> Code style -> Scheme -> Import Scheme -> IntelliJ IDEA code style XML -> choose the `MoxyAndroid.xml` file in finder   
 
 ## License
 ```

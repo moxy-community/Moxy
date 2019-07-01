@@ -9,9 +9,6 @@ import com.google.common.io.Resources;
 import com.google.common.truth.Truth;
 import com.google.testing.compile.CompileTester;
 import com.google.testing.compile.JavaSourcesSubjectFactory;
-
-import org.junit.Before;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
 import javax.annotation.processing.Processor;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -33,6 +29,7 @@ import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+import org.junit.Before;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -62,8 +59,8 @@ public abstract class CompilerTest {
 
     protected CompileTester getThat(Collection<? extends Processor> processors, final JavaFileObject... target) {
         return Truth.assert_().about(JavaSourcesSubjectFactory.javaSources())
-                .that(Arrays.asList(target))
-                .processedWith(processors);
+            .that(Arrays.asList(target))
+            .processedWith(processors);
     }
 
     protected String getString(String filePath) throws IOException {
@@ -79,21 +76,20 @@ public abstract class CompilerTest {
         return stringBuilder.toString();
     }
 
-    protected void assertCompilationResultIs(Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics,
-            Collection<String> resources) throws IOException {
+    protected void assertCompilationResultIs(Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics, Collection<String> resources) throws IOException {
         assertCompilationResultIs(expectedDiagnostics, resources, MvpCompiler.class);
     }
 
     //For more info see https://github.com/google/auto/blob/master/value/src/test/java/com/google/auto/value/processor/CompilationErrorsTest.java
-    protected void assertCompilationResultIs(Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics,
-            Collection<String> resources, final Class<? extends Processor> processor) throws IOException {
+    protected void assertCompilationResultIs(Table<Diagnostic.Kind, Integer, Pattern> expectedDiagnostics, Collection<String> resources, final Class<? extends Processor> processor)
+        throws IOException {
         StringWriter compilerOut = new StringWriter();
 
         List<String> options = ImmutableList.of(
-                "-sourcepath", tmpDir.getPath(),
-                "-d", tmpDir.getPath(),
-                "-processor", processor.getName(),
-                "-Xlint");
+            "-sourcepath", tmpDir.getPath(),
+            "-d", tmpDir.getPath(),
+            "-processor", processor.getName(),
+            "-Xlint");
         javac.getTask(compilerOut, fileManager, diagnosticCollector, options, null, null);
         // This doesn't compile anything but communicates the paths to the JavaFileManager.
 
@@ -110,14 +106,13 @@ public abstract class CompilerTest {
             Files.write(source, new File(dir, sourceName), Charset.forName("UTF-8"));
             classNames.add(className.fullName());
             JavaFileObject sourceFile = fileManager.getJavaFileForInput(
-                    StandardLocation.SOURCE_PATH, className.fullName(), JavaFileObject.Kind.SOURCE);
+                StandardLocation.SOURCE_PATH, className.fullName(), JavaFileObject.Kind.SOURCE);
             sourceFiles.add(sourceFile);
         }
         assertEquals(classNames.size(), sourceFiles.size());
 
         // Compile the classes.
-        JavaCompiler.CompilationTask javacTask = javac.getTask(
-                compilerOut, fileManager, diagnosticCollector, options, classNames, sourceFiles);
+        JavaCompiler.CompilationTask javacTask = javac.getTask(compilerOut, fileManager, diagnosticCollector, options, classNames, sourceFiles);
         boolean compiledOk = javacTask.call();
 
         // Check that there were no compilation errors unless we were expecting there to be.
@@ -126,19 +121,20 @@ public abstract class CompilerTest {
         Table<Diagnostic.Kind, Integer, String> diagnostics = HashBasedTable.create();
         for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
             boolean ignore = (diagnostic.getKind() == Diagnostic.Kind.NOTE
-                    || (diagnostic.getKind() == Diagnostic.Kind.WARNING
-                    && diagnostic.getMessage(null).contains(
-                    "No processor claimed any of these annotations")));
+                || (diagnostic.getKind() == Diagnostic.Kind.WARNING
+                && diagnostic.getMessage(null).contains(
+                "No processor claimed any of these annotations")));
             if (!ignore) {
                 diagnostics.put(
-                        diagnostic.getKind(), (int) diagnostic.getLineNumber(), diagnostic.getMessage(null));
+                    diagnostic.getKind(), (int) diagnostic.getLineNumber(),
+                    diagnostic.getMessage(null));
             }
         }
         assertEquals(diagnostics.containsRow(Diagnostic.Kind.ERROR), !compiledOk);
         assertEquals("Diagnostic kinds should match: " + diagnostics,
-                expectedDiagnostics.rowKeySet(), diagnostics.rowKeySet());
+            expectedDiagnostics.rowKeySet(), diagnostics.rowKeySet());
         for (Table.Cell<Diagnostic.Kind, Integer, Pattern> expectedDiagnostic :
-                expectedDiagnostics.cellSet()) {
+            expectedDiagnostics.cellSet()) {
             boolean match = false;
             for (Table.Cell<Diagnostic.Kind, Integer, String> diagnostic : diagnostics.cellSet()) {
 
@@ -148,7 +144,7 @@ public abstract class CompilerTest {
                         int actualLine = diagnostic.getColumnKey();
                         if (actualLine != expectedLine) {
                             fail("Diagnostic matched pattern but on line " + actualLine
-                                    + " not line " + expectedLine + ": " + diagnostic.getValue());
+                                + " not line " + expectedLine + ": " + diagnostic.getValue());
                         }
                     }
                     match = true;

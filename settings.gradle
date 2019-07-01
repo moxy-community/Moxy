@@ -1,10 +1,10 @@
-include ':moxy', ':moxy-android', ':moxy-compiler', ':moxy-app-compat', ':moxy-androidx', ':moxy-material'
+include ':moxy', ':moxy-android', ':moxy-compiler', ':moxy-app-compat', ':moxy-androidx',
+    ':moxy-material'
 
-include ':stub-reflector', ':stub-android', ':stub-appcompat', ':stub-androidx', ':stub-material'
+include ':stub-android', ':stub-appcompat', ':stub-androidx', ':stub-material'
 
 include ':sample-app'
 
-project(':stub-reflector').projectDir = new File('moxy/stub-reflector')
 project(':stub-android').projectDir = new File('moxy-android/stub-android')
 project(':stub-appcompat').projectDir = new File('moxy-app-compat/stub-appcompat')
 project(':stub-androidx').projectDir = new File('moxy-androidx/stub-androidx')

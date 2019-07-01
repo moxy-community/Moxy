@@ -1,3 +1,7 @@
+plugins {
+    id 'com.stepango.aar2jar' version "0.4"
+}
+
 apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
@@ -6,15 +10,15 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
-    //compileOnly project(':moxy')
+//    implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
+    compileOnlyAar project(path: ':moxy', configuration: 'default')
 
     compileOnly deps.android
     compileOnly project(':stub-appcompat')
 
-//    javadocDeps project(':moxy')
-//    javadocDeps deps.android
-//    javadocDeps project(':stub-appcompat')
+    //    javadocDeps project(':moxy')
+    //    javadocDeps deps.android
+    //    javadocDeps project(':stub-appcompat')
 }
 def artifact = 'moxy-app-compat'
 project.archivesBaseName = artifact
@@ -81,10 +85,12 @@ bintray {
                 passphrase = properties.getProperty("gpgPassphrase")
             }
             mavenCentralSync {
-                sync = true //[Default: true] Determines whether to sync the version to Maven Central.
+                sync = getPublishToMaven()
+                //[Default: true] Determines whether to sync the version to Maven Central.
                 user = properties.getProperty("mavenUser") //OSS user token: mandatory
                 password = properties.getProperty("mavenToken") //OSS user password: mandatory
-                close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                close = '1'
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
             }
         }
     }
@@ -92,7 +98,6 @@ bintray {
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
-
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs

@@ -4,12 +4,12 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import moxy.PresenterStore;
 
 /**
  * Called when Moxy can't find right presenter instance in {@link PresenterStore}.
- * <p>Attention! <b>Don't use manually method marked with this annotation!</b> Use presenter field, which you want. If you override this method in inherited classes, make them return same type(not requirements but recommendation).</p>
+ * <p>Attention! <b>Don't use manually method marked with this annotation!</b> Use presenter field, which you want. If
+ * you override this method in inherited classes, make them return same type(not requirements but recommendation).</p>
  * <p>Requirements:</p>
  * <ul>
  * <li>Method should return full equals class as presenter field type</li>
@@ -17,7 +17,8 @@ import moxy.PresenterStore;
  * <li>Tags should be equals</li>
  * <li>Presenter IDs should be equals</li>
  * </ul>
- * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation parameters. These parameters should be equals to @InjectPresenter parameters</p>
+ * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation
+ * parameters. These parameters should be equals to @InjectPresenter parameters</p>
  * <br>
  */
 @Target(ElementType.METHOD)

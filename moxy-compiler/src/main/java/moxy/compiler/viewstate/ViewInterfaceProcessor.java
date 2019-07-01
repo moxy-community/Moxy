@@ -2,15 +2,11 @@ package moxy.compiler.viewstate;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.ParameterSpec;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -22,20 +18,18 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
-
 import moxy.compiler.ElementProcessor;
 import moxy.compiler.MvpCompiler;
 import moxy.compiler.Util;
 import moxy.viewstate.strategy.AddToEndSingleStrategy;
 import moxy.viewstate.strategy.StateStrategyType;
 
-public class ViewInterfaceProcessor
-        extends ElementProcessor<TypeElement, moxy.compiler.viewstate.ViewInterfaceInfo> {
+public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.compiler.viewstate.ViewInterfaceInfo> {
 
     private static final String STATE_STRATEGY_TYPE_ANNOTATION = StateStrategyType.class.getName();
 
     private static final TypeElement NEW_DEFAULT_STATE_STRATEGY = MvpCompiler.getElementUtils()
-            .getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
+        .getTypeElement(AddToEndSingleStrategy.class.getCanonicalName());
 
     private final TypeElement frameworkDefaultStrategy;
 
@@ -47,14 +41,12 @@ public class ViewInterfaceProcessor
 
     private String viewInterfaceName;
 
-    private Set<TypeElement> usedStrategies = new HashSet<>();
-
     private List<MigrationMethod> migrationMethods = new ArrayList<>();
 
     public ViewInterfaceProcessor(
-            final boolean disableEmptyStrategyCheck,
-            final boolean enableEmptyStrategyHelper,
-            final String defaultStrategy
+        final boolean disableEmptyStrategyCheck,
+        final boolean enableEmptyStrategyHelper,
+        final String defaultStrategy
     ) {
         super();
         this.enableEmptyStrategyHelper = enableEmptyStrategyHelper;
@@ -64,7 +56,7 @@ public class ViewInterfaceProcessor
 
             if (localDefaultStrategy == null) {
                 String message = String
-                        .format("Unable to parse option %s. Check %s exists", defaultStrategy, defaultStrategy);
+                    .format("Unable to parse option %s. Check %s exists", defaultStrategy, defaultStrategy);
 
                 MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
                 localDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
@@ -75,10 +67,6 @@ public class ViewInterfaceProcessor
             frameworkDefaultStrategy = NEW_DEFAULT_STATE_STRATEGY;
         }
         this.disableEmptyStrategyCheck = disableEmptyStrategyCheck;
-    }
-
-    public List<TypeElement> getUsedStrategies() {
-        return new ArrayList<>(usedStrategies);
     }
 
     @Override
@@ -95,7 +83,7 @@ public class ViewInterfaceProcessor
 
         // Add methods from super interfaces
         methods.addAll(iterateInterfaces(0, element, interfaceStateStrategyType, methods,
-                new ArrayList<>()));
+            new ArrayList<>()));
 
         // Allow methods be with same names
         Map<String, Integer> methodsCounter = new HashMap<>();
@@ -115,50 +103,49 @@ public class ViewInterfaceProcessor
         return new moxy.compiler.viewstate.ViewInterfaceInfo(element, methods);
     }
 
-    public JavaFile makeMigrationHelper(final String moxyReflectorPackage) {
+    public JavaFile makeMigrationHelper() {
         if (enableEmptyStrategyHelper && !migrationMethods.isEmpty()) {
-            return EmptyStrategyHelperGenerator.generate(moxyReflectorPackage, migrationMethods);
+            return EmptyStrategyHelperGenerator.generate(migrationMethods);
         }
         return null;
     }
 
-
     private void getMethods(TypeElement typeElement,
-            TypeElement defaultStrategy,
-            List<ViewMethod> rootMethods,
-            List<ViewMethod> superinterfacesMethods) {
+        TypeElement defaultStrategy,
+        List<ViewMethod> rootMethods,
+        List<ViewMethod> superinterfacesMethods) {
         for (Element element : typeElement.getEnclosedElements()) {
             // ignore all but non-static methods
             if (element.getKind() != ElementKind.METHOD || element.getModifiers()
-                    .contains(Modifier.STATIC)) {
+                .contains(Modifier.STATIC)) {
                 continue;
             }
 
             final ExecutableElement methodElement = (ExecutableElement) element;
 
             if (methodElement.getReturnType().getKind() != TypeKind.VOID) {
-                String message = String.format("You are trying generate ViewState for %s. " +
-                                "But %s contains non-void method \"%s\" that return type is %s. ",
-                        typeElement.getSimpleName(),
-                        typeElement.getSimpleName(),
-                        methodElement.getSimpleName(),
-                        methodElement.getReturnType()
+                String message = String.format("You are trying generate ViewState for %s. "
+                        + "But %s contains non-void method \"%s\" that return type is %s. ",
+                    typeElement.getSimpleName(),
+                    typeElement.getSimpleName(),
+                    methodElement.getSimpleName(),
+                    methodElement.getReturnType()
                 );
                 MvpCompiler.getMessager()
-                        .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
+                    .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
             }
 
             AnnotationMirror annotation = Util
-                    .getAnnotation(methodElement, STATE_STRATEGY_TYPE_ANNOTATION);
+                .getAnnotation(methodElement, STATE_STRATEGY_TYPE_ANNOTATION);
 
             // get strategy from annotation
             TypeMirror strategyClassFromAnnotation = Util
-                    .getAnnotationValueAsTypeMirror(annotation, "value");
+                .getAnnotationValueAsTypeMirror(annotation, "value");
 
             TypeElement strategyClass;
             if (strategyClassFromAnnotation != null) {
                 strategyClass = (TypeElement) ((DeclaredType) strategyClassFromAnnotation)
-                        .asElement();
+                    .asElement();
             } else {
                 if (defaultStrategy == null && !disableEmptyStrategyCheck) {
 
@@ -166,21 +153,21 @@ public class ViewInterfaceProcessor
                         migrationMethods.add(new MigrationMethod(typeElement, methodElement));
                     } else {
                         String message = String
-                                .format("A View method has no strategy! You are probably trying to migrate from an "
-                                                + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
-                                                + "without any Strategy, and you did not specify a default Strategy.",
-                                        typeElement.getQualifiedName(),
-                                        methodElement.getSimpleName()
-                                );
+                            .format(
+                                "A View method has no strategy! You are probably trying to migrate from an "
+                                    + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
+                                    + "without any Strategy, and you did not specify a default Strategy.",
+                                typeElement.getQualifiedName(),
+                                methodElement.getSimpleName()
+                            );
 
                         MvpCompiler.getMessager()
-                                .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
+                            .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
                     }
                 }
 
-                strategyClass = defaultStrategy != null ? defaultStrategy : frameworkDefaultStrategy;
-
-
+                strategyClass =
+                    defaultStrategy != null ? defaultStrategy : frameworkDefaultStrategy;
             }
 
             // get tag from annotation
@@ -193,14 +180,8 @@ public class ViewInterfaceProcessor
                 methodTag = methodElement.getSimpleName().toString();
             }
 
-            // add strategy to list
-            usedStrategies.add(strategyClass);
-
-            final ViewMethod method
-                    = new ViewMethod(
-                    (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass,
-                    methodTag
-            );
+            final ViewMethod method = new ViewMethod(
+                (DeclaredType) viewInterfaceElement.asType(), methodElement, strategyClass, methodTag);
 
             if (rootMethods.contains(method)) {
                 continue;
@@ -208,7 +189,7 @@ public class ViewInterfaceProcessor
 
             if (superinterfacesMethods.contains(method)) {
                 checkStrategyAndTagEquals(method,
-                        superinterfacesMethods.get(superinterfacesMethods.indexOf(method)));
+                    superinterfacesMethods.get(superinterfacesMethods.indexOf(method)));
                 continue;
             }
 
@@ -217,8 +198,8 @@ public class ViewInterfaceProcessor
     }
 
     private void checkStrategyAndTagEquals(
-            ViewMethod method,
-            ViewMethod existingMethod) {
+        ViewMethod method,
+        ViewMethod existingMethod) {
         List<String> differentParts = new ArrayList<>();
         if (!existingMethod.getStrategy().equals(method.getStrategy())) {
             differentParts.add("strategies");
@@ -229,46 +210,57 @@ public class ViewInterfaceProcessor
 
         if (!differentParts.isEmpty()) {
             String arguments = method.getParameterSpecs().stream()
-                    .map(ParameterSpec::toString)
-                    .collect(Collectors.joining(", "));
+                .map(ParameterSpec::toString)
+                .collect(Collectors.joining(", "));
 
             String parts = differentParts.stream().collect(Collectors.joining(" and "));
 
-            throw new IllegalStateException("Both " + existingMethod.getEnclosedClassName() +
-                    " and " + method.getEnclosedClassName() +
-                    " has method " + method.getName() + "(" + arguments + ")" +
-                    " with different " + parts + "." +
-                    " Override this method in " + viewInterfaceName + " or make " + parts
-                    + " equals");
+            throw new IllegalStateException("Both "
+                + existingMethod.getEnclosedClassName()
+                + " and "
+                + method.getEnclosedClassName()
+                + " has method "
+                + method.getName()
+                + "("
+                + arguments
+                + ")"
+                + " with different "
+                + parts
+                + "."
+                + " Override this method in "
+                + viewInterfaceName
+                + " or make "
+                + parts
+                + " equals");
         }
     }
 
     private List<ViewMethod> iterateInterfaces(int level,
-            TypeElement parentElement,
-            TypeElement parentDefaultStrategy,
-            List<ViewMethod> rootMethods,
-            List<ViewMethod> superinterfacesMethods) {
+        TypeElement parentElement,
+        TypeElement parentDefaultStrategy,
+        List<ViewMethod> rootMethods,
+        List<ViewMethod> superinterfacesMethods) {
         for (TypeMirror typeMirror : parentElement.getInterfaces()) {
             final TypeElement anInterface = (TypeElement) ((DeclaredType) typeMirror).asElement();
 
             final List<? extends TypeMirror> typeArguments = ((DeclaredType) typeMirror)
-                    .getTypeArguments();
+                .getTypeArguments();
             final List<? extends TypeParameterElement> typeParameters = anInterface
-                    .getTypeParameters();
+                .getTypeParameters();
 
             if (typeArguments.size() > typeParameters.size()) {
                 throw new IllegalArgumentException(
-                        "Code generation for interface " + anInterface.getSimpleName()
-                                + " failed. Simplify your generics.");
+                    "Code generation for interface " + anInterface.getSimpleName()
+                        + " failed. Simplify your generics.");
             }
 
             TypeElement defaultStrategy = parentDefaultStrategy != null ? parentDefaultStrategy
-                    : getInterfaceStateStrategyType(anInterface);
+                : getInterfaceStateStrategyType(anInterface);
 
             getMethods(anInterface, defaultStrategy, rootMethods, superinterfacesMethods);
 
             iterateInterfaces(level + 1, anInterface, defaultStrategy, rootMethods,
-                    superinterfacesMethods);
+                superinterfacesMethods);
         }
 
         return superinterfacesMethods;
@@ -276,7 +268,7 @@ public class ViewInterfaceProcessor
 
     private TypeElement getInterfaceStateStrategyType(TypeElement typeElement) {
         AnnotationMirror annotation = Util
-                .getAnnotation(typeElement, STATE_STRATEGY_TYPE_ANNOTATION);
+            .getAnnotation(typeElement, STATE_STRATEGY_TYPE_ANNOTATION);
         TypeMirror value = Util.getAnnotationValueAsTypeMirror(annotation, "value");
         if (value != null && value.getKind() == TypeKind.DECLARED) {
             return (TypeElement) ((DeclaredType) value).asElement();

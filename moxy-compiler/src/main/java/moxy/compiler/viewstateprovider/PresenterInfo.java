@@ -1,7 +1,6 @@
 package moxy.compiler.viewstateprovider;
 
 import com.squareup.javapoet.ClassName;
-
 import javax.lang.model.element.TypeElement;
 
 class PresenterInfo {

@@ -29,9 +29,9 @@ android {
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [
-                        disableEmptyStrategyCheck: 'false',
-                        enableEmptyStrategyHelper: 'true',
-                        defaultMoxyStrategy      : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
+                    disableEmptyStrategyCheck: 'false',
+                    enableEmptyStrategyHelper: 'true',
+                    defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy'
                 ]
             }
         }
@@ -39,7 +39,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
     }
 
@@ -66,7 +66,7 @@ dependencies {
     def moxyVersion = '1.0'
     //implementation "com.github.moxy-community:moxy:$moxyVersion"
     //implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
-    //kapt "com.github.moxy-community::moxy-compiler:$moxyVersion"
+    //kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     def daggerVersion = '2.22.1'
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -90,6 +90,5 @@ dependencies {
     testImplementation "androidx.test:core:1.1.0"
     testImplementation "androidx.test.ext:junit:1.1.0"
     testImplementation deps.android
-    testImplementation project(':stub-reflector')
     kaptAndroidTest project(':moxy-compiler')
 }

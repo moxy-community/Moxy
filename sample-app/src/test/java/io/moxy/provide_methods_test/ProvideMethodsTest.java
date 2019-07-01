@@ -1,16 +1,14 @@
 package moxy.provide_methods_test;
 
+import android.os.Bundle;
+import moxy.MvpDelegate;
+import moxy.provide_methods_test.resources.LocalProvidedView;
+import moxy.provide_methods_test.resources.TwoLocalProvidedView;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import android.os.Bundle;
-
-import moxy.MvpDelegate;
-import moxy.provide_methods_test.resources.LocalProvidedView;
-import moxy.provide_methods_test.resources.TwoLocalProvidedView;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest = Config.NONE)

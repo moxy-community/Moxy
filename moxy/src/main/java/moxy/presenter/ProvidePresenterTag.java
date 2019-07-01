@@ -4,7 +4,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import moxy.MvpPresenter;
 import moxy.PresenterStore;
 
@@ -16,7 +15,8 @@ import moxy.PresenterStore;
  * <li>Presenter Types should be same</li>
  * <li>Presenter IDs should be equals</li>
  * </ul>
- * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation parameters.</p>
+ * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation
+ * parameters.</p>
  * <br>
  */
 @Target(ElementType.METHOD)

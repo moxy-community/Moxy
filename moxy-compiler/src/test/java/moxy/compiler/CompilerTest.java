@@ -3,23 +3,17 @@ package moxy.compiler;
 import com.google.common.base.Joiner;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
-
-import junit.framework.AssertionFailedError;
-import junit.framework.ComparisonFailure;
-
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.TraceClassVisitor;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
-
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
-
-import moxy.compiler.MvpCompiler;
+import junit.framework.AssertionFailedError;
+import junit.framework.ComparisonFailure;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.TraceClassVisitor;
 
 import static com.google.testing.compile.Compiler.javac;
 
@@ -27,37 +21,38 @@ public abstract class CompilerTest {
 
     protected Compilation compileSources(JavaFileObject... sources) {
         return javac()
-                .withOptions("-implicit:none") // don't process or generate classes for implicitly found sources
-                .compile(sources);
+            .withOptions("-implicit:none") // don't process or generate classes for implicitly found sources
+            .compile(sources);
     }
 
     protected Compilation compileSourcesWithProcessor(JavaFileObject... sources) {
         return javac()
-                .withOptions("-implicit:none") // TODO: enable lint (-Xlint:processing)
-                .withProcessors(new moxy.compiler.MvpCompiler())
-                .compile(sources);
+            .withOptions("-implicit:none") // TODO: enable lint (-Xlint:processing)
+            .withProcessors(new moxy.compiler.MvpCompiler())
+            .compile(sources);
     }
 
-    protected Compilation compileLibSourcesWithProcessor(String moxyReflectorPackage, JavaFileObject... sources) {
+    protected Compilation compileLibSourcesWithProcessor(JavaFileObject... sources) {
         return javac()
-                .withOptions("-implicit:none", "-AmoxyReflectorPackage=" + moxyReflectorPackage)
-                .withProcessors(new MvpCompiler())
-                .compile(sources);
+            .withOptions("-implicit:none")
+            .withProcessors(new MvpCompiler())
+            .compile(sources);
     }
 
     /**
-     * Asserts that all files from {@code exceptedGeneratedFiles} exists in {@code actualGeneratedFiles}
+     * Asserts that all files from {@code exceptedGeneratedFiles} exists in {@code
+     * actualGeneratedFiles}
      * and have equivalent bytecode
      */
     protected void assertExceptedFilesGenerated(List<JavaFileObject> actualGeneratedFiles,
-            List<JavaFileObject> exceptedGeneratedFiles) throws Exception {
+        List<JavaFileObject> exceptedGeneratedFiles) throws Exception {
         for (JavaFileObject exceptedClass : exceptedGeneratedFiles) {
             final String fileName = exceptedClass.getName();
 
             JavaFileObject actualClass = actualGeneratedFiles.stream()
-                    .filter(input -> fileName.equals(input.getName()))
-                    .findFirst()
-                    .orElseThrow(() -> new AssertionFailedError("File " + fileName + " is not generated"));
+                .filter(input -> fileName.equals(input.getName()))
+                .findFirst()
+                .orElseThrow(() -> new AssertionFailedError("File " + fileName + " is not generated"));
 
             String actualBytecode = getBytecodeString(actualClass);
             String exceptedBytecode = getBytecodeString(exceptedClass);
@@ -66,13 +61,13 @@ public abstract class CompilerTest {
                 JavaFileObject actualSource = findSourceForClass(actualGeneratedFiles, fileName);
 
                 throw new ComparisonFailure(Joiner.on('\n').join(
-                        "Bytecode for file " + fileName + " not equal to excepted",
-                        "",
-                        "Actual generated file (" + actualSource.getName() + "):",
-                        "================",
-                        "",
-                        actualSource.getCharContent(false),
-                        ""
+                    "Bytecode for file " + fileName + " not equal to excepted",
+                    "",
+                    "Actual generated file (" + actualSource.getName() + "):",
+                    "================",
+                    "",
+                    actualSource.getCharContent(false),
+                    ""
                 ), exceptedBytecode, actualBytecode);
             }
         }
@@ -93,11 +88,13 @@ public abstract class CompilerTest {
         return out.toString();
     }
 
-    private JavaFileObject findSourceForClass(List<JavaFileObject> outputFiles, String classFileName) {
+    private JavaFileObject findSourceForClass(List<JavaFileObject> outputFiles,
+        String classFileName) {
         // TODO: more effective algorithm ;)
         String sourceFile = classFileName
-                .replace(StandardLocation.CLASS_OUTPUT.getName(), StandardLocation.SOURCE_OUTPUT.getName())
-                .replace(".class", "");
+            .replace(StandardLocation.CLASS_OUTPUT.getName(),
+                StandardLocation.SOURCE_OUTPUT.getName())
+            .replace(".class", "");
 
         // remove chars from end of name to find parent class source
         int nameStart = sourceFile.lastIndexOf("/") + 1;
@@ -105,8 +102,8 @@ public abstract class CompilerTest {
             String name = sourceFile.substring(0, i) + ".java";
 
             Optional<JavaFileObject> file = outputFiles.stream()
-                    .filter(javaFileObject -> javaFileObject.getName().equals(name))
-                    .findFirst();
+                .filter(javaFileObject -> javaFileObject.getName().equals(name))
+                .findFirst();
 
             if (file.isPresent()) {
                 return file.get();

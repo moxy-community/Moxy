@@ -6,6 +6,6 @@ import view.ViewStateChildWithIncorrectStrategyClassView;
 
 @InjectViewState
 public class ViewStateChildWithIncorrectStrategyClassPresenter
-        extends MvpPresenter<ViewStateChildWithIncorrectStrategyClassView> {
+    extends MvpPresenter<ViewStateChildWithIncorrectStrategyClassView> {
 
 }
