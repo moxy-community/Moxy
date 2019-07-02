@@ -8,17 +8,17 @@ public class GenericView$$State<T> extends MvpViewState<GenericView<T>> implemen
     @Override
     public void testEvent(T param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);
-        mViewCommands.beforeApply(testEventCommand);
+        viewCommands.beforeApply(testEventCommand);
 
         if (hasNotView()) {
             return;
         }
 
-        for (GenericView<T> view : mViews) {
+        for (GenericView<T> view : views) {
             view.testEvent(param);
         }
 
-        mViewCommands.afterApply(testEventCommand);
+        viewCommands.afterApply(testEventCommand);
     }
 
     public class TestEventCommand extends ViewCommand<GenericView<T>> {

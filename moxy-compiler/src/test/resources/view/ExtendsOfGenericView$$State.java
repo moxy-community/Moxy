@@ -9,17 +9,17 @@ public class ExtendsOfGenericView$$State extends MvpViewState<ExtendsOfGenericVi
     @Override
     public void testEvent(Serializable param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);
-        mViewCommands.beforeApply(testEventCommand);
+        viewCommands.beforeApply(testEventCommand);
 
         if (hasNotView()) {
             return;
         }
 
-        for (ExtendsOfGenericView view : mViews) {
+        for (ExtendsOfGenericView view : views) {
             view.testEvent(param);
         }
 
-        mViewCommands.afterApply(testEventCommand);
+        viewCommands.afterApply(testEventCommand);
     }
 
     public class TestEventCommand extends ViewCommand<ExtendsOfGenericView> {

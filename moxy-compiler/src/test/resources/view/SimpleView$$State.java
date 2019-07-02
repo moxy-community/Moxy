@@ -8,17 +8,17 @@ public class SimpleView$$State extends MvpViewState<SimpleView> implements Simpl
     @Override
     public void testEvent() {
         TestEventCommand testEventCommand = new TestEventCommand();
-        mViewCommands.beforeApply(testEventCommand);
+        viewCommands.beforeApply(testEventCommand);
 
         if (hasNotView()) {
             return;
         }
 
-        for (SimpleView view : mViews) {
+        for (SimpleView view : views) {
             view.testEvent();
         }
 
-        mViewCommands.afterApply(testEventCommand);
+        viewCommands.afterApply(testEventCommand);
     }
 
     public class TestEventCommand extends ViewCommand<SimpleView> {

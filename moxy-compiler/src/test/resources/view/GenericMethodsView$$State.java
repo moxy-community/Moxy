@@ -8,33 +8,33 @@ public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> 
     @Override
     public <T> void generic(T param) {
         GenericCommand genericCommand = new GenericCommand(param);
-        mViewCommands.beforeApply(genericCommand);
+        viewCommands.beforeApply(genericCommand);
 
         if (hasNotView()) {
             return;
         }
 
-        for (GenericMethodsView view : mViews) {
+        for (GenericMethodsView view : views) {
             view.generic(param);
         }
 
-        mViewCommands.afterApply(genericCommand);
+        viewCommands.afterApply(genericCommand);
     }
 
     @Override
     public <T extends Number> void genericWithExtends(T param) {
         GenericWithExtendsCommand genericWithExtendsCommand = new GenericWithExtendsCommand(param);
-        mViewCommands.beforeApply(genericWithExtendsCommand);
+        viewCommands.beforeApply(genericWithExtendsCommand);
 
         if (hasNotView()) {
             return;
         }
 
-        for (GenericMethodsView view : mViews) {
+        for (GenericMethodsView view : views) {
             view.genericWithExtends(param);
         }
 
-        mViewCommands.afterApply(genericWithExtendsCommand);
+        viewCommands.afterApply(genericWithExtendsCommand);
     }
 
     public class GenericCommand<T> extends ViewCommand<GenericMethodsView> {
