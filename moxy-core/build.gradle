@@ -1,35 +1,34 @@
-apply plugin: 'com.android.library'
+apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-android {
-    compileSdkVersion 28
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 28
-
-        consumerProguardFiles 'proguard-rules.pro'
-    }
-}
-
 dependencies {
-    api project(":moxy")
+    compileOnly deps.android
+
+    testImplementation project(':moxy-compiler')
+    testImplementation deps.junit
+    testImplementation deps.mockito
+    testImplementation deps.truth
+    testImplementation deps.android
+    testImplementation deps.robolectric
+    testImplementation deps.androidJunit
+    testImplementation deps.compiletesting
+    testImplementation deps.javapoet
 }
 
-project.archivesBaseName = 'moxy'
+project.archivesBaseName = 'moxy-core'
 group = rootProject.ext.groupId // Maven Group ID for the artifact
 
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom.project {
-            packaging 'aar'
+            packaging 'jar'
             groupId rootProject.ext.groupId
-            artifactId 'moxy'
+            artifactId 'moxy-core'
             version rootProject.ext.targetVersion
             name 'Moxy'
             modelVersion = '4.0.0'
@@ -60,7 +59,7 @@ install {
     }
 }
 
-version = getArtifactVersion('moxy') // Library version
+version = getArtifactVersion('moxy-core') // Library version
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -74,7 +73,7 @@ bintray {
     // Package info for Bintray
     pkg {
         repo = 'maven'
-        name = 'moxy'
+        name = 'moxy-core'
         licenses = ['MIT']
         vcsUrl = 'https://github.com/moxy-community/Moxy'
         publish = true
@@ -84,7 +83,7 @@ bintray {
                 passphrase = properties.getProperty("gpgPassphrase")
             }
             mavenCentralSync {
-                sync = true
+                sync = getPublishToMaven()
                 //[Default: true] Determines whether to sync the version to Maven Central.
                 user = properties.getProperty("mavenUser") //OSS user token: mandatory
                 password = properties.getProperty("mavenToken") //OSS user password: mandatory
@@ -97,3 +96,19 @@ bintray {
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
+
+// Tasks for sources and javadocs jars
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}

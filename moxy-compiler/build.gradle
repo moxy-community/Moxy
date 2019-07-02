@@ -7,14 +7,14 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     //implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
-    implementation project(':moxy')
+    implementation project(':moxy-core')
 
     implementation deps.javapoet
     compileOnly deps.autocommon
     compileOnly deps.autoservice
     compileOnly deps.guava
 
-    //    javadocDeps project(':moxy')
+    //    javadocDeps project(':moxy-core')
     //    javadocDeps deps.javapoet
     //    javadocDeps deps.autoservice
 

@@ -58,7 +58,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     //uncomment for test library from local sources
-    implementation project(':moxy')
+    implementation project(':moxy-core')
     implementation project(':moxy-androidx')
     kapt project(':moxy-compiler')
 
