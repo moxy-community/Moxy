@@ -1,11 +1,13 @@
 package view;
 
 import java.io.Serializable;
+
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class ExtendsOfGenericView$$State extends MvpViewState<ExtendsOfGenericView> implements ExtendsOfGenericView {
+
     @Override
     public void testEvent(Serializable param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);
@@ -23,10 +25,11 @@ public class ExtendsOfGenericView$$State extends MvpViewState<ExtendsOfGenericVi
     }
 
     public class TestEventCommand extends ViewCommand<ExtendsOfGenericView> {
+
         public final Serializable param;
 
         TestEventCommand(Serializable param) {
-            super("testEvent", AddToEndStrategy.class);
+            super("testEvent", AddToEndSingleStrategy.class);
 
             this.param = param;
         }
