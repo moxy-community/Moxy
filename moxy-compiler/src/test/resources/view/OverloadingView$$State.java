@@ -2,7 +2,7 @@ package view;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class OverloadingView$$State extends MvpViewState<OverloadingView> implements OverloadingView {
     @Override
@@ -57,7 +57,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
         public final String string;
 
         MethodCommand(String string) {
-            super("method", AddToEndStrategy.class);
+            super("method", AddToEndSingleStrategy.class);
 
             this.string = string;
         }
@@ -72,7 +72,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
         public final int number;
 
         Method1Command(int number) {
-            super("method", AddToEndStrategy.class);
+            super("method", AddToEndSingleStrategy.class);
 
             this.number = number;
         }
@@ -87,7 +87,7 @@ public class OverloadingView$$State extends MvpViewState<OverloadingView> implem
         public final Object object;
 
         Method2Command(Object object) {
-            super("method", AddToEndStrategy.class);
+            super("method", AddToEndSingleStrategy.class);
 
             this.object = object;
         }
