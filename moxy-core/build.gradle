@@ -6,18 +6,20 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-//    implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
-    compileOnly project(':moxy-core')
-
     compileOnly deps.android
-    compileOnly project(':stub-appcompat')
 
-    //    javadocDeps project(':moxy-core')
-    //    javadocDeps deps.android
-    //    javadocDeps project(':stub-appcompat')
+    testImplementation project(':moxy-compiler')
+    testImplementation deps.junit
+    testImplementation deps.mockito
+    testImplementation deps.truth
+    testImplementation deps.android
+    testImplementation deps.robolectric
+    testImplementation deps.androidJunit
+    testImplementation deps.compiletesting
+    testImplementation deps.javapoet
 }
-def artifact = 'moxy-app-compat'
-project.archivesBaseName = artifact
+
+project.archivesBaseName = 'moxy-core'
 group = rootProject.ext.groupId // Maven Group ID for the artifact
 
 install {
@@ -26,11 +28,11 @@ install {
         pom.project {
             packaging 'jar'
             groupId rootProject.ext.groupId
-            artifactId artifact
+            artifactId 'moxy-core'
             version rootProject.ext.targetVersion
-            name 'Moxy AppCompat'
+            name 'Moxy'
             modelVersion = '4.0.0'
-            description = 'Moxy AppCompat library for Android'
+            description = 'Moxy library for Android'
             url = 'https://github.com/moxy-community/'
             inceptionYear '2019'
             licenses {
@@ -57,7 +59,7 @@ install {
     }
 }
 
-version = getArtifactVersion('moxy-app-compat') // Library version
+version = getArtifactVersion('moxy-core') // Library version
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -71,7 +73,7 @@ bintray {
     // Package info for Bintray
     pkg {
         repo = 'maven'
-        name = artifact
+        name = 'moxy-core'
         licenses = ['MIT']
         vcsUrl = 'https://github.com/moxy-community/Moxy'
         publish = true
@@ -95,6 +97,7 @@ bintray {
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
 
+// Tasks for sources and javadocs jars
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs
     classifier = 'sources'
@@ -104,6 +107,7 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
+
 artifacts {
     archives javadocJar
     archives sourcesJar

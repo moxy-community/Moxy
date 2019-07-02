@@ -1,7 +1,3 @@
-plugins {
-    id 'com.stepango.aar2jar' version "0.4"
-}
-
 apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
@@ -9,21 +5,16 @@ apply plugin: 'com.jfrog.bintray'
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-def impAar = project.configurations.getByName("implementationAar")
-def testSourceSet = project.convention.getPlugin(JavaPluginConvention.class).sourceSets.findByName("test")
-testSourceSet.compileClasspath += impAar
-testSourceSet.runtimeClasspath += impAar
-
 dependencies {
     //implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
-    implementationAar project(path: ':moxy',  configuration: 'default')
+    implementation project(':moxy-core')
 
     implementation deps.javapoet
     compileOnly deps.autocommon
     compileOnly deps.autoservice
     compileOnly deps.guava
 
-    //    javadocDeps project(':moxy')
+    //    javadocDeps project(':moxy-core')
     //    javadocDeps deps.javapoet
     //    javadocDeps deps.autoservice
 
