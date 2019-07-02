@@ -2,9 +2,10 @@ package view;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class GenericView$$State<T> extends MvpViewState<GenericView<T>> implements GenericView<T> {
+
     @Override
     public void testEvent(T param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);
@@ -22,10 +23,11 @@ public class GenericView$$State<T> extends MvpViewState<GenericView<T>> implemen
     }
 
     public class TestEventCommand extends ViewCommand<GenericView<T>> {
+
         public final T param;
 
         TestEventCommand(T param) {
-            super("testEvent", AddToEndStrategy.class);
+            super("testEvent", AddToEndSingleStrategy.class);
 
             this.param = param;
         }
