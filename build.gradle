@@ -85,7 +85,7 @@ private boolean getPublishToMaven() {
 
 ext {
     groupId = 'com.github.moxy-community'
-    targetVersion = "1.0.14"
+    targetVersion = "2.0-alpha02"
 
     deps = [
         android: 'com.google.android:android:1.6_r2',

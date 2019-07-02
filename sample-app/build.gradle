@@ -64,26 +64,21 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    packagingOptions {
-        exclude 'LICENSE.txt'
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
-    }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.2'
 
     //uncomment for test library from local sources
-    //implementation project(':moxy')
-    //implementation project(':moxy-androidx')
-    //kapt project(':moxy-compiler')
+    implementation project(':moxy')
+    implementation project(':moxy-androidx')
+    kapt project(':moxy-compiler')
 
     //uncomment for test library from maven
-    def moxyVersion = '2.0-alpha01'
-    implementation "com.github.moxy-community:moxy:$moxyVersion"
-    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
-    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+    def moxyVersion = '2.0-alpha02'
+    //implementation "com.github.moxy-community:moxy:$moxyVersion"
+    //implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    //kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
