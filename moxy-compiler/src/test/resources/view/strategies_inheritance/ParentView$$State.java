@@ -6,6 +6,7 @@ import view.strategies_inheritance.strategies.ParentDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;
 
 public class ParentView$$State extends MvpViewState<ParentView> implements ParentView {
+
     @Override
     public void parentMethod1() {
         ParentMethod1Command parentMethod1Command = new ParentMethod1Command();
@@ -57,7 +58,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
     @Override
     public void parentMethodWithStrategy() {
         ParentMethodWithStrategyCommand parentMethodWithStrategyCommand =
-            new ParentMethodWithStrategyCommand();
+                new ParentMethodWithStrategyCommand();
         viewCommands.beforeApply(parentMethodWithStrategyCommand);
 
         if (hasNotView()) {
@@ -72,6 +73,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
     }
 
     public class ParentMethod1Command extends ViewCommand<ParentView> {
+
         ParentMethod1Command() {
             super("parentMethod1", ParentDefaultStrategy.class);
         }
@@ -83,6 +85,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
     }
 
     public class ParentMethod2Command extends ViewCommand<ParentView> {
+
         ParentMethod2Command() {
             super("parentMethod2", ParentDefaultStrategy.class);
         }
@@ -94,6 +97,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
     }
 
     public class ParentMethod3Command extends ViewCommand<ParentView> {
+
         ParentMethod3Command() {
             super("parentMethod3", ParentDefaultStrategy.class);
         }
@@ -105,6 +109,7 @@ public class ParentView$$State extends MvpViewState<ParentView> implements Paren
     }
 
     public class ParentMethodWithStrategyCommand extends ViewCommand<ParentView> {
+
         ParentMethodWithStrategyCommand() {
             super("parentMethodWithStrategy", Strategy1.class);
         }

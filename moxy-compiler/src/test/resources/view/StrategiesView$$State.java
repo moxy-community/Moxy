@@ -7,6 +7,7 @@ import moxy.viewstate.strategy.OneExecutionStateStrategy;
 import moxy.viewstate.strategy.SingleStateStrategy;
 
 public class StrategiesView$$State extends MvpViewState<StrategiesView> implements StrategiesView {
+
     @Override
     public void singleState() {
         SingleStateCommand singleStateCommand = new SingleStateCommand();
@@ -56,6 +57,7 @@ public class StrategiesView$$State extends MvpViewState<StrategiesView> implemen
     }
 
     public class SingleStateCommand extends ViewCommand<StrategiesView> {
+
         SingleStateCommand() {
             super("singleState", SingleStateStrategy.class);
         }
@@ -67,6 +69,7 @@ public class StrategiesView$$State extends MvpViewState<StrategiesView> implemen
     }
 
     public class OneExecutionCommand extends ViewCommand<StrategiesView> {
+
         OneExecutionCommand() {
             super("oneExecution", OneExecutionStateStrategy.class);
         }
@@ -78,6 +81,7 @@ public class StrategiesView$$State extends MvpViewState<StrategiesView> implemen
     }
 
     public class WithoutStrategyCommand extends ViewCommand<StrategiesView> {
+
         WithoutStrategyCommand() {
             super("withoutStrategy", AddToEndSingleStrategy.class);
         }

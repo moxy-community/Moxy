@@ -5,6 +5,7 @@ import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class SimpleView$$State extends MvpViewState<SimpleView> implements SimpleView {
+
     @Override
     public void testEvent() {
         TestEventCommand testEventCommand = new TestEventCommand();
@@ -22,6 +23,7 @@ public class SimpleView$$State extends MvpViewState<SimpleView> implements Simpl
     }
 
     public class TestEventCommand extends ViewCommand<SimpleView> {
+
         TestEventCommand() {
             super("testEvent", AddToEndSingleStrategy.class);
         }
