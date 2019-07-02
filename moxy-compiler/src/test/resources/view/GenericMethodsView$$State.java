@@ -2,9 +2,10 @@ package view;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> implements GenericMethodsView {
+
     @Override
     public <T> void generic(T param) {
         GenericCommand genericCommand = new GenericCommand(param);
@@ -38,10 +39,11 @@ public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> 
     }
 
     public class GenericCommand<T> extends ViewCommand<GenericMethodsView> {
+
         public final T param;
 
         GenericCommand(T param) {
-            super("generic", AddToEndStrategy.class);
+            super("generic", AddToEndSingleStrategy.class);
 
             this.param = param;
         }
@@ -53,11 +55,12 @@ public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> 
     }
 
     public class GenericWithExtendsCommand<T extends Number>
-        extends ViewCommand<GenericMethodsView> {
+            extends ViewCommand<GenericMethodsView> {
+
         public final T param;
 
         GenericWithExtendsCommand(T param) {
-            super("genericWithExtends", AddToEndStrategy.class);
+            super("genericWithExtends", AddToEndSingleStrategy.class);
 
             this.param = param;
         }
