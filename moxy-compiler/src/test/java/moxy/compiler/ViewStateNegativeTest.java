@@ -12,7 +12,7 @@ import static com.google.testing.compile.CompilationSubject.assertThat;
 import static com.google.testing.compile.JavaFileObjects.forSourceLines;
 
 @RunWith(Parameterized.class)
-public class ViewStateCompilationFailTest extends CompilerTest {
+public class ViewStateNegativeTest extends CompilerTest {
 
     @Parameterized.Parameter
     public String viewClassName;
@@ -20,7 +20,8 @@ public class ViewStateCompilationFailTest extends CompilerTest {
     @Parameterized.Parameters(name = "{0}")
     public static String[] data() {
         return new String[]{
-                "view.FailureView"
+                "view.NoMethodStrategyView",
+                "view.NonVoidMethodView"
         };
     }
 

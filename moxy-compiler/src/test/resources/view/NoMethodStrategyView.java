@@ -2,7 +2,7 @@ package view;
 
 import moxy.MvpView;
 
-public interface FailureView extends MvpView {
+public interface NoMethodStrategyView extends MvpView {
 
     void testEvent();
 }
