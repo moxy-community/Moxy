@@ -150,8 +150,11 @@ Moxy project already includes ProGuard rule files, no additional configuration r
 ## Road Map
 * [✓] ~~Provide a migration tool from com.arello-mobile.moxy and its default strategy~~
 * [✓] ~~Kotlin incremental compilation support~~
-* [✓] ~~Remove reflectors and common presenter store~~
+* [✓] ~~Remove reflectors~~
+* [✓] ~~Add delivery module support~~
 * [ ]Provide Runtime Implementation
+* [ ]Add separate Annotation Processor for migration
+* [ ]Research possibility of removing @InjectViewState annotation
 
 ## Moxy Community
 Brave people how created library
