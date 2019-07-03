@@ -1,21 +1,40 @@
-apply plugin: 'java'
+apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+android {
+    compileSdkVersion 28
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
+
+        consumerProguardFiles '../proguard-rules.pro'
+    }
+}
+
+configurations {
+    publishConfig
+}
+
+task copyLibs(type: Copy) {
+    from configurations.publishConfig
+    into "libs"
+}
+
 dependencies {
-//    implementation "${rootProject.ext.groupId}:moxy:${getArtifactVersion("moxy")}"
-    compileOnly project(':moxy-core')
+    publishConfig project(":moxy-core")
+    api fileTree(dir: 'libs', include: ['*.jar'])
 
     compileOnly deps.android
     compileOnly project(':stub-android')
-
-    //    javadocDeps project(':moxy-core')
-    //    javadocDeps deps.android
-    //    javadocDeps project(':stub-android')
 }
+
+preBuild.dependsOn copyLibs
+
 def artifact = 'moxy-android'
 project.archivesBaseName = artifact
 group = rootProject.ext.groupId // Maven Group ID for the artifact
@@ -24,7 +43,7 @@ install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom.project {
-            packaging 'jar'
+            packaging 'aar'
             groupId rootProject.ext.groupId
             artifactId artifact
             version rootProject.ext.targetVersion
@@ -92,17 +111,3 @@ bintray {
 
 // Dependency to call only bintrayUpload task
 bintrayUpload.dependsOn install
-
-task sourcesJar(type: Jar) {
-    from sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}

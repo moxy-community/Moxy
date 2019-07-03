@@ -15,6 +15,8 @@ public class EmptyStrategyHelperGenerator {
 
     /**
      * @param migrationMethods non empty list of methods
+     *
+     * @return File with references to files witch need in refactoring
      */
     public static JavaFile generate(List<MigrationMethod> migrationMethods) {
 
