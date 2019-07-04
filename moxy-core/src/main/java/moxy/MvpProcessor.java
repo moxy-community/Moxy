@@ -3,6 +3,7 @@ package moxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import moxy.locators.PresenterBinderLocator;
 import moxy.presenter.InjectPresenter;
 import moxy.presenter.PresenterField;
@@ -74,22 +75,36 @@ public class MvpProcessor {
         }
 
         List<MvpPresenter<? super Delegated>> presenters = new ArrayList<>();
-        PresentersCounter presentersCounter = MvpFacade.getInstance().getPresentersCounter();
 
         //noinspection unchecked
         List<PresenterField<? super Delegated>> presenterFields = presenterBinder.getPresenterFields();
 
         for (PresenterField<? super Delegated> presenterField : presenterFields) {
             MvpPresenter<? super Delegated> presenter =
-                (MvpPresenter<? super Delegated>) getMvpPresenter(delegated, presenterField, delegateTag);
+                (MvpPresenter<? super Delegated>) injectPresenter(delegated, presenterField, delegateTag);
 
             if (presenter != null) {
-                presentersCounter.injectPresenter(presenter, delegateTag);
                 presenters.add(presenter);
-                presenterField.bind(delegated, presenter);
             }
         }
 
         return presenters;
+    }
+
+    public <Delegated> MvpPresenter<? super Delegated> injectPresenter(
+            Delegated delegated,
+            PresenterField<? super Delegated> presenterField,
+            String delegateTag) {
+
+        PresentersCounter presentersCounter = MvpFacade.getInstance().getPresentersCounter();
+        MvpPresenter<? super Delegated> presenter =
+            (MvpPresenter<? super Delegated>) getMvpPresenter(delegated, presenterField, delegateTag);
+
+        if (presenter != null) {
+            presentersCounter.injectPresenter(presenter, delegateTag);
+            presenterField.bind(delegated, presenter);
+        }
+
+        return presenter;
     }
 }

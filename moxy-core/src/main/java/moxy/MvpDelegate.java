@@ -265,4 +265,14 @@ public class MvpDelegate<Delegated> {
             .replace(getClass().getName(), "");
         return tag;
     }
+
+    public String getDelegateTag() {
+        return delegateTag;
+    }
+
+    public void addPresenter(MvpPresenter<? super Delegated> presenter) {
+        ArrayList<MvpPresenter<? super Delegated>> newList = new ArrayList<>(presenters);
+        newList.add(presenter);
+        this.presenters = newList;
+    }
 }

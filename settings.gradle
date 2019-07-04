@@ -5,6 +5,7 @@ include ':moxy-compiler'
 include ':moxy-app-compat'
 include ':moxy-androidx'
 include ':moxy-material'
+include ':moxy-ktx'
 
 include ':stub-android', ':stub-appcompat', ':stub-androidx', ':stub-material'
 
