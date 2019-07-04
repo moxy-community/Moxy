@@ -13,6 +13,7 @@ dependencies {
     compileOnly deps.autoservice
     compileOnly deps.guava
 
+    testImplementation project(':moxy-core')
     testImplementation deps.junit
     testImplementation deps.truth
     testImplementation deps.compiletesting
