@@ -23,12 +23,17 @@ task copyLibs(type: Copy) {
     into "libs"
 }
 
+task clearLibs(type: Delete) {
+    delete "libs"
+}
+
+preBuild.dependsOn copyLibs
+copyLibs.dependsOn clearLibs
+
 dependencies {
     publishConfig project(":moxy-core")
     api fileTree(dir: 'libs', include: ['*.jar'])
 }
-
-preBuild.dependsOn copyLibs
 
 def artifact = 'moxy'
 project.archivesBaseName = 'moxy'

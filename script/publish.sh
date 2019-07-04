@@ -1,3 +1,6 @@
+./gradlew moxy-core:updatePublishVersion
+./gradlew moxy-core:bintrayUpload
+
 ./gradlew moxy:updatePublishVersion
 ./gradlew moxy:bintrayUpload
 

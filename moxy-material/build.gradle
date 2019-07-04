@@ -25,6 +25,13 @@ task copyLibs(type: Copy) {
     into "libs"
 }
 
+task clearLibs(type: Delete) {
+    delete "libs"
+}
+
+preBuild.dependsOn copyLibs
+copyLibs.dependsOn clearLibs
+
 dependencies {
     publishConfig project(":moxy-core")
     api fileTree(dir: 'libs', include: ['*.jar'])
@@ -34,8 +41,6 @@ dependencies {
     compileOnly project(':stub-androidx')
     compileOnly project(':stub-material')
 }
-
-preBuild.dependsOn copyLibs
 
 def artifact = 'moxy-material'
 project.archivesBaseName = artifact
