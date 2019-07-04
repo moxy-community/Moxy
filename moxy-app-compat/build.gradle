@@ -16,24 +16,8 @@ android {
     }
 }
 
-configurations {
-    publishConfig
-}
-
-task copyLibs(type: Copy) {
-    from configurations.publishConfig
-    into "libs"
-}
-
-task clearLibs(type: Delete) {
-    delete "libs"
-}
-
-preBuild.dependsOn copyLibs
-copyLibs.dependsOn clearLibs
 dependencies {
-    publishConfig project(":moxy-core")
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    api project(":moxy")
 
     compileOnly deps.android
     compileOnly project(':stub-appcompat')

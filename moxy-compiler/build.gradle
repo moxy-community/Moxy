@@ -6,14 +6,14 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compileOnly project(':moxy-core')
+    implementation project(':moxy')
 
     implementation deps.javapoet
     compileOnly deps.autocommon
     compileOnly deps.autoservice
     compileOnly deps.guava
 
-    testImplementation project(':moxy-core')
+    testImplementation project(':moxy')
     testImplementation deps.junit
     testImplementation deps.truth
     testImplementation deps.compiletesting
