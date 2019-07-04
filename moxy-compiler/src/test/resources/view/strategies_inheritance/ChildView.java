@@ -6,6 +6,7 @@ import view.strategies_inheritance.strategies.Strategy2;
 
 @StateStrategyType(ChildDefaultStrategy.class)
 public interface ChildView extends ParentView {
+
     void parentMethod1(); // ParentDefaultStrategy -> ChildDefaultStrategy
 
     @StateStrategyType(Strategy2.class)
