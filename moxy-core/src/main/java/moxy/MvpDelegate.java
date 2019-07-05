@@ -1,10 +1,15 @@
 package moxy;
 
 import android.os.Bundle;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
+
+import moxy.presenter.PresenterField;
 
 /**
  * Date: 18-Dec-15
@@ -29,12 +34,16 @@ public class MvpDelegate<Delegated> {
 
     public static final String MOXY_DELEGATE_TAGS_KEY = "MoxyDelegateBundle";
     private static final String KEY_TAG = "moxy.MvpDelegate.KEY_TAG";
+    private final static Comparator<PresenterField> COMPARE_BY_TAGS =
+            (f1, f2) -> f1.getTag(null).compareTo(f2.getTag(null));
     private final Delegated delegated;
     private String keyTag = KEY_TAG;
     private String delegateTag;
     private boolean isAttached;
 
     private MvpDelegate parentDelegate;
+
+    private Set<PresenterField<? super Delegated>> externalPresenterFields = new TreeSet<>(COMPARE_BY_TAGS);
 
     private List<MvpPresenter<? super Delegated>> presenters = Collections.emptyList();
 
@@ -130,7 +139,8 @@ public class MvpDelegate<Delegated> {
         }
 
         //bind presenters to view
-        presenters = MvpFacade.getInstance().getMvpProcessor().getMvpPresenters(delegated, delegateTag);
+        presenters = MvpFacade.getInstance().getMvpProcessor()
+                .getMvpPresenters(delegated, delegateTag, externalPresenterFields);
 
         for (MvpDelegate childDelegate : childDelegates) {
             childDelegate.onCreate(bundle);
@@ -266,13 +276,7 @@ public class MvpDelegate<Delegated> {
         return tag;
     }
 
-    public String getDelegateTag() {
-        return delegateTag;
-    }
-
-    public void addPresenter(MvpPresenter<? super Delegated> presenter) {
-        ArrayList<MvpPresenter<? super Delegated>> newList = new ArrayList<>(presenters);
-        newList.add(presenter);
-        this.presenters = newList;
+    public void registerExternalPresenterField(PresenterField<? super Delegated> field) {
+        externalPresenterFields.add(field);
     }
 }

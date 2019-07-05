@@ -1,25 +1,27 @@
 package moxy.ktx
 
 import moxy.MvpDelegate
-import moxy.MvpFacade
 import moxy.MvpPresenter
 import moxy.presenter.PresenterField
 import kotlin.reflect.KProperty
 
 class MoxyKtxDelegate<T : MvpPresenter<*>>(
-    private val delegate: MvpDelegate<*>,
+    delegate: MvpDelegate<*>,
+    name: String,
     private val factory: () -> T
 ) {
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-        val field = object : PresenterField<Any?>(property.name, null, null) {
+
+    private lateinit var presenter: T
+
+    init {
+        val field = object : PresenterField<Any?>(name, null, null) {
             override fun providePresenter(delegated: Any?): MvpPresenter<*> = factory()
-            override fun bind(container: Any?, presenter: MvpPresenter<*>) = Unit
+            override fun bind(container: Any?, presenter: MvpPresenter<*>) {
+                this@MoxyKtxDelegate.presenter = presenter as T
+            }
         }
-
-        val presenter = MvpFacade.getInstance().mvpProcessor.injectPresenter(thisRef, field, delegate.delegateTag)
-
-        delegate.addPresenter(presenter)
-
-        return presenter as T
+        delegate.registerExternalPresenterField(field)
     }
+
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = presenter
 }
