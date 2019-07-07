@@ -34,7 +34,7 @@ public class MvpDelegate<Delegated> {
 
     public static final String MOXY_DELEGATE_TAGS_KEY = "MoxyDelegateBundle";
     private static final String KEY_TAG = "moxy.MvpDelegate.KEY_TAG";
-    private final static Comparator<PresenterField> COMPARE_BY_TAGS =
+    private static final Comparator<PresenterField> COMPARE_BY_TAGS =
             (f1, f2) -> f1.getTag(null).compareTo(f2.getTag(null));
     private final Delegated delegated;
     private String keyTag = KEY_TAG;
