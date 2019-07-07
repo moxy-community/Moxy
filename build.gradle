@@ -75,18 +75,6 @@ private void updatePublishVersion(String module) {
     propertyFile.withWriter { developSettings.store(it, null) }
 }
 
-private String getArtifactVersion(String module) {
-    Properties developSettings = new Properties()
-    developSettings.load(project.rootProject.file('publish.properties').newDataInputStream())
-    return developSettings.getOrDefault(module + "_version", '0.1')
-}
-
-private boolean getPublishToMaven() {
-    Properties developSettings = new Properties()
-    developSettings.load(project.rootProject.file('publish.properties').newDataInputStream())
-    return developSettings.getOrDefault("publish_to_maven", 'false').toBoolean()
-}
-
 ext {
     groupId = 'com.github.moxy-community'
     targetVersion = "2.0-alpha04"

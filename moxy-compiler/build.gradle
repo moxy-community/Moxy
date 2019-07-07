@@ -1,19 +1,20 @@
 apply plugin: 'java'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
+apply plugin: MoxyPublishing
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compileOnly project(':moxy-core')
+    implementation project(':moxy')
 
     implementation deps.javapoet
     compileOnly deps.autocommon
     compileOnly deps.autoservice
     compileOnly deps.guava
 
-    testImplementation project(':moxy-core')
+    testImplementation project(':moxy')
     testImplementation deps.junit
     testImplementation deps.truth
     testImplementation deps.compiletesting
@@ -23,80 +24,10 @@ dependencies {
     testRuntime files(sourceSets.test.output.resourcesDir)
 }
 
-def artifact = 'moxy-compiler'
-project.archivesBaseName = artifact
-group = rootProject.ext.groupId // Maven Group ID for the artifact
-
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom.project {
-            packaging 'jar'
-            groupId rootProject.ext.groupId
-            artifactId artifact
-            version rootProject.ext.targetVersion
-            name 'Moxy Compiler'
-            modelVersion = '4.0.0'
-            description = 'Moxy Compiler library for Android'
-            url = 'https://github.com/moxy-community/'
-            inceptionYear '2019'
-            licenses {
-                license {
-                    name 'MIT'
-                    url 'https://opensource.org/licenses/MIT'
-                    distribution 'repo'
-                }
-            }
-            developers {
-                developer {
-                    name 'Moxy Community'
-                    email 'moxy-community@yandex.ru'
-                    organization = 'Moxy Community'
-                    organizationUrl 'https://github.com/moxy-community/'
-                }
-            }
-            scm {
-                connection 'scm:git@github.com:moxy-community/Moxy.git'
-                developerConnection 'scm:git@github.com:moxy-community/Moxy.git'
-                url 'https://github.com/moxy-community/Moxy.git'
-            }
-        }
-    }
-}
-
-version = getArtifactVersion('moxy-compiler') // Library version
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    // User and ApiKey stored in local.properties
-    user = properties.getProperty("bintrayUser")
-    key = properties.getProperty("bintrayApiKey")
-
-    configurations = ['archives']
-    // Package info for Bintray
-    pkg {
-        repo = 'maven'
-        name = artifact
-        licenses = ['MIT']
-        vcsUrl = 'https://github.com/moxy-community/Moxy'
-        publish = true
-        version {
-            gpg {
-                sign = true
-                passphrase = properties.getProperty("gpgPassphrase")
-            }
-            mavenCentralSync {
-                sync = getPublishToMaven()
-                //[Default: true] Determines whether to sync the version to Maven Central.
-                user = properties.getProperty("mavenUser") //OSS user token: mandatory
-                password = properties.getProperty("mavenToken") //OSS user password: mandatory
-                close = '1'
-                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
-            }
-        }
-    }
+moxyPublishing {
+    artifactName 'moxy-compiler'
+    pomName 'Moxy Compiler'
+    pomDescription 'Moxy Compiler library for Android'
 }
 
 // Dependency to call only bintrayUpload task

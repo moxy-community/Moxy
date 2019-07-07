@@ -1,5 +1,4 @@
 include ':moxy'
-include ':moxy-core'
 include ':moxy-android'
 include ':moxy-compiler'
 include ':moxy-app-compat'
