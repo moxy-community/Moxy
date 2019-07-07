@@ -2,52 +2,34 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.41'
 }
 apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: MoxyPublishing
 
 dependencies {
-    compileOnly project(":moxy-core")
+    api project(":moxy")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.41"
 }
 
-sourceCompatibility = "7"
-targetCompatibility = "7"
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
 
-def artifact = 'moxy-ktx'
-project.archivesBaseName = artifact
-group = rootProject.ext.groupId // Maven Group ID for the artifact
+moxyPublishing {
+    artifactName 'moxy-ktx'
+    pomName 'Moxy Kotlin Extensions'
+    pomDescription 'Kotlin extensions for Moxy'
+}
 
-install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom.project {
-            packaging 'jar'
-            groupId rootProject.ext.groupId
-            artifactId artifact
-            version rootProject.ext.targetVersion
-            name 'Moxy Compiler'
-            modelVersion = '4.0.0'
-            description = 'Moxy Compiler library for Android'
-            url = 'https://github.com/moxy-community/'
-            inceptionYear '2019'
-            licenses {
-                license {
-                    name 'MIT'
-                    url 'https://opensource.org/licenses/MIT'
-                    distribution 'repo'
-                }
-            }
-            developers {
-                developer {
-                    name 'Moxy Community'
-                    email 'moxy-community@yandex.ru'
-                    organization = 'Moxy Community'
-                    organizationUrl 'https://github.com/moxy-community/'
-                }
-            }
-            scm {
-                connection 'scm:git@github.com:moxy-community/Moxy.git'
-                developerConnection 'scm:git@github.com:moxy-community/Moxy.git'
-                url 'https://github.com/moxy-community/Moxy.git'
-            }
-        }
-    }
+// Tasks for sources and javadocs jars
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
 }

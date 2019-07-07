@@ -72,17 +72,15 @@ public class MvpProcessor {
         @SuppressWarnings("unchecked")
         Class<? super Delegated> aClass = (Class<Delegated>) delegated.getClass();
         PresenterBinder<Delegated> presenterBinder = PresenterBinderLocator.getPresenterBinders(aClass);
+        List<PresenterField<? super Delegated>> presenterFields =
+                combinePresenterFields(presenterBinder, externalPresenterFields);
 
-        if (presenterBinder == null || externalPresenterFields.isEmpty()) {
+        if (presenterFields.isEmpty()) {
             return Collections.emptyList();
         }
 
         List<MvpPresenter<? super Delegated>> presenters = new ArrayList<>();
         PresentersCounter presentersCounter = MvpFacade.getInstance().getPresentersCounter();
-
-        //noinspection unchecked
-        List<PresenterField<? super Delegated>> presenterFields =
-                combinePresenterFields(presenterBinder, externalPresenterFields);
 
         for (PresenterField<? super Delegated> presenterField : presenterFields) {
             MvpPresenter<? super Delegated> presenter =

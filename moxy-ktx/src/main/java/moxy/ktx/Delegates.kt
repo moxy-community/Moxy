@@ -3,9 +3,9 @@ package moxy.ktx
 import moxy.MvpDelegateHolder
 import moxy.MvpPresenter
 
-fun <T : MvpPresenter<*>> MvpDelegateHolder.moxyPresenter(
+inline fun <reified T : MvpPresenter<*>> MvpDelegateHolder.moxyPresenter(
     name: String = "presenter",
-    factory: () -> T
+    noinline factory: () -> T
 ): MoxyKtxDelegate<T> {
-    return MoxyKtxDelegate(mvpDelegate, name, factory)
+    return MoxyKtxDelegate(mvpDelegate, T::class.java.name + "." + name, factory)
 }
