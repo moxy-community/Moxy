@@ -1,6 +1,7 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.41'
 }
+apply plugin: 'com.github.dcendents.android-maven'
 
 dependencies {
     compileOnly project(":moxy-core")
@@ -9,3 +10,44 @@ dependencies {
 
 sourceCompatibility = "7"
 targetCompatibility = "7"
+
+def artifact = 'moxy-ktx'
+project.archivesBaseName = artifact
+group = rootProject.ext.groupId // Maven Group ID for the artifact
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom.project {
+            packaging 'jar'
+            groupId rootProject.ext.groupId
+            artifactId artifact
+            version rootProject.ext.targetVersion
+            name 'Moxy Compiler'
+            modelVersion = '4.0.0'
+            description = 'Moxy Compiler library for Android'
+            url = 'https://github.com/moxy-community/'
+            inceptionYear '2019'
+            licenses {
+                license {
+                    name 'MIT'
+                    url 'https://opensource.org/licenses/MIT'
+                    distribution 'repo'
+                }
+            }
+            developers {
+                developer {
+                    name 'Moxy Community'
+                    email 'moxy-community@yandex.ru'
+                    organization = 'Moxy Community'
+                    organizationUrl 'https://github.com/moxy-community/'
+                }
+            }
+            scm {
+                connection 'scm:git@github.com:moxy-community/Moxy.git'
+                developerConnection 'scm:git@github.com:moxy-community/Moxy.git'
+                url 'https://github.com/moxy-community/Moxy.git'
+            }
+        }
+    }
+}
