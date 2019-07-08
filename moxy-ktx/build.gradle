@@ -1,6 +1,4 @@
-plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.41'
-}
+apply plugin: 'kotlin'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: MoxyPublishing
 
