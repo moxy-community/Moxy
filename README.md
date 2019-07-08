@@ -10,9 +10,9 @@ The main idea of using Moxy:
 ## Capabilities
 
 Moxy has a few killer features in other ways:
-- _Presenter_ stay alive when _Activity_ recreated(it simplify work with multithreading)
-- Automatically restore all that user see when _Activity_ recreated(including dynamic content is added)
-- Capability to changes of many _Views_ from one _Presenter_
+- _Presenter_ stay alive when _Activity_ recreated(it simplifies work with multithreading)
+- Automatically restore everything user sees when _Activity_ recreated(including cases, when dynamic content is added)
+- Capability to change many _Views_ from one _Presenter_
 
 ## Sample
 
@@ -21,54 +21,54 @@ View interface
 interface MainView : MvpView {
 
     @StateStrategyType(AddToEndSingleStrategy::class)
-	fun printLog(msg: String)
+    fun printLog(msg: String)
 }
 
 class MainActivity : MvpAppCompatActivity(), MainView {
-	
-	@InjectPresenter
-	internal lateinit var presenter: MainPresenter
-	
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
-	}
-	
-	override fun printLog(msg: String) {
-		Log.e(TAG, "printLog : msg : $msg activity hash code : ${hashCode()}")
-	}
-	
-	companion object {
-		const val TAG = "MoxyDebug"
-	}
+
+    @InjectPresenter
+    internal lateinit var presenter: MainPresenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+    }
+
+    override fun printLog(msg: String) {
+        Log.e(TAG, "printLog : msg : $msg activity hash code : ${hashCode()}")
+    }
+
+    companion object {
+        const val TAG = "MoxyDebug"
+    }
 }
 ```
 Presenter
 ```kotlin
 @InjectViewState
 class MainPresenter : MvpPresenter<MainView>() {
-	override fun onFirstViewAttach() {
-		super.onFirstViewAttach()
-		Log.e(MainActivity.TAG, "presenter hash code : ${hashCode()}")
-		viewState.printLog("TEST")
-	}
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        Log.e(MainActivity.TAG, "presenter hash code : ${hashCode()}")
+        viewState.printLog("TEST")
+    }
 }
 ```
 
 ## Inject with Dagger2
 ```kotlin
-	@Inject
-	lateinit var daggerPresenter: Lazy<MainPresenter>
-	
-	@InjectPresenter
-	lateinit var presenter: MainPresenter
-	
-	@ProvidePresenter
-	fun providePresenter(): MainPresenter = daggerPresenter.get()
+@Inject
+lateinit var daggerPresenter: Lazy<MainPresenter>
+
+@InjectPresenter
+lateinit var presenter: MainPresenter
+
+@ProvidePresenter
+fun providePresenter(): MainPresenter = daggerPresenter.get()
 ```
 
 
-## Android studio and Intellij templates 
+## Android studio and Intellij templates
 **We will change this template in future**
 In order to avoid boilerplate code creating for binding activity, fragments and its presentation part, we propose to use Android Studio templates for Moxy.
 
@@ -83,66 +83,79 @@ In order to avoid boilerplate code creating for binding activity, fragments and 
 
 ### Base modules integration:
 ```groovy
-implementation 'com.github.moxy-community:moxy:moxyVersion'
+implementation "com.github.moxy-community:moxy:$moxyVersion"
 ```
 #### Java project
 ```groovy
-annotationProcessor 'com.github.moxy-community:moxy-compiler:moxyVersion'
+annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
 ```
 #### Kotlin
 ```groovy
 apply plugin: 'kotlin-kapt'
 ```
 ```groovy
-kapt 'com.github.moxy-community:moxy-compiler:moxyVersion'
+kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 ```
 ### Default android module integration
 For additional base view classes `MvpActivity` and `MvpFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-android:moxyVersion'
+implementation "com.github.moxy-community:moxy-android:$moxyVersion"
 ```
 ### AppCompat module integration
 If you use AppCompat, use `MvpAppCompatActivity` and `MvpAppCompatFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-app-compat:moxyVersion'
+implementation "com.github.moxy-community:moxy-app-compat:$moxyVersion"
 ```
 ### AndroidX module integration
 If you use AndroidX, use `MvpAppCompatActivity` and `MvpAppCompatFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-androidx:moxyVersion'
+implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
 ```
 ### AndroidX(Google material) module integration
 If you use google material, use `MvpBottomSheetDialogFragment` add this:
 ```groovy
-implementation 'com.github.moxy-community:moxy-material:moxyVersion'
+implementation "com.github.moxy-community:moxy-material:$moxyVersion"
+```
+### Kotlin extensions integration
+If you use kotlin, you can declare presenters in your views using property delegate:
+```kotlin
+class MyFragment: MvpFragment() {
+    ...
+    private val presenter by moxyPresenter { presenterProvider.get() }
+    ...
+}
+```
+To use `MvpDelegateHolder.moxyPresenter`, add this:
+```groovy
+implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
 ```
 ## New Features and Compiler option for Migration from old version
 
 By default, each `MvpView` method must have an annotation `@StateStrategyType`.
-In the old version of Moxy, it was allowed to miss strategy for methods. In this case, the default strategy was applied.
+In the old version of Moxy, it was allowed to omit strategy for methods. In this case, the default strategy was applied.
 
 You can fallback to the old behavior. To do this, set the disableEmptyStrategyCheck parameter to true.
 ```kotlin
 disableEmptyStrategyCheck : ‘true’
 ```
 
-In this case, the default strategy will be `AddToEndSingleStrategy`. In old version default strategy was` AddToEndStrategy`.
+In this case, the default strategy will be `AddToEndSingleStrategy`. In old version default strategy was `AddToEndStrategy`.
 
-To change default strategy, provide for `defaultMoxyStrategy` parameter the full class name of new default strategy.
+To change default strategy, provide `defaultMoxyStrategy` parameter with the full qualified class name of new default strategy.
 
 ```kotlin
 defaultMoxyStrategy : 'moxy.viewstate.strategy.OneExecutionStateStrategy'
 ```
 
-If compiler finds `MvpView` method without annotation `@StateStrategyType` it show this error with standard method for notifying about compilation problems.For ease of migration from older versions, we have provided an additional mechanism: `EmptyStrategyHelper`.
-It collects all the errors associated with an empty strategy in one place. Using it, you can easily navigate from the `EmptyStrategyHelper` directly to the method with a missing strategy.
+If compiler finds `MvpView` method without annotation `@StateStrategyType`, compilation will fail with clarifying error message. To ease migration from older versions there is additional mechanism: `EmptyStrategyHelper`.
+It collects all the errors associated with an empty strategy in one generated class called `EmptyStrategyHelper`. Using this class, you can easily navigate to all methods with a missing strategy.
 
-To switch the error output method, enable the option
+To turn on generation of this class, enable this compiler option:
 ```kotlin
 enableEmptyStrategyHelper : 'true'
 ```
 
-How to correctly use compilation flags see at [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
+To see, how to correctly use compilation flags, check out [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
 
 ## ProGuard\R8
 If you using any of moxy-android, moxy-appcompat, moxy-androidx or moxy-material, no additional configuration required.
@@ -159,7 +172,7 @@ If you use only moxy, you need to manually include rules from [this file](https:
 * [ ]Research possibility of removing @InjectViewState annotation
 
 ## Moxy Community
-Brave people how created library
+Brave people, who created this library
 
 [@senneco](https://github.com/senneco)
 [@ekursakov](https://github.com/ekursakov)
