@@ -5,6 +5,7 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -144,8 +145,13 @@ class ViewMethod {
 
     @Override
     public int hashCode() {
-        int result = name.hashCode();
-        result = 31 * result + parameterSpecs.hashCode();
+        if (name == null && parameterSpecs == null) {
+            return 0;
+        }
+        int result = 31 + Objects.hashCode(name);
+        for (ParameterSpec spec : parameterSpecs) {
+            result = 31 * result + (spec != null ? Objects.hashCode(spec.type) : 0);
+        }
         return result;
     }
 }
