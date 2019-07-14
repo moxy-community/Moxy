@@ -142,7 +142,7 @@ class ViewMethod {
         ViewMethod that = (ViewMethod) o;
 
         return name.equals(that.name) && Util.equalsBy(this.parameterSpecs, that.parameterSpecs,
-                (first, second) -> Objects.equals(first.type,second.type));
+                (first, second) -> Objects.equals(first.type, second.type));
     }
 
     @Override
