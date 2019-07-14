@@ -15,6 +15,7 @@ import javax.lang.model.type.ExecutableType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Types;
 import moxy.compiler.MvpCompiler;
+import moxy.compiler.Util;
 
 class ViewMethod {
 
@@ -140,7 +141,8 @@ class ViewMethod {
 
         ViewMethod that = (ViewMethod) o;
 
-        return name.equals(that.name) && parameterSpecs.equals(that.parameterSpecs);
+        return name.equals(that.name) && Util.equalsBy(this.parameterSpecs, that.parameterSpecs,
+                (first, second) -> Objects.equals(first.type,second.type));
     }
 
     @Override
