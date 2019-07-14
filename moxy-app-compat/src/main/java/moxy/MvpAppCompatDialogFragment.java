@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDialogFragment;
 
 @SuppressWarnings({ "ConstantConditions", "unused" })
-public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
+public class MvpAppCompatDialogFragment extends AppCompatDialogFragment implements MvpDelegateHolder {
 
     private boolean isStateSaved;
 
@@ -81,6 +81,7 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

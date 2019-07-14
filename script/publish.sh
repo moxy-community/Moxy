@@ -15,3 +15,6 @@
 
 ./gradlew moxy-android:updatePublishVersion
 ./gradlew moxy-android:bintrayUpload
+
+./gradlew moxy-ktx:updatePublishVersion
+./gradlew moxy-ktx:bintrayUpload

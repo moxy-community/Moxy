@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 @SuppressWarnings({ "ConstantConditions", "unused" })
-public class MvpAppCompatFragment extends Fragment {
+public class MvpAppCompatFragment extends Fragment implements MvpDelegateHolder {
 
     private boolean isStateSaved;
 
@@ -89,6 +89,7 @@ public class MvpAppCompatFragment extends Fragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

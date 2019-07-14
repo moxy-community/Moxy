@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 @SuppressWarnings("ConstantConditions")
-public class MvpFragment extends Fragment {
+public class MvpFragment extends Fragment implements MvpDelegateHolder {
 
     private static final int ANDROID_OS_JELLY_BEAN = 17;
 
@@ -95,6 +95,7 @@ public class MvpFragment extends Fragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);
