@@ -152,14 +152,9 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
                     if (enableEmptyStrategyHelper) {
                         migrationMethods.add(new MigrationMethod(typeElement, methodElement));
                     } else {
-                        String message = String
-                            .format(
-                                "A View method has no strategy! You are probably trying to migrate from an "
-                                    + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
-                                    + "without any Strategy, and you did not specify a default Strategy.",
-                                typeElement.getQualifiedName(),
-                                methodElement.getSimpleName()
-                            );
+                        String message = "A View method has no strategy! " +
+                                "Add @StateStrategyType annotation to this method, or to the View interface. " +
+                                "You can also specify default strategy via compiler option.";
 
                         MvpCompiler.getMessager()
                             .printMessage(Diagnostic.Kind.ERROR, message, methodElement);
