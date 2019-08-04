@@ -53,6 +53,7 @@ subprojects { project ->
         ignoreFailures false
         showViolations true
         classpath = files()
+        exclude '**/*.kt'
         source 'src/main/java'
     }
 
