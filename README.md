@@ -10,9 +10,8 @@ The main idea of using Moxy:
 ## Capabilities
 
 Moxy has a few killer features in other ways:
-- _Presenter_ stay alive when _Activity_ recreated(it simplify work with multithreading)
-- Automatically restore all that user see when _Activity_ recreated(including dynamic content is added)
-- Capability to changes of many _Views_ from one _Presenter_
+- _Presenter_ stay alive when _Activity_,_View_ or _Fragment_ recreated(it simplify work with multithreading)
+- Automatically restore all that user see when _Activity_,_View_ or _Fragment_ recreated(including dynamic content is added)
 
 ## Sample
 
