@@ -11,7 +11,7 @@ class MoxyKtxDelegate<T : MvpPresenter<*>>(
     private val factory: () -> T
 ) {
 
-    private lateinit var presenter: T
+    private var presenter: T? = null
 
     init {
         val field = object : PresenterField<Any?>(name, null, null) {
@@ -23,5 +23,8 @@ class MoxyKtxDelegate<T : MvpPresenter<*>>(
         delegate.registerExternalPresenterField(field)
     }
 
-    operator fun getValue(thisRef: Any?, property: KProperty<*>): T = presenter
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        return presenter ?: throw IllegalStateException(
+            "Presenter can be accessed only after MvpDelegate.onCreate() call")
+    }
 }
