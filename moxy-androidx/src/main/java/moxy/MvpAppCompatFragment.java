@@ -1,14 +1,26 @@
 package moxy;
 
 import android.os.Bundle;
+
+import androidx.annotation.ContentView;
+import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
 
-@SuppressWarnings({ "ConstantConditions", "unused" })
+@SuppressWarnings({"ConstantConditions", "unused"})
 public class MvpAppCompatFragment extends Fragment implements MvpDelegateHolder {
 
     private boolean isStateSaved;
 
     private MvpDelegate<? extends MvpAppCompatFragment> mvpDelegate;
+
+    public MvpAppCompatFragment() {
+        super();
+    }
+
+    @ContentView
+    public MvpAppCompatFragment(@LayoutRes int contentLayoutId) {
+        super(contentLayoutId);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

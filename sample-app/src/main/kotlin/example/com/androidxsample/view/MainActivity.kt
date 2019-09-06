@@ -9,7 +9,7 @@ import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 
     @InjectPresenter
     lateinit var presenter: MainPresenter
@@ -20,9 +20,7 @@ class MainActivity : MvpAppCompatActivity(), MainView {
     fun providePresenter(): MainPresenter = MainPresenter(logger)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         presenter.printLog()
 
