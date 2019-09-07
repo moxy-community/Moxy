@@ -22,25 +22,29 @@ object EmptyStrategyHelperGenerator {
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
 
         val javaDoc = """
-            This class was generated from 'com.github.moxy-community:moxy-migration-helper'.
+            This class was generated, because 'enableEmptyStrategyHelper' compiler option is set to true.
+            
             
             It is required for all view methods to have strategy.
             Add @StateStrategyType annotation to methods listed below.
             You can also set annotation directly to the View interface.
             
-            Do not pay attention to errors like:
+            Do not pay attention to compilation errors like these:
             'error: $exampleView is abstract; cannot be instantiated'
             
-            Use you IDE to navigate to methods and set necessary strategy to it.
-            When you fix all methods, you can remove dependency on 'com.github.moxy-community:moxy-migration-helper'.
+            Just use your IDE to navigate to methods and set necessary strategy to it.
+            When you fix all methods, you can remove 'enableEmptyStrategyHelper' option for current module.
             
-        """.trimIndent()
+        """.trimIndent() // leave blank line above for nice generated javadoc
 
 
         classBuilder.addJavadoc(javaDoc)
 
         val methodSpecBuilder = MethodSpec.methodBuilder("getViewStateProviders")
             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+
+        methodSpecBuilder.addComment("If you are using Intellij IDEA or Android Studio, use Go to declaration (Ctrl/⌘+B or Ctrl/⌘+Click)")
+        methodSpecBuilder.addComment("to navigate to '${migrationMethods.first().method.simpleName}()'")
 
         for ((clazz, method) in migrationMethods) {
             val statement = "new %s().%s()".format(clazz.qualifiedName, method.simpleName)
