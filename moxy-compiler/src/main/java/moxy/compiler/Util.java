@@ -118,6 +118,16 @@ public final class Util {
         return packageName + className.replaceAll("\\.", "\\$");
     }
 
+    public static String getSimpleClassName(TypeElement typeElement) {
+        String packageName = MvpCompiler.getElementUtils().getPackageOf(typeElement).getQualifiedName().toString();
+        if (packageName.length() > 0) {
+            packageName += ".";
+        }
+
+        String className = typeElement.toString().substring(packageName.length());
+        return className.replaceAll("\\.", "\\$");
+    }
+
     public static AnnotationMirror getAnnotation(Element element, String annotationClass) {
         for (AnnotationMirror annotationMirror : element.getAnnotationMirrors()) {
             if (annotationMirror.getAnnotationType().asElement().toString().equals(annotationClass)) {
