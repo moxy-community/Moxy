@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -46,7 +48,7 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
     public ViewInterfaceProcessor(
         final boolean disableEmptyStrategyCheck,
         final boolean enableEmptyStrategyHelper,
-        final String defaultStrategy
+        @Nullable final String defaultStrategy
     ) {
         super();
         this.enableEmptyStrategyHelper = enableEmptyStrategyHelper;

@@ -53,6 +53,7 @@ subprojects { project ->
         ignoreFailures false
         showViolations true
         classpath = files()
+        exclude '**/*.kt'
         source 'src/main/java'
     }
 
@@ -94,5 +95,6 @@ ext {
         autoservice: 'com.google.auto.service:auto-service:1.0-rc5',
         autocommon: 'com.google.auto:auto-common:0.10',
         guava: 'com.google.guava:guava:23.0',
+        kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     ]
 }
