@@ -4,6 +4,14 @@ import android.os.Bundle;
 
 public class Fragment {
 
+    public Fragment() {
+        throw new RuntimeException("Stub!");
+    }
+
+    public Fragment(int contentLayoutId) {
+        throw new RuntimeException("Stub!");
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         throw new RuntimeException("Stub!");
     }
