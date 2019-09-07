@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.Test;
 
-@SuppressWarnings("UnnecessaryBoxing")
 public class UtilEqualsByTest {
 
     @Test
@@ -13,8 +12,8 @@ public class UtilEqualsByTest {
         ArrayList<Object> firstArray = new ArrayList<>();
         ArrayList<Object> secondArray = new ArrayList<>();
 
-        firstArray.add(new Integer(1));
-        secondArray.add(new Integer(1));
+        firstArray.add(new ComplexObject("1"));
+        secondArray.add(new ComplexObject("1"));
 
         boolean equals = Util.equalsBy(
             firstArray,
@@ -52,7 +51,7 @@ public class UtilEqualsByTest {
 
         ArrayList<Object> firstArray = new ArrayList<>();
 
-        firstArray.add(new Integer(1));
+        firstArray.add(new ComplexObject("1"));
 
         boolean equals = Util.equalsBy(
             firstArray,
@@ -66,31 +65,13 @@ public class UtilEqualsByTest {
 
         ArrayList<Object> secondArray = new ArrayList<>();
 
-        secondArray.add(new Integer(1));
+        secondArray.add(new ComplexObject("1"));
 
         boolean equals = Util.equalsBy(
             null,
             secondArray,
             Objects::equals);
         assert !equals;
-    }
-
-    static class ListWrapper {
-        private List<Object> first;
-        private List<Object> second;
-
-        public ListWrapper(List<Object> first, List<Object> second) {
-            this.first = first;
-            this.second = second;
-        }
-
-        public List<Object> getFirst() {
-            return first;
-        }
-
-        public List<Object> getSecond() {
-            return second;
-        }
     }
 
     static class ComplexObject {
