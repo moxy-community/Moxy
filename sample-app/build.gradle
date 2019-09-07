@@ -74,7 +74,7 @@ dependencies {
     kapt project(':moxy-compiler')
 
     //uncomment for test library from maven
-    def moxyVersion = '2.0-alpha05'
+    def moxyVersion = targetVersion
     //implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
     //implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
     //kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
