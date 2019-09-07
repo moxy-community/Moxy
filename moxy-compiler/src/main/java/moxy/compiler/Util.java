@@ -16,10 +16,14 @@
  */
 package moxy.compiler;
 
+import com.google.common.base.Preconditions;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -206,5 +210,39 @@ public final class Util {
     public static String decapitalizeString(String string) {
         return string == null || string.isEmpty() ? "" : string.length()
             == 1 ? string.toLowerCase() : Character.toLowerCase(string.charAt(0)) + string.substring(1);
+    }
+
+    /**
+     * @param first list to compare
+     * @param second list to compare
+     * @param predicate to compare objects by
+     * @param <T> type of compared lists
+     * @return true if lists has the same size and predicate returns true for items with the same position,
+     * false
+     * otherwise. If one of lists is null return false.
+     */
+    public static <T> boolean equalsBy(
+        Collection<T> first,
+        Collection<T> second,
+        BiFunction<T, T, Boolean> predicate) {
+
+        Preconditions.checkArgument(predicate != null, "Require non null predicate!");
+        if (first != null && second != null) {
+            if (first.size() != second.size()) {
+                return false;
+            }
+            final Iterator<T> firstIterator = first.iterator();
+            final Iterator<T> secondIterator = second.iterator();
+            while (firstIterator.hasNext()) {
+                final T firstItem = firstIterator.next();
+                final T secondItem = secondIterator.next();
+                if (!predicate.apply(firstItem, secondItem)) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }
