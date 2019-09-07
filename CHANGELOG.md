@@ -1,0 +1,21 @@
+# Changelog
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.0-alpha06] - 2019-09-07
+### Added
+- Support for gradle incremental annotation processing.
+- `moxy-ktx` artifact, containing `moxyPresenter` property delegate for kotlin users.
+- Layout id constructors for `MvpFragment` and `MvpAppCompatActivity`.
+- `enableEmptyStrategyHelper`, `defaultMoxyStrategy` and `disableEmptyStrategyCheck` compiler options.
+
+### Changed
+- Make `moxy-android`, `moxy-andoridx`, `moxy-appcompat` and `moxy-material` artifacts to be .aar instead of .jar
+to provide proguard files.
+- All view methods are required to have `@StateStrategy` annotation.
+
+### Removed
+- MoxyReflector generation, `moxyReflectorPackage` compiler option.
+
