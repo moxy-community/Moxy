@@ -19,3 +19,13 @@ to provide proguard files.
 ### Removed
 - MoxyReflector generation, `moxyReflectorPackage` compiler option.
 
+
+## Differences between [Arello-Mobile Moxy](https://github.com/Arello-Mobile/Moxy) and Moxy-community
+### Added
+- `moxy-androidx` and `moxy-material` artifacts
+
+### Changed
+- Package from `com.arellomobile.mvp` to `moxy`
+
+### Removed
+- Presenter types `WEAK` and `GLOBAL`. All presenters are now `LOCAL`
