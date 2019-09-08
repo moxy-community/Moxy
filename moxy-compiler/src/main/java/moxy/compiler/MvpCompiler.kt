@@ -10,6 +10,8 @@ import moxy.compiler.viewstate.ViewStateClassGenerator
 import moxy.compiler.viewstateprovider.InjectViewStateProcessor
 import moxy.compiler.viewstateprovider.ViewStateProviderClassGenerator
 import moxy.presenter.InjectPresenter
+import net.ltgt.gradle.incap.IncrementalAnnotationProcessor
+import net.ltgt.gradle.incap.IncrementalAnnotationProcessorType.AGGREGATING
 import java.io.IOException
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Messager
@@ -27,6 +29,7 @@ import javax.lang.model.util.Types
 import javax.tools.Diagnostic
 
 @AutoService(Processor::class)
+@IncrementalAnnotationProcessor(AGGREGATING)
 class MvpCompiler : AbstractProcessor() {
 
     private val defaultStrategy: String? get() = options[DEFAULT_MOXY_STRATEGY]
