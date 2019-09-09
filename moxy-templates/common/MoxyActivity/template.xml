@@ -69,7 +69,7 @@
 
   <parameter
       default="baseActivity"
-      help="if choose BaseActivity, please add your_package_name/ui/activity/BaseActivity otherwise MvpActivity"
+      help="If you've chosen BaseActivity, please add your_package_name/ui/activity/BaseActivity otherwise use MvpActivity"
       id="superClass"
       name="Base Activity"
       type="enum">
