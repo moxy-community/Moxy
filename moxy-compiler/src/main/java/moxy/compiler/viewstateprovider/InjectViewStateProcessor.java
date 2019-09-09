@@ -54,7 +54,8 @@ public class InjectViewStateProcessor extends ElementProcessor<TypeElement, Pres
 
                 TypeElement viewTypeElement = MvpCompiler.getElementUtils().getTypeElement(view);
                 if (viewTypeElement == null) {
-                    throw new IllegalArgumentException("View \"" + view + "\" for " + typeElement + " cannot be found");
+                    throw new IllegalArgumentException("View \"" + view + "\" for "
+                        + typeElement + " cannot be found");
                 }
 
                 usedViews.add(viewTypeElement);

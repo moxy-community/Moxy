@@ -107,7 +107,8 @@ public class MvpCompiler extends AbstractProcessor {
             return throwableProcess(roundEnv);
         } catch (RuntimeException e) {
             getMessager().printMessage(Diagnostic.Kind.OTHER,
-                "Moxy compilation has failed. Could you copy the stack trace above and write us (or open an issue on Github)?");
+                "Moxy compilation has failed. Could you copy the stack trace above and write us "
+                    + "(or open an issue on Github)?");
             e.printStackTrace();
             getMessager().printMessage(Diagnostic.Kind.ERROR,
                 "Moxy compilation has failed; see the compiler error output for details (" + e

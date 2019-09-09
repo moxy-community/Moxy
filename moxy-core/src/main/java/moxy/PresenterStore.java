@@ -21,7 +21,7 @@ public class PresenterStore {
     }
 
     /**
-     * Get a presenter by tag 
+     * Get a presenter by tag
      *
      * @param tag Tag of a presenter. Local presenters also contain delegate's tag as their prefix
      * @return Presenter if exists. Null otherwise (if it doesn't exists)

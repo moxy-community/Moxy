@@ -10,8 +10,8 @@ import moxy.viewstate.ViewCommand;
  * <ul>
  * <li>Don't rearrange current state</li>
  * <li>Don't insert commands inside existing current state - only put them to the end of it</li>
- * <li>Be careful when you remove commands by another type. If you do it, be sure that inside your view method you've fully
- * overriden the view changes</li>
+ * <li>Be careful when you remove commands by another type. If you do it, be sure that inside your view method
+ * you've fully overriden the view changes</li>
  * </ul>
  */
 public interface StateStrategy {
@@ -23,8 +23,8 @@ public interface StateStrategy {
      * {@link MvpView}
      *
      * @param currentState current state of {@link MvpViewState}. Each {@link ViewCommand} contains its own parameters.
-     * @param incomingCommand command for applying to a {@link MvpView} This {@link ViewCommand} contains params of this
-     * command.
+     * @param incomingCommand command for applying to a {@link MvpView} This {@link ViewCommand} contains params
+     * of this command.
      * @param <View> type of the given view
      */
     <View extends MvpView> void beforeApply(List<ViewCommand<View>> currentState, ViewCommand<View> incomingCommand);

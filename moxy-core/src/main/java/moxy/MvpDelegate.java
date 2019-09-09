@@ -78,7 +78,8 @@ public class MvpDelegate<Delegated> {
     public void freeParentDelegate() {
 
         if (parentDelegate == null) {
-            throw new IllegalStateException("You should call freeParentDelegate() before first call to setParentDelegate()");
+            throw new IllegalStateException(
+                "You should call freeParentDelegate() before first call to setParentDelegate()");
         }
         parentDelegate.removeChildDelegate(this);
     }
@@ -230,7 +231,8 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * Saves presenters. Tag prefix to save state to restore presenters in the future after the delegate will be recreated
+     * Saves presenters. Tag prefix to save state to restore presenters in the future
+     * after the delegate will be recreated
      *
      * @param outState out state from Android component
      */

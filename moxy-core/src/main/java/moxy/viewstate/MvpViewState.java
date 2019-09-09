@@ -76,8 +76,7 @@ public abstract class MvpViewState<View extends MvpView> {
 
     /**
      * <p>Detach a view from the view state. After this call view state will save
-     * commands via
-     * {@link StateStrategy#beforeApply(List, ViewCommand)}.</p>
+     * commands via {@link StateStrategy#beforeApply(List, ViewCommand)}.</p>
      *
      * @param view target mvp view to detach
      */
