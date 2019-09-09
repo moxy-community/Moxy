@@ -7,18 +7,18 @@ import java.lang.annotation.Target;
 import moxy.PresenterStore;
 
 /**
- * Called when Moxy can't find right presenter instance in {@link PresenterStore}.
- * <p>Attention! <b>Don't use manually method marked with this annotation!</b> Use presenter field, which you want. If
- * you override this method in inherited classes, make them return same type(not requirements but recommendation).</p>
+ * Called when Moxy can't find the right presenter instance in the {@link PresenterStore}.
+ * <p>Attention! <b>Don't use manually the method marked with this annotation!</b> Use a presenter field whichever you want. If
+ * you override this method in derived classes, make it return the same type (not a requirement but recommendation).</p>
  * <p>Requirements:</p>
  * <ul>
- * <li>Method should return full equals class as presenter field type</li>
- * <li>Presenter Types should be same</li>
- * <li>Tags should be equals</li>
- * <li>Presenter IDs should be equals</li>
+ * <li>Method should return stricty the same class as the presenter field type</li>
+ * <li>Presenter Types should be the same</li>
+ * <li>Tags should be equal</li>
+ * <li>Presenter IDs should be equal</li>
  * </ul>
- * <p>Note: if this method stay unused after build, then Moxy never use this method and you should check annotation
- * parameters. These parameters should be equals to @InjectPresenter parameters</p>
+ * <p>Note: if this method stays unused after the build, then Moxy'll never use this method and you should check annotation
+ * parameters. These parameters should be equal to @InjectPresenter parameters</p>
  * <br>
  */
 @Target(ElementType.METHOD)

@@ -10,9 +10,9 @@ import java.util.Set;
  * Date: 18-Dec-15
  * Time: 13:51
  * <p>
- * This class represents a delegate which you can use to extend Mvp's support to any class.
+ * This class represents a delegate you can use to extend MVP support to any class.
  * <p>
- * When using an {@link MvpDelegate}, lifecycle methods which should be proxied to the delegate:
+ * When using an {@link MvpDelegate}, the following lifecycle methods should be forwarded to the delegate:
  * <ul>
  * <li>{@link #onCreate(Bundle)}</li>
  * <li>{@link #onAttach()}: inside onStart() of Activity or Fragment</li>
@@ -49,11 +49,11 @@ public class MvpDelegate<Delegated> {
 
     public void setParentDelegate(MvpDelegate delegate, String childId) {
         if (bundle != null) {
-            throw new IllegalStateException("You should call setParentDelegate() before first onCreate()");
+            throw new IllegalStateException("You should call setParentDelegate() before first call to onCreate()");
         }
         if (childDelegates != null && childDelegates.size() > 0) {
             throw new IllegalStateException(
-                "You could not set parent delegate when there are already has child presenters");
+                "You could not set parent delegate when there are some child presenters already");
         }
 
         parentDelegate = delegate;
@@ -78,7 +78,7 @@ public class MvpDelegate<Delegated> {
     public void freeParentDelegate() {
 
         if (parentDelegate == null) {
-            throw new IllegalStateException("You should call freeParentDelegate() before first setParentDelegate()");
+            throw new IllegalStateException("You should call freeParentDelegate() before first call to setParentDelegate()");
         }
         parentDelegate.removeChildDelegate(this);
     }
@@ -138,9 +138,9 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * <p>Attach delegated object as view to presenter fields of this object.
-     * If delegate did not enter at {@link #onCreate(Bundle)}(or
-     * {@link #onCreate()}) before this method, then view will not be attached to
+     * <p>Attach delegated object as a View into presenter fields of this object.
+     * If delegate wasn't introduced in {@link #onCreate(Bundle)} (or
+     * {@link #onCreate()}) before call to this method, the view will not be attached to its
      * presenters</p>
      */
     public void onAttach() {
@@ -160,7 +160,7 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * <p>Detach delegated object from their presenters.</p>
+     * <p>Detach delegated object from its presenters.</p>
      */
     public void onDetach() {
         for (MvpPresenter<? super Delegated> presenter : presenters) {
@@ -179,7 +179,7 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * <p>View was being destroyed, but logical unit still alive</p>
+     * <p>View was being destroyed, but logical unit is still alive</p>
      */
     public void onDestroyView() {
         for (MvpPresenter<? super Delegated> presenter : presenters) {
@@ -217,8 +217,8 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * <p>Similar like {@link #onSaveInstanceState(Bundle)}. But this method try to save
-     * state to parent presenter Bundle</p>
+     * <p>Similar like {@link #onSaveInstanceState(Bundle)}. But this method tries to save
+     *  its state to the parent presenter Bundle</p>
      */
     public void onSaveInstanceState() {
         Bundle bundle = new Bundle();
@@ -230,7 +230,7 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * Save presenters tag prefix to save state for restore presenters at future after delegate recreate
+     * Saves presenters. Tag prefix to save state to restore presenters in the future after the delegate will be recreated
      *
      * @param outState out state from Android component
      */
@@ -254,7 +254,7 @@ public class MvpDelegate<Delegated> {
     }
 
     /**
-     * @return generated tag in format:
+     * @return generated tag in the following format:
      * &lt;parent_delegate_tag&gt; &lt;delegated_class_full_name&gt;$MvpDelegate@&lt;hashCode&gt;
      * <p>
      * example: moxy.sample.SampleFragment$MvpDelegate@32649b0

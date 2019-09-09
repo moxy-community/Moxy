@@ -18,7 +18,7 @@ public abstract class PresenterField<PresentersContainer> {
 
     public abstract void bind(PresentersContainer container, MvpPresenter presenter);
 
-    // Delegated may be used from generated code if user plane to generate tag at runtime
+    // Delegated may be used from the generated code if a user planes to generate the tag at runtime
     public String getTag(PresentersContainer delegated) {
         return tag;
     }

@@ -5,9 +5,9 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * Command will be added to end of commands queue.
+ * Command will be added to the end of the commands queue.
  * <p>
- * This strategy used by default.
+ * This strategy was used by default.
  */
 public class AddToEndStrategy implements StateStrategy {
 
