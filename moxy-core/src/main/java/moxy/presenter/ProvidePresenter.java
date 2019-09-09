@@ -13,7 +13,7 @@ import moxy.PresenterStore;
  * make it return the same type (not a requirement but recommendation).</p>
  * <p>Requirements:</p>
  * <ul>
- * <li>Method should return stricty the same class as the presenter field type</li>
+ * <li>Method should return strictly the same class as the presenter field type</li>
  * <li>Presenter Types should be the same</li>
  * <li>Tags should be equal</li>
  * <li>Presenter IDs should be equal</li>

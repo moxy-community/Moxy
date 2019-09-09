@@ -47,7 +47,7 @@ public abstract class MvpViewState<View extends MvpView> {
     }
 
     /**
-     * Attach view to view state and apply saved states
+     * Attach view to view state and apply a saved state
      *
      * @param view attachment
      */
