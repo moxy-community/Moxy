@@ -107,10 +107,10 @@ public class MvpCompiler extends AbstractProcessor {
             return throwableProcess(roundEnv);
         } catch (RuntimeException e) {
             getMessager().printMessage(Diagnostic.Kind.OTHER,
-                "Moxy compilation failed. Could you copy stack trace above and write us (or make issue on Github)?");
+                "Moxy compilation has failed. Could you copy the stack trace above and write us (or open an issue on Github)?");
             e.printStackTrace();
             getMessager().printMessage(Diagnostic.Kind.ERROR,
-                "Moxy compilation failed; see the compiler error output for details (" + e
+                "Moxy compilation has failed; see the compiler error output for details (" + e
                     + ")");
         }
 
@@ -186,7 +186,7 @@ public class MvpCompiler extends AbstractProcessor {
         for (Element element : roundEnv.getElementsAnnotatedWith(clazz)) {
             if (element.getKind() != kind) {
                 getMessager().printMessage(Diagnostic.Kind.ERROR,
-                    element + " must be " + kind.name() + ", or not mark it as @" + clazz
+                    element + " must be " + kind.name() + ", or do not annotate it with @" + clazz
                         .getSimpleName(), element);
             }
 

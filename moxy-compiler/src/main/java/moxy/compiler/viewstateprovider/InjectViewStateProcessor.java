@@ -120,7 +120,7 @@ public class InjectViewStateProcessor extends ElementProcessor<TypeElement, Pres
             final List<? extends TypeParameterElement> typeParameters = superclassElement.getTypeParameters();
 
             if (typeArguments.size() > typeParameters.size()) {
-                throw new IllegalArgumentException("Code generation for interface "
+                throw new IllegalArgumentException("Code generation for the interface "
                     + typeElement.getSimpleName()
                     + " failed. Simplify your generics. ("
                     + typeArguments

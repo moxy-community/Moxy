@@ -42,7 +42,7 @@ public class PresenterInjectorRules extends AnnotationRule {
                     + annotatedField.getEnclosingElement().getSimpleName()
                     + " should be "
                     + validKind.name()
-                    + ", or not mark it as @"
+                    + ", or do not annotate it with @"
                     + InjectPresenter.class.getSimpleName()).append("\n");
         }
 
@@ -89,7 +89,7 @@ public class PresenterInjectorRules extends AnnotationRule {
         }
         if (!result) {
             MvpCompiler.getMessager().printMessage(Diagnostic.Kind.ERROR,
-                "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter",
+                "You can not use @InjectPresenter in a class that is not a View typed with target Presenter",
                 annotatedField);
         }
     }

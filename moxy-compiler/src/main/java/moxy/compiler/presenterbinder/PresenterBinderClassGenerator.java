@@ -22,9 +22,9 @@ import moxy.presenter.PresenterField;
 /**
  * 18.12.2015
  * <p>
- * Generates PresenterBinder for class annotated with &#64;InjectPresenters
+ * Generates PresenterBinder for a class annotated with &#64;InjectPresenters
  * <p>
- * for Sample class with single injected presenter
+ * An example: a class with a single injected presenter
  * <pre>
  * {@code
  *
@@ -139,7 +139,7 @@ public final class PresenterBinderClassGenerator extends JavaFilesGenerator<Targ
                 builder.addStatement("return new $T()", field.getTypeName());
             } else {
                 builder.addStatement("throw new $T($S + $S)", IllegalStateException.class, field.getClazz(),
-                    " has not default constructor. You can apply @ProvidePresenter to some method which will "
+                    " has not default constructor. You can apply @ProvidePresenter to a method which will "
                         + "construct Presenter. Also you can make it default constructor");
             }
         }
