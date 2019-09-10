@@ -64,7 +64,15 @@ public class MvpAppCompatActivity extends AppCompatActivity implements MvpDelega
 
         if (isFinishing()) {
             getMvpDelegate().onDestroy();
+            onClose();
         }
+    }
+
+    /**
+     * Called right after presenters, associated with current activity, have been destroyed.
+     */
+    public void onClose() {
+
     }
 
     /**

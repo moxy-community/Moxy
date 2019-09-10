@@ -58,6 +58,7 @@ public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment impl
         //We leave the screen and respectively all fragments will be destroyed
         if (getActivity().isFinishing()) {
             getMvpDelegate().onDestroy();
+            onClose();
             return;
         }
 
@@ -77,7 +78,15 @@ public class MvpBottomSheetDialogFragment extends BottomSheetDialogFragment impl
 
         if (isRemoving() || anyParentIsRemoving) {
             getMvpDelegate().onDestroy();
+            onClose();
         }
+    }
+
+    /**
+     * Called right after presenters, associated with current fragment, have been destroyed.
+     */
+    public void onClose() {
+
     }
 
     /**

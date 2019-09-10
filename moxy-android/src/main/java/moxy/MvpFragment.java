@@ -67,6 +67,7 @@ public class MvpFragment extends Fragment implements MvpDelegateHolder {
         //We leave the screen and respectively all fragments will be destroyed
         if (getActivity().isFinishing()) {
             getMvpDelegate().onDestroy();
+            onClose();
             return;
         }
 
@@ -89,7 +90,15 @@ public class MvpFragment extends Fragment implements MvpDelegateHolder {
 
         if (isRemoving() || anyParentIsRemoving) {
             getMvpDelegate().onDestroy();
+            onClose();
         }
+    }
+
+    /**
+     * Called right after presenters, associated with current activity, have been destroyed.
+     */
+    public void onClose() {
+
     }
 
     /**
