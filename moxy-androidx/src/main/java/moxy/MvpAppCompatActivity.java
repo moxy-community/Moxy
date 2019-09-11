@@ -69,7 +69,7 @@ public class MvpAppCompatActivity extends AppCompatActivity implements MvpDelega
     }
 
     /**
-     * Called right after presenters, associated with current activity, have been destroyed.
+     * Called right after presenters associated with the current activity have been destroyed.
      */
     public void onClose() {
 

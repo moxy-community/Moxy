@@ -84,7 +84,7 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment implemen
     }
 
     /**
-     * Called right after presenters, associated with current fragment, have been destroyed.
+     * Called right after presenters associated with the current fragment have been destroyed.
      */
     public void onClose() {
 

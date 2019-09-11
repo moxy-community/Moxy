@@ -102,7 +102,7 @@ public class MvpAppCompatFragment extends Fragment implements MvpDelegateHolder 
     }
 
     /**
-     * Called right after presenters, associated with current fragment, have been destroyed.
+     * Called right after presenters associated with the current fragment have been destroyed.
      */
     public void onClose() {
 
