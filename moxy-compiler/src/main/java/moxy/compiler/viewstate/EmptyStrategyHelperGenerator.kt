@@ -8,9 +8,9 @@ import javax.lang.model.element.Modifier
 object EmptyStrategyHelperGenerator {
 
     /**
-     * @param migrationMethods non empty list of methods
+     * @param migrationMethods non-empty list of methods
      *
-     * @return File with references to files witch need in refactoring
+     * @return File with references to the files which are in need of refactoring
      */
     @JvmStatic
     fun generate(migrationMethods: List<MigrationMethod>): JavaFile {
@@ -22,20 +22,20 @@ object EmptyStrategyHelperGenerator {
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
 
         val javaDoc = """
-            This class was generated, because 'enableEmptyStrategyHelper' compiler option is set to true.
+            This class is generated because 'enableEmptyStrategyHelper' compiler option is set to true.
             
             
-            It is required for all view methods to have strategy.
-            Add @StateStrategyType annotation to methods listed below.
-            You can also set annotation directly to the View interface.
+            All view methods must have a strategy. Please, add the @StateStrategyType annotation
+            to the methods listed below. You can also set this annotation directly to the View interface.
             
-            Do not pay attention to compilation errors like these:
+            Do not pay attention to compilation errors like
             'error: $exampleView is abstract; cannot be instantiated'
             
-            Just use your IDE to navigate to methods and set necessary strategy to it.
-            When you fix all methods, you can remove 'enableEmptyStrategyHelper' option for current module.
+            Just use your IDE to navigate to the methods and set the required strategy for them.
+            After you've fixed all the methods, you can remove 'enableEmptyStrategyHelper' option
+            for the current module.
             
-        """.trimIndent() // leave blank line above for nice generated javadoc
+        """.trimIndent() // leave blank line above for a nice generated javadoc
 
 
         classBuilder.addJavadoc(javaDoc)
