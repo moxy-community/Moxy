@@ -41,7 +41,7 @@ public class PresentersCounter {
      *
      * @param presenter Rejected presenter
      * @param delegateTag Delegate tag
-     * @return True if there are no links to this presenter and presenter be able to destroy. False
+     * @return True if there are no links to this presenter and presenter is able to be destroyed. False
      * otherwise
      */
     public boolean rejectPresenter(MvpPresenter<?> presenter, String delegateTag) {

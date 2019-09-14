@@ -6,8 +6,8 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * Command will be added to end of commands queue. If commands queue contains same tag, then
- * existing command will be removed.
+ * Command will be added to the end of the commands queue. If the commands queue contains the same tag, then
+ * an existing command will be removed.
  */
 public class AddToEndSingleTagStrategy implements StateStrategy {
 

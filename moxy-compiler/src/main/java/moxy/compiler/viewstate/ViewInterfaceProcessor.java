@@ -124,8 +124,8 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
             final ExecutableElement methodElement = (ExecutableElement) element;
 
             if (methodElement.getReturnType().getKind() != TypeKind.VOID) {
-                String message = String.format("You are trying generate ViewState for %s. "
-                        + "But %s contains non-void method \"%s\" that return type is %s. ",
+                String message = String.format("You are trying to generate ViewState for %s. "
+                        + "But %s contains non-void method \"%s\" with the return type of %s. ",
                     typeElement.getSimpleName(),
                     typeElement.getSimpleName(),
                     methodElement.getSimpleName(),
@@ -156,7 +156,7 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
                             .format(
                                 "A View method has no strategy! You are probably trying to migrate from an "
                                     + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
-                                    + "without any Strategy, and you did not specify a default Strategy.",
+                                    + "without any Strategy and you did not specify a default Strategy.",
                                 typeElement.getQualifiedName(),
                                 methodElement.getSimpleName()
                             );
@@ -231,7 +231,7 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
                 + viewInterfaceName
                 + " or make "
                 + parts
-                + " equals");
+                + " equal");
         }
     }
 
@@ -250,7 +250,7 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
 
             if (typeArguments.size() > typeParameters.size()) {
                 throw new IllegalArgumentException(
-                    "Code generation for interface " + anInterface.getSimpleName()
+                    "Code generation for the interface " + anInterface.getSimpleName()
                         + " failed. Simplify your generics.");
             }
 

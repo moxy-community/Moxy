@@ -5,7 +5,7 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * Command will be saved in commands queue. And this command will be removed after first execution.
+ * Command will be saved in the commands queue, but will be removed after its first execution.
  */
 
 public class OneExecutionStateStrategy implements StateStrategy {

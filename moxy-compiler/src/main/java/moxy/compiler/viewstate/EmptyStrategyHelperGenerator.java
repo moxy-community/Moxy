@@ -14,7 +14,7 @@ public class EmptyStrategyHelperGenerator {
     }
 
     /**
-     * @param migrationMethods non empty list of methods
+     * @param migrationMethods non-empty list of methods
      */
     public static JavaFile generate(List<MigrationMethod> migrationMethods) {
 
@@ -26,10 +26,10 @@ public class EmptyStrategyHelperGenerator {
 
         String javaDoc =
             String.format(
-                "This is a helper class. See the clickable list of methods witch need in refactoring.\n"
+                "This is a helper class. See the clickable list of methods in need of refactoring.\n"
                     + "Do not pay attention to errors like:\n\n"
                     + "\'error: %s is abstract; cannot be instantiated\'\n\n"
-                    + "To complete migration just open the method and set the necessary strategy to it",
+                    + "To complete migration just open the method and add a required strategy to it",
                 firstViewSimpleName);
         classBuilder.addJavadoc(
             javaDoc);

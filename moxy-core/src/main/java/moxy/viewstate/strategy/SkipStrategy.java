@@ -5,7 +5,7 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * Command will not be put in commands queue
+ * Command will not be put in the commands queue
  */
 public class SkipStrategy implements StateStrategy {
 
