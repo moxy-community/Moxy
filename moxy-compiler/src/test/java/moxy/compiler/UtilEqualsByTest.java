@@ -43,7 +43,7 @@ public class UtilEqualsByTest {
             null,
             null,
             Objects::equals);
-        assert !equals;
+        assert equals;
     }
 
     @Test
