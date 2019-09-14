@@ -169,9 +169,9 @@ If you use only `moxy`, you need to manually include rules from [this file](http
 * [✓] ~~Kotlin incremental compilation support~~
 * [✓] ~~Remove reflectors~~
 * [✓] ~~Add delivery module support~~
-* [ ]Provide Runtime Implementation
-* [ ]Add separate Annotation Processor for migration
-* [ ]Research possibility of removing @InjectViewState annotation
+* [х] ~~Add separate Annotation Processor for migration~~
+* [ ] Provide Runtime Implementation
+* [ ] Research possibility of removing @InjectViewState annotation
 
 ## Moxy Community
 Brave people, who created this library
