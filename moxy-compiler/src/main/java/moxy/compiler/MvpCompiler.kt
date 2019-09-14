@@ -67,7 +67,7 @@ class MvpCompiler : AbstractProcessor() {
         } catch (e: RuntimeException) {
             messager.printMessage(
                 Diagnostic.Kind.OTHER,
-                "Moxy compilation failed. Could you copy stack trace above and write us (or make issue on Github)?")
+                "Moxy compilation has failed. Could you copy stack trace above and write us (or open an issue on Github)?")
             e.printStackTrace()
             messager.printMessage(
                 Diagnostic.Kind.ERROR,
@@ -147,7 +147,7 @@ class MvpCompiler : AbstractProcessor() {
             if (element.kind != kind) {
                 messager.printMessage(
                     Diagnostic.Kind.ERROR,
-                    "$element must be ${kind.name}, or not mark it as @${clazz.simpleName}",
+                    "$element must be ${kind.name}, or do not annotate it with @${clazz.simpleName}",
                     element)
             }
 

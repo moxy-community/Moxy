@@ -6,8 +6,8 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * Command will be added to end of commands queue. If commands queue contains same type command, then existing command
- * will be removed.
+ * Command will be added to the end of the commands queue. If commands queue contains a command of the same type,
+ * then existing command will be removed.
  */
 public class AddToEndSingleStrategy implements StateStrategy {
 

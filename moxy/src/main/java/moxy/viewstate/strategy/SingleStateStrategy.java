@@ -5,7 +5,7 @@ import moxy.MvpView;
 import moxy.viewstate.ViewCommand;
 
 /**
- * This strategy will clear current commands queue and then incoming command will be put in.
+ * This strategy will clear current commands queue and then the given command will be put in.
  * <p>
  * Caution! Be sure that you fully set view to initial state inside this command.
  */

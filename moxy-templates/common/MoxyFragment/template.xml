@@ -40,7 +40,7 @@
 
   <parameter
       default="baseFragment"
-      help="if choose BaseFragment, please add your_package_name/ui/activity/BaseFragment otherwise MvpFragment"
+      help="If you've chosen BaseFragment, please add your_package_name/ui/activity/BaseFragment otherwise use MvpFragment"
       id="superClass"
       name="Base Fragment"
       type="enum">
