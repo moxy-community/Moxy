@@ -196,6 +196,8 @@ Brave people, who created this library
 [@sbogolepov](https://github.com/sbogolepov)
 [@A-Zaiats](https://github.com/A-Zaiats)
 [@lion4ik](https://github.com/lion4ik)
+[@bejibx](https://github.com/bejibx)
+[@sychyow](https://github.com/sychyow)
 
 
 You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
