@@ -182,6 +182,7 @@ Brave people, who created this library
 [@asitnkova](https://github.com/asitnkova)
 [@alaershov](https://github.com/alaershov)
 [@bejibx](https://github.com/bejibx)
+[@katkoff](https://github.com/katkoff)
 [@ekursakov](https://github.com/ekursakov)
 [@SavinMike](https://github.com/SavinMike)
 [@sychyow](https://github.com/sychyow)
