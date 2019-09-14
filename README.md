@@ -177,10 +177,14 @@ If you use only `moxy`, you need to manually include rules from [this file](http
 Brave people, who created this library
 
 [@senneco](https://github.com/senneco)
-[@ekursakov](https://github.com/ekursakov)
 [@jordan1997](https://github.com/jordan1997)
 [@xanderblinov](https://github.com/xanderblinov)
+[@asitnkova](https://github.com/asitnkova)
+[@alaershov](https://github.com/alaershov)
+[@bejibx](https://github.com/bejibx)
+[@ekursakov](https://github.com/ekursakov)
 [@SavinMike](https://github.com/SavinMike)
+[@sychyow](https://github.com/sychyow)
 [@AlexeyKorshun](https://github.com/AlexeyKorshun)
 [@dmdevgo](https://github.com/dmdevgo)
 [@rsajob](https://github.com/rsajob)
@@ -196,8 +200,6 @@ Brave people, who created this library
 [@sbogolepov](https://github.com/sbogolepov)
 [@A-Zaiats](https://github.com/A-Zaiats)
 [@lion4ik](https://github.com/lion4ik)
-[@bejibx](https://github.com/bejibx)
-[@sychyow](https://github.com/sychyow)
 
 
 You may also find them in [contributors page of old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
