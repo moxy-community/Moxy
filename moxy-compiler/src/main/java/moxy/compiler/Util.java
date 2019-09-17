@@ -242,7 +242,7 @@ public final class Util {
             }
             return true;
         } else {
-            return false;
+            return first == second;
         }
     }
 }
