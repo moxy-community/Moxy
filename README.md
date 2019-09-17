@@ -169,18 +169,23 @@ If you use only `moxy`, you need to manually include rules from [this file](http
 * [✓] ~~Kotlin incremental compilation support~~
 * [✓] ~~Remove reflectors~~
 * [✓] ~~Add delivery module support~~
-* [ ]Provide Runtime Implementation
-* [ ]Add separate Annotation Processor for migration
-* [ ]Research possibility of removing @InjectViewState annotation
+* [х] ~~Add separate Annotation Processor for migration~~
+* [ ] Provide Runtime Implementation
+* [ ] Research possibility of removing @InjectViewState annotation
 
 ## Moxy Community
 Brave people, who created this library
 
 [@senneco](https://github.com/senneco)
-[@ekursakov](https://github.com/ekursakov)
 [@jordan1997](https://github.com/jordan1997)
 [@xanderblinov](https://github.com/xanderblinov)
+[@asitnkova](https://github.com/asitnkova)
+[@alaershov](https://github.com/alaershov)
+[@bejibx](https://github.com/bejibx)
+[@katkoff](https://github.com/katkoff)
+[@ekursakov](https://github.com/ekursakov)
 [@SavinMike](https://github.com/SavinMike)
+[@sychyow](https://github.com/sychyow)
 [@AlexeyKorshun](https://github.com/AlexeyKorshun)
 [@dmdevgo](https://github.com/dmdevgo)
 [@rsajob](https://github.com/rsajob)
