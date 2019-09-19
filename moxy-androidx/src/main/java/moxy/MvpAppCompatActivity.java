@@ -1,12 +1,24 @@
 package moxy;
 
 import android.os.Bundle;
+
+import androidx.annotation.ContentView;
+import androidx.annotation.LayoutRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 @SuppressWarnings("unused")
-public class MvpAppCompatActivity extends AppCompatActivity {
+public class MvpAppCompatActivity extends AppCompatActivity implements MvpDelegateHolder {
 
     private MvpDelegate<? extends MvpAppCompatActivity> mvpDelegate;
+
+    public MvpAppCompatActivity() {
+        super();
+    }
+
+    @ContentView
+    public MvpAppCompatActivity(@LayoutRes int contentLayoutId) {
+        super(contentLayoutId);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,7 @@ public class MvpAppCompatActivity extends AppCompatActivity {
     /**
      * @return The {@link MvpDelegate} being used by this Activity.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

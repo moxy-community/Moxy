@@ -1,5 +1,4 @@
 buildscript {
-    ext.kotlin_version = '1.3.31'
     repositories {
         google()
         jcenter()
@@ -67,17 +66,17 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 
     //uncomment for test library from local sources
-    implementation project(':moxy')
     implementation project(':moxy-androidx')
+    implementation project(':moxy-ktx')
     kapt project(':moxy-compiler')
 
     //uncomment for test library from maven
-    def moxyVersion = '2.0-alpha03'
-    //implementation "com.github.moxy-community:moxy:$moxyVersion"
+    def moxyVersion = targetVersion
     //implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    //implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
     //kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

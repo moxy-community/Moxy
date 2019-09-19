@@ -1,6 +1,3 @@
-./gradlew moxy-core:updatePublishVersion
-./gradlew moxy-core:bintrayUpload
-
 ./gradlew moxy:updatePublishVersion
 ./gradlew moxy:bintrayUpload
 
@@ -18,3 +15,6 @@
 
 ./gradlew moxy-android:updatePublishVersion
 ./gradlew moxy-android:bintrayUpload
+
+./gradlew moxy-ktx:updatePublishVersion
+./gradlew moxy-ktx:bintrayUpload

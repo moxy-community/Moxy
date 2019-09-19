@@ -15,28 +15,30 @@ import javax.lang.model.type.DeclaredType;
 import moxy.MvpProcessor;
 import moxy.compiler.JavaFilesGenerator;
 import moxy.compiler.MvpCompiler;
+import moxy.compiler.Util;
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 
 import static moxy.compiler.Util.decapitalizeString;
 
-public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compiler.viewstate.ViewInterfaceInfo> {
+public final class ViewStateClassGenerator extends JavaFilesGenerator<ViewInterfaceInfo> {
 
     private static final int COMMAND_FIELD_NAME_RANDOM_BOUND = 10;
 
     @Override
-    public List<JavaFile> generate(moxy.compiler.viewstate.ViewInterfaceInfo viewInterfaceInfo) {
+    public List<JavaFile> generate(ViewInterfaceInfo viewInterfaceInfo) {
         ClassName viewName = viewInterfaceInfo.getName();
         TypeName nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables();
         DeclaredType viewInterfaceType = (DeclaredType) viewInterfaceInfo.getElement().asType();
 
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(viewName.simpleName() + MvpProcessor.VIEW_STATE_SUFFIX)
+        String typeName = Util.getSimpleClassName(viewInterfaceInfo.getElement()) + MvpProcessor.VIEW_STATE_SUFFIX;
+        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(typeName)
             .addModifiers(Modifier.PUBLIC)
             .superclass(ParameterizedTypeName.get(ClassName.get(MvpViewState.class), nameWithTypeVariables))
             .addSuperinterface(nameWithTypeVariables)
             .addTypeVariables(viewInterfaceInfo.getTypeVariables());
 
-        for (moxy.compiler.viewstate.ViewMethod method : viewInterfaceInfo.getMethods()) {
+        for (ViewMethod method : viewInterfaceInfo.getMethods()) {
             TypeSpec commandClass = generateCommandClass(method, nameWithTypeVariables);
             classBuilder.addType(commandClass);
             classBuilder.addMethod(generateMethod(viewInterfaceType, method, nameWithTypeVariables, commandClass));
@@ -48,7 +50,7 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
         return Collections.singletonList(javaFile);
     }
 
-    private TypeSpec generateCommandClass(moxy.compiler.viewstate.ViewMethod method, TypeName viewTypeName) {
+    private TypeSpec generateCommandClass(ViewMethod method, TypeName viewTypeName) {
         MethodSpec applyMethod = MethodSpec.methodBuilder("apply")
             .addAnnotation(Override.class)
             .addModifiers(Modifier.PUBLIC)
@@ -100,7 +102,7 @@ public final class ViewStateClassGenerator extends JavaFilesGenerator<moxy.compi
             .build();
     }
 
-    private MethodSpec generateCommandConstructor(moxy.compiler.viewstate.ViewMethod method) {
+    private MethodSpec generateCommandConstructor(ViewMethod method) {
         List<ParameterSpec> parameters = method.getParameterSpecs();
 
         MethodSpec.Builder builder = MethodSpec.constructorBuilder()

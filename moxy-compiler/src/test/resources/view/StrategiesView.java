@@ -8,6 +8,7 @@ import moxy.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface StrategiesView extends MvpView {
+
     @StateStrategyType(SingleStateStrategy.class)
     void singleState();
 

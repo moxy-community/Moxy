@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
@@ -46,7 +48,7 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
     public ViewInterfaceProcessor(
         final boolean disableEmptyStrategyCheck,
         final boolean enableEmptyStrategyHelper,
-        final String defaultStrategy
+        @Nullable final String defaultStrategy
     ) {
         super();
         this.enableEmptyStrategyHelper = enableEmptyStrategyHelper;
@@ -152,14 +154,9 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
                     if (enableEmptyStrategyHelper) {
                         migrationMethods.add(new MigrationMethod(typeElement, methodElement));
                     } else {
-                        String message = String
-                            .format(
-                                "A View method has no strategy! You are probably trying to migrate from an "
-                                    + "older version of Moxy. But your %s interface has method \\\"%s\\\" "
-                                    + "without any Strategy and you did not specify a default Strategy.",
-                                typeElement.getQualifiedName(),
-                                methodElement.getSimpleName()
-                            );
+                        String message = "A View method has no strategy! "
+                                + "Add @StateStrategyType annotation to this method, or to the View interface. "
+                                + "You can also specify default strategy via compiler option.";
 
                         MvpCompiler.getMessager()
                             .printMessage(Diagnostic.Kind.ERROR, message, methodElement);

@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 
 @SuppressWarnings({ "unused" })
-public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
+public class MvpAppCompatDialogFragment extends AppCompatDialogFragment implements MvpDelegateHolder {
 
     private boolean isStateSaved;
 
@@ -84,6 +84,7 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);
