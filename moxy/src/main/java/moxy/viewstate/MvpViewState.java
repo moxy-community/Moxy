@@ -26,7 +26,7 @@ public abstract class MvpViewState<View extends MvpView> {
     }
 
     /**
-     * Apply saved state to attached view
+     * Apply a saved state to the attached view
      *
      * @param view mvp view to restore state
      * @param currentState commands that was applied already
@@ -40,14 +40,14 @@ public abstract class MvpViewState<View extends MvpView> {
     }
 
     /**
-     * @return true if view state has one or more views, false otherwise (if view state doesn't have any view)
+     * @return true if the view state has one or more views, false otherwise (if the view state doesn't have any view)
      */
     protected Boolean hasNotView() {
         return (views == null) || views.isEmpty();
     }
 
     /**
-     * Attach view to view state and apply saves state
+     * Attach view to view state and apply a saved state
      *
      * @param view attachment
      */
@@ -75,9 +75,8 @@ public abstract class MvpViewState<View extends MvpView> {
     }
 
     /**
-     * <p>Detach view from view state. After this moment view state save
-     * commands via
-     * {@link StateStrategy#beforeApply(List, ViewCommand)}.</p>
+     * <p>Detach a view from the view state. After this call view state will save
+     * commands via {@link StateStrategy#beforeApply(List, ViewCommand)}.</p>
      *
      * @param view target mvp view to detach
      */
@@ -95,17 +94,17 @@ public abstract class MvpViewState<View extends MvpView> {
     }
 
     /**
-     * @return views, attached to this view state instance
+     * @return views attached to this view state instance
      */
     public Set<View> getViews() {
         return views;
     }
 
     /**
-     * Check if view is in restore state or not
+     * Check if the view is in a restore state or not
      *
-     * @param view view for check
-     * @return true if view state restore state to incoming view. false otherwise.
+     * @param view a view for check
+     * @return true if this view state is restoring state to the given view. false otherwise.
      */
     public boolean isInRestoreState(View view) {
         return inRestoreState.contains(view);

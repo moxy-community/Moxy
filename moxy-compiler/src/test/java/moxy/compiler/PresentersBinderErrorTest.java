@@ -17,7 +17,7 @@ public class PresentersBinderErrorTest extends CompilerTest {
 
         assertThat(targetCompilation)
             .hadErrorContaining(
-                "You can not use @InjectPresenter in classes that are not View, which is typified target Presenter")
+                "You can not use @InjectPresenter in a class that is not a View typed with target Presenter")
             .inFile(target)
             .onLineContaining("EmptyViewPresenter presenter");
     }
