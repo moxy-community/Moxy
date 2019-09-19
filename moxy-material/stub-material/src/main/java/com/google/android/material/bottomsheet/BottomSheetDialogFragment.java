@@ -1,7 +1,6 @@
 package com.google.android.material.bottomsheet;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -34,5 +33,4 @@ public class BottomSheetDialogFragment extends AppCompatDialogFragment {
     public Fragment getParentFragment() {
         throw new RuntimeException("Stub!");
     }
-
 }

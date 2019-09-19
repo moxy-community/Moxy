@@ -3,10 +3,8 @@ package moxy;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import moxy.MvpDelegate;
-
 @SuppressWarnings("unused")
-public class MvpAppCompatActivity extends AppCompatActivity {
+public class MvpAppCompatActivity extends AppCompatActivity implements MvpDelegateHolder {
 
     private MvpDelegate<? extends MvpAppCompatActivity> mvpDelegate;
 
@@ -60,6 +58,7 @@ public class MvpAppCompatActivity extends AppCompatActivity {
     /**
      * @return The {@link MvpDelegate} being used by this Activity.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

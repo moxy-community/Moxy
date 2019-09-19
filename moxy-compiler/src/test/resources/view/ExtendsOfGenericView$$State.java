@@ -1,34 +1,35 @@
-
 package view;
+
+import java.io.Serializable;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
-import java.io.Serializable;
-import java.lang.Override;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class ExtendsOfGenericView$$State extends MvpViewState<ExtendsOfGenericView> implements ExtendsOfGenericView {
+
     @Override
     public void testEvent(Serializable param) {
         TestEventCommand testEventCommand = new TestEventCommand(param);
-        mViewCommands.beforeApply(testEventCommand);
+        viewCommands.beforeApply(testEventCommand);
 
         if (hasNotView()) {
             return;
         }
 
-        for (ExtendsOfGenericView view : mViews) {
+        for (ExtendsOfGenericView view : views) {
             view.testEvent(param);
         }
 
-        mViewCommands.afterApply(testEventCommand);
+        viewCommands.afterApply(testEventCommand);
     }
 
     public class TestEventCommand extends ViewCommand<ExtendsOfGenericView> {
+
         public final Serializable param;
 
         TestEventCommand(Serializable param) {
-            super("testEvent", AddToEndStrategy.class);
+            super("testEvent", AddToEndSingleStrategy.class);
 
             this.param = param;
         }

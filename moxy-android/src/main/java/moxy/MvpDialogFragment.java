@@ -5,12 +5,12 @@ import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 
-import moxy.MvpDelegate;
-
 @SuppressWarnings("ConstantConditions")
-public class MvpDialogFragment extends DialogFragment {
+public class MvpDialogFragment extends DialogFragment implements MvpDelegateHolder {
 
-    private boolean mIsStateSaved;
+    private static final int ANDROID_OS_JELLY_BEAN = 17;
+
+    private boolean isStateSaved;
 
     private MvpDelegate<? extends MvpDialogFragment> mvpDelegate;
 
@@ -23,7 +23,7 @@ public class MvpDialogFragment extends DialogFragment {
     public void onResume() {
         super.onResume();
 
-        mIsStateSaved = false;
+        isStateSaved = false;
 
         getMvpDelegate().onAttach();
     }
@@ -31,7 +31,7 @@ public class MvpDialogFragment extends DialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        mIsStateSaved = true;
+        isStateSaved = true;
 
         getMvpDelegate().onSaveInstanceState(outState);
         getMvpDelegate().onDetach();
@@ -64,15 +64,15 @@ public class MvpDialogFragment extends DialogFragment {
 
         // When we rotate device isRemoving() return true for fragment placed in backstack
         // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-        if (mIsStateSaved) {
-            mIsStateSaved = false;
+        if (isStateSaved) {
+            isStateSaved = false;
             return;
         }
 
         // See https://github.com/Arello-Mobile/Moxy/issues/24
         boolean anyParentIsRemoving = false;
 
-        if (Build.VERSION.SDK_INT >= 17) {
+        if (Build.VERSION.SDK_INT >= ANDROID_OS_JELLY_BEAN) {
             Fragment parent = getParentFragment();
             while (!anyParentIsRemoving && parent != null) {
                 anyParentIsRemoving = parent.isRemoving();
@@ -88,6 +88,7 @@ public class MvpDialogFragment extends DialogFragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

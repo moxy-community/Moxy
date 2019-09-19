@@ -1,17 +1,14 @@
 package moxy.memory_leak_test;
 
+import android.os.Bundle;
+import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
+import moxy.MvpDelegate;
+import moxy.memmory_leak_test.resources.TestViewImplementation;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-
-import android.os.Bundle;
-
-import java.lang.ref.WeakReference;
-import java.util.concurrent.TimeUnit;
-
-import moxy.MvpDelegate;
-import moxy.memmory_leak_test.resources.TestViewImplementation;
 
 import static org.junit.Assert.assertTrue;
 

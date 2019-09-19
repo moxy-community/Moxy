@@ -1,25 +1,28 @@
 package example.com.androidxsample.view
 
 import android.util.Log
+import example.com.androidxsample.view.Logger.Companion.MOXY_TAG
 import moxy.InjectViewState
 import moxy.MvpPresenter
-import javax.inject.Inject
 
 @InjectViewState
-class MainPresenter @Inject constructor(
-		private val logger: Logger
+class MainPresenter constructor(
+    private val logger: Logger
 ) : MvpPresenter<MainView>() {
-	
-	override fun onFirstViewAttach() {
-		super.onFirstViewAttach()
-		
-		logger.printErrorLog()
-		Log.e(MainActivity.TAG, "presenter hash code : ${hashCode()}")
-		viewState.printLog("TEST")
-	}
-	
-	fun printLog() {
-		viewState.printLog("TEST print log")
-	}
-	
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+
+        logger.printLog( "presenter hash code : ${hashCode()}")
+        viewState.printLog("TEST")
+    }
+
+    fun printLog() {
+        viewState.printLog("TEST print log ${hashCode()}")
+    }
+
+    fun onOpenKtxButtonClick() {
+        viewState.openKtxActivity()
+    }
+
 }

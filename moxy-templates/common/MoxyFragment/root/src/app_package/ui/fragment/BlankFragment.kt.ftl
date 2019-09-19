@@ -12,31 +12,31 @@ import moxy.MvpFragment
 import moxy.presenter.InjectPresenter
 
 class ${className} : MvpFragment(), ${viewName} {
-    companion object {
-        const val TAG = "${className}"
+companion object {
+const val TAG = "${className}"
 <#if includeFactory>
 
-        fun newInstance(): ${className} {
-			val fragment: ${className} = ${className}()
-			val args: Bundle = Bundle()
-			fragment.arguments = args
-			return fragment
-		}
+  fun newInstance(): ${className} {
+  val fragment: ${className} = ${className}()
+  val args: Bundle = Bundle()
+  fragment.arguments = args
+  return fragment
+  }
 </#if>
-    }
+}
 
-	@InjectPresenter
-	lateinit var m${presenterName}: ${presenterName}
+@InjectPresenter
+lateinit var m${presenterName}: ${presenterName}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+savedInstanceState: Bundle?): View? {
 <#if includeLayout>
-        return inflater.inflate(R.layout.${fragmentName}, container, false)
+  return inflater.inflate(R.layout.${fragmentName}, container, false)
 </#if>
-    }
+}
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+super.onViewCreated(view, savedInstanceState)
 
-    }
+}
 }

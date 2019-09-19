@@ -3,7 +3,7 @@ package moxy;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class MvpActivity extends Activity {
+public class MvpActivity extends Activity implements MvpDelegateHolder {
 
     private MvpDelegate<? extends MvpActivity> mvpDelegate;
 
@@ -57,6 +57,7 @@ public class MvpActivity extends Activity {
     /**
      * @return The {@link MvpDelegate} being used by this Activity.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

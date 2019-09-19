@@ -3,8 +3,6 @@ package moxy.view;
 import java.util.HashMap;
 import java.util.Map;
 
-import moxy.view.TestView;
-
 public class CounterTestView implements TestView {
 
     public final Map<String, Integer> counterEvents = new HashMap<>();

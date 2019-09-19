@@ -4,10 +4,8 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
-
 import java.util.List;
 import java.util.stream.Collectors;
-
 import javax.lang.model.element.TypeElement;
 
 class ViewInterfaceInfo {
@@ -26,8 +24,8 @@ class ViewInterfaceInfo {
         this.methods = methods;
 
         this.typeVariables = element.getTypeParameters().stream()
-                .map(TypeVariableName::get)
-                .collect(Collectors.toList());
+            .map(TypeVariableName::get)
+            .collect(Collectors.toList());
     }
 
     public TypeElement getElement() {

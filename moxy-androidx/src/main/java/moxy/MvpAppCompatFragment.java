@@ -2,16 +2,25 @@ package moxy;
 
 import android.os.Bundle;
 
+import androidx.annotation.ContentView;
+import androidx.annotation.LayoutRes;
 import androidx.fragment.app.Fragment;
-import moxy.MvpDelegate;
-
 
 @SuppressWarnings({"ConstantConditions", "unused"})
-public class MvpAppCompatFragment extends Fragment {
+public class MvpAppCompatFragment extends Fragment implements MvpDelegateHolder {
 
-    private boolean mIsStateSaved;
+    private boolean isStateSaved;
 
     private MvpDelegate<? extends MvpAppCompatFragment> mvpDelegate;
+
+    public MvpAppCompatFragment() {
+        super();
+    }
+
+    @ContentView
+    public MvpAppCompatFragment(@LayoutRes int contentLayoutId) {
+        super(contentLayoutId);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +33,7 @@ public class MvpAppCompatFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        mIsStateSaved = false;
+        isStateSaved = false;
 
         getMvpDelegate().onAttach();
     }
@@ -32,7 +41,7 @@ public class MvpAppCompatFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        mIsStateSaved = false;
+        isStateSaved = false;
 
         getMvpDelegate().onAttach();
     }
@@ -40,7 +49,7 @@ public class MvpAppCompatFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        mIsStateSaved = true;
+        isStateSaved = true;
 
         getMvpDelegate().onSaveInstanceState(outState);
         getMvpDelegate().onDetach();
@@ -73,8 +82,8 @@ public class MvpAppCompatFragment extends Fragment {
 
         // When we rotate device isRemoving() return true for fragment placed in backstack
         // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-        if (mIsStateSaved) {
-            mIsStateSaved = false;
+        if (isStateSaved) {
+            isStateSaved = false;
             return;
         }
 
@@ -93,6 +102,7 @@ public class MvpAppCompatFragment extends Fragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

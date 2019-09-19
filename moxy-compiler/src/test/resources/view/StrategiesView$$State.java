@@ -5,87 +5,90 @@ import moxy.viewstate.ViewCommand;
 import moxy.viewstate.strategy.AddToEndSingleStrategy;
 import moxy.viewstate.strategy.OneExecutionStateStrategy;
 import moxy.viewstate.strategy.SingleStateStrategy;
-import java.lang.Override;
 
 public class StrategiesView$$State extends MvpViewState<StrategiesView> implements StrategiesView {
-	@Override
-	public void singleState() {
-		SingleStateCommand singleStateCommand = new SingleStateCommand();
-		mViewCommands.beforeApply(singleStateCommand);
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void singleState() {
+        SingleStateCommand singleStateCommand = new SingleStateCommand();
+        viewCommands.beforeApply(singleStateCommand);
 
-		for (StrategiesView view : mViews) {
-			view.singleState();
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(singleStateCommand);
-	}
+        for (StrategiesView view : views) {
+            view.singleState();
+        }
 
-	@Override
-	public void oneExecution() {
-		OneExecutionCommand oneExecutionCommand = new OneExecutionCommand();
-		mViewCommands.beforeApply(oneExecutionCommand);
+        viewCommands.afterApply(singleStateCommand);
+    }
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void oneExecution() {
+        OneExecutionCommand oneExecutionCommand = new OneExecutionCommand();
+        viewCommands.beforeApply(oneExecutionCommand);
 
-		for (StrategiesView view : mViews) {
-			view.oneExecution();
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(oneExecutionCommand);
-	}
+        for (StrategiesView view : views) {
+            view.oneExecution();
+        }
 
-	@Override
-	public void withoutStrategy() {
-		WithoutStrategyCommand withoutStrategyCommand = new WithoutStrategyCommand();
-		mViewCommands.beforeApply(withoutStrategyCommand);
+        viewCommands.afterApply(oneExecutionCommand);
+    }
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void withoutStrategy() {
+        WithoutStrategyCommand withoutStrategyCommand = new WithoutStrategyCommand();
+        viewCommands.beforeApply(withoutStrategyCommand);
 
-		for (StrategiesView view : mViews) {
-			view.withoutStrategy();
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(withoutStrategyCommand);
-	}
+        for (StrategiesView view : views) {
+            view.withoutStrategy();
+        }
 
-	public class SingleStateCommand extends ViewCommand<StrategiesView> {
-		SingleStateCommand() {
-			super("singleState", SingleStateStrategy.class);
-		}
+        viewCommands.afterApply(withoutStrategyCommand);
+    }
 
-		@Override
-		public void apply(StrategiesView mvpView) {
-			mvpView.singleState();
-		}
-	}
+    public class SingleStateCommand extends ViewCommand<StrategiesView> {
 
-	public class OneExecutionCommand extends ViewCommand<StrategiesView> {
-		OneExecutionCommand() {
-			super("oneExecution", OneExecutionStateStrategy.class);
-		}
+        SingleStateCommand() {
+            super("singleState", SingleStateStrategy.class);
+        }
 
-		@Override
-		public void apply(StrategiesView mvpView) {
-			mvpView.oneExecution();
-		}
-	}
+        @Override
+        public void apply(StrategiesView mvpView) {
+            mvpView.singleState();
+        }
+    }
 
-	public class WithoutStrategyCommand extends ViewCommand<StrategiesView> {
-		WithoutStrategyCommand() {
-			super("withoutStrategy", AddToEndSingleStrategy.class);
-		}
+    public class OneExecutionCommand extends ViewCommand<StrategiesView> {
 
-		@Override
-		public void apply(StrategiesView mvpView) {
-			mvpView.withoutStrategy();
-		}
-	}
+        OneExecutionCommand() {
+            super("oneExecution", OneExecutionStateStrategy.class);
+        }
+
+        @Override
+        public void apply(StrategiesView mvpView) {
+            mvpView.oneExecution();
+        }
+    }
+
+    public class WithoutStrategyCommand extends ViewCommand<StrategiesView> {
+
+        WithoutStrategyCommand() {
+            super("withoutStrategy", AddToEndSingleStrategy.class);
+        }
+
+        @Override
+        public void apply(StrategiesView mvpView) {
+            mvpView.withoutStrategy();
+        }
+    }
 }

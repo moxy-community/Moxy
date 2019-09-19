@@ -2,34 +2,35 @@ package view;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
-import java.lang.Override;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class SimpleView$$State extends MvpViewState<SimpleView> implements SimpleView {
-	@Override
-	public void testEvent() {
-		TestEventCommand testEventCommand = new TestEventCommand();
-		mViewCommands.beforeApply(testEventCommand);
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void testEvent() {
+        TestEventCommand testEventCommand = new TestEventCommand();
+        viewCommands.beforeApply(testEventCommand);
 
-		for (SimpleView view : mViews) {
-			view.testEvent();
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(testEventCommand);
-	}
+        for (SimpleView view : views) {
+            view.testEvent();
+        }
 
-	public class TestEventCommand extends ViewCommand<SimpleView> {
-		TestEventCommand() {
-			super("testEvent", AddToEndStrategy.class);
-		}
+        viewCommands.afterApply(testEventCommand);
+    }
 
-		@Override
-		public void apply(SimpleView mvpView) {
-			mvpView.testEvent();
-		}
-	}
+    public class TestEventCommand extends ViewCommand<SimpleView> {
+
+        TestEventCommand() {
+            super("testEvent", AddToEndSingleStrategy.class);
+        }
+
+        @Override
+        public void apply(SimpleView mvpView) {
+            mvpView.testEvent();
+        }
+    }
 }

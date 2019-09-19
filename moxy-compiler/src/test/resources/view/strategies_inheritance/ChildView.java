@@ -5,15 +5,24 @@ import moxy.viewstate.strategy.StateStrategyType;
 import view.strategies_inheritance.strategies.ChildDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy2;
 
+import javax.annotation.Nullable;
+
 @StateStrategyType(ChildDefaultStrategy.class)
 public interface ChildView extends ParentView {
-	void parentMethod1(); // ParentDefaultStrategy -> ChildDefaultStrategy
+    void parentMethod1(); // ParentDefaultStrategy -> ChildDefaultStrategy
 
-	@StateStrategyType(Strategy2.class)
-	void parentMethod2(); // ParentDefaultStrategy -> Strategy2
+    @StateStrategyType(Strategy2.class)
+    void parentMethod2(); // ParentDefaultStrategy -> Strategy2
 
-	void childMethod(); // ChildDefaultStrategy
+    void childMethod(); // ChildDefaultStrategy
 
-	@StateStrategyType(Strategy2.class)
-	void childMethodWithStrategy(); // Strategy2
+    @Override
+    void parentMethodWithArg(final String i); // ParentDefaultStrategy -> ChildDefaultStrategy
+
+    void parentMethodWithArg2(@Nullable String i); // ParentDefaultStrategy
+
+    void parentMethodWithArg3(String a); // ParentDefaultStrategy
+
+    @StateStrategyType(Strategy2.class)
+    void childMethodWithStrategy(); // Strategy2
 }

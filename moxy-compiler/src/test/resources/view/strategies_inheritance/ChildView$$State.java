@@ -2,171 +2,263 @@ package view.strategies_inheritance;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import java.lang.Override;
 import view.strategies_inheritance.strategies.ChildDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;
 import view.strategies_inheritance.strategies.Strategy2;
 
 public class ChildView$$State extends MvpViewState<ChildView> implements ChildView {
-	@Override
-	public void parentMethod1() {
-		ParentMethod1Command parentMethod1Command = new ParentMethod1Command();
-		mViewCommands.beforeApply(parentMethod1Command);
+    @Override
+    public void parentMethod1() {
+        ParentMethod1Command parentMethod1Command = new ParentMethod1Command();
+        viewCommands.beforeApply(parentMethod1Command);
 
-		if (hasNotView()) {
-			return;
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		for (ChildView view : mViews) {
-			view.parentMethod1();
-		}
+        for (ChildView view : views) {
+            view.parentMethod1();
+        }
 
-		mViewCommands.afterApply(parentMethod1Command);
-	}
+        viewCommands.afterApply(parentMethod1Command);
+    }
 
-	@Override
-	public void parentMethod2() {
-		ParentMethod2Command parentMethod2Command = new ParentMethod2Command();
-		mViewCommands.beforeApply(parentMethod2Command);
+    @Override
+    public void parentMethod2() {
+        ParentMethod2Command parentMethod2Command = new ParentMethod2Command();
+        viewCommands.beforeApply(parentMethod2Command);
 
-		if (hasNotView()) {
-			return;
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		for (ChildView view : mViews) {
-			view.parentMethod2();
-		}
+        for (ChildView view : views) {
+            view.parentMethod2();
+        }
 
-		mViewCommands.afterApply(parentMethod2Command);
-	}
+        viewCommands.afterApply(parentMethod2Command);
+    }
 
-	@Override
-	public void childMethod() {
-		ChildMethodCommand childMethodCommand = new ChildMethodCommand();
-		mViewCommands.beforeApply(childMethodCommand);
+    @Override
+    public void childMethod() {
+        ChildMethodCommand childMethodCommand = new ChildMethodCommand();
+        viewCommands.beforeApply(childMethodCommand);
 
-		if (hasNotView()) {
-			return;
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		for (ChildView view : mViews) {
-			view.childMethod();
-		}
+        for (ChildView view : views) {
+            view.childMethod();
+        }
 
-		mViewCommands.afterApply(childMethodCommand);
-	}
+        viewCommands.afterApply(childMethodCommand);
+    }
 
-	@Override
-	public void childMethodWithStrategy() {
-		ChildMethodWithStrategyCommand childMethodWithStrategyCommand = new ChildMethodWithStrategyCommand();
-		mViewCommands.beforeApply(childMethodWithStrategyCommand);
+    @Override
+    public void parentMethodWithArg(final String i) {
+        ParentMethodWithArgCommand parentMethodWithArgCommand = new ParentMethodWithArgCommand(i);
+        viewCommands.beforeApply(parentMethodWithArgCommand);
 
-		if (hasNotView()) {
-			return;
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		for (ChildView view : mViews) {
-			view.childMethodWithStrategy();
-		}
+        for (ChildView view : views) {
+            view.parentMethodWithArg(i);
+        }
 
-		mViewCommands.afterApply(childMethodWithStrategyCommand);
-	}
+        viewCommands.afterApply(parentMethodWithArgCommand);
+    }
 
-	@Override
-	public void parentMethod3() {
-		ParentMethod3Command parentMethod3Command = new ParentMethod3Command();
-		mViewCommands.beforeApply(parentMethod3Command);
+    @Override
+    public void parentMethodWithArg2(String i) {
+        ParentMethodWithArg2Command parentMethodWithArg2Command = new ParentMethodWithArg2Command(i);
+        viewCommands.beforeApply(parentMethodWithArg2Command);
 
-		if (hasNotView()) {
-			return;
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		for (ChildView view : mViews) {
-			view.parentMethod3();
-		}
+        for (ChildView view : views) {
+            view.parentMethodWithArg2(i);
+        }
 
-		mViewCommands.afterApply(parentMethod3Command);
-	}
+        viewCommands.afterApply(parentMethodWithArg2Command);
+    }
 
-	@Override
-	public void parentMethodWithStrategy() {
-		ParentMethodWithStrategyCommand parentMethodWithStrategyCommand = new ParentMethodWithStrategyCommand();
-		mViewCommands.beforeApply(parentMethodWithStrategyCommand);
+    @Override
+    public void parentMethodWithArg3(String a) {
+        ParentMethodWithArg3Command parentMethodWithArg3Command = new ParentMethodWithArg3Command(a);
+        viewCommands.beforeApply(parentMethodWithArg3Command);
 
-		if (hasNotView()) {
-			return;
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		for (ChildView view : mViews) {
-			view.parentMethodWithStrategy();
-		}
+        for (ChildView view : views) {
+            view.parentMethodWithArg3(a);
+        }
 
-		mViewCommands.afterApply(parentMethodWithStrategyCommand);
-	}
+        viewCommands.afterApply(parentMethodWithArg3Command);
+    }
 
-	public class ParentMethod1Command extends ViewCommand<ChildView> {
-		ParentMethod1Command() {
-			super("parentMethod1", ChildDefaultStrategy.class);
-		}
+    @Override
+    public void childMethodWithStrategy() {
+        ChildMethodWithStrategyCommand childMethodWithStrategyCommand = new ChildMethodWithStrategyCommand();
+        viewCommands.beforeApply(childMethodWithStrategyCommand);
 
-		@Override
-		public void apply(ChildView mvpView) {
-			mvpView.parentMethod1();
-		}
-	}
+        if (hasNotView()) {
+            return;
+        }
 
-	public class ParentMethod2Command extends ViewCommand<ChildView> {
-		ParentMethod2Command() {
-			super("parentMethod2", Strategy2.class);
-		}
+        for (ChildView view : views) {
+            view.childMethodWithStrategy();
+        }
 
-		@Override
-		public void apply(ChildView mvpView) {
-			mvpView.parentMethod2();
-		}
-	}
+        viewCommands.afterApply(childMethodWithStrategyCommand);
+    }
 
-	public class ChildMethodCommand extends ViewCommand<ChildView> {
-		ChildMethodCommand() {
-			super("childMethod", ChildDefaultStrategy.class);
-		}
+    @Override
+    public void parentMethod3() {
+        ParentMethod3Command parentMethod3Command = new ParentMethod3Command();
+        viewCommands.beforeApply(parentMethod3Command);
 
-		@Override
-		public void apply(ChildView mvpView) {
-			mvpView.childMethod();
-		}
-	}
+        if (hasNotView()) {
+            return;
+        }
 
-	public class ChildMethodWithStrategyCommand extends ViewCommand<ChildView> {
-		ChildMethodWithStrategyCommand() {
-			super("childMethodWithStrategy", Strategy2.class);
-		}
+        for (ChildView view : views) {
+            view.parentMethod3();
+        }
 
-		@Override
-		public void apply(ChildView mvpView) {
-			mvpView.childMethodWithStrategy();
-		}
-	}
+        viewCommands.afterApply(parentMethod3Command);
+    }
 
-	public class ParentMethod3Command extends ViewCommand<ChildView> {
-		ParentMethod3Command() {
-			super("parentMethod3", ChildDefaultStrategy.class);
-		}
+    @Override
+    public void parentMethodWithStrategy() {
+        ParentMethodWithStrategyCommand parentMethodWithStrategyCommand = new ParentMethodWithStrategyCommand();
+        viewCommands.beforeApply(parentMethodWithStrategyCommand);
 
-		@Override
-		public void apply(ChildView mvpView) {
-			mvpView.parentMethod3();
-		}
-	}
+        if (hasNotView()) {
+            return;
+        }
 
-	public class ParentMethodWithStrategyCommand extends ViewCommand<ChildView> {
-		ParentMethodWithStrategyCommand() {
-			super("parentMethodWithStrategy", Strategy1.class);
-		}
+        for (ChildView view : views) {
+            view.parentMethodWithStrategy();
+        }
 
-		@Override
-		public void apply(ChildView mvpView) {
-			mvpView.parentMethodWithStrategy();
-		}
-	}
+        viewCommands.afterApply(parentMethodWithStrategyCommand);
+    }
+
+    public class ParentMethod1Command extends ViewCommand<ChildView> {
+        ParentMethod1Command() {
+            super("parentMethod1", ChildDefaultStrategy.class);
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethod1();
+        }
+    }
+
+    public class ParentMethod2Command extends ViewCommand<ChildView> {
+        ParentMethod2Command() {
+            super("parentMethod2", Strategy2.class);
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethod2();
+        }
+    }
+
+    public class ChildMethodCommand extends ViewCommand<ChildView> {
+        ChildMethodCommand() {
+            super("childMethod", ChildDefaultStrategy.class);
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.childMethod();
+        }
+    }
+
+    public class ParentMethodWithArgCommand extends ViewCommand<ChildView> {
+        public final String i;
+
+        ParentMethodWithArgCommand(final String i) {
+            super("parentMethodWithArg", ChildDefaultStrategy.class);
+
+            this.i = i;
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethodWithArg(i);
+        }
+    }
+
+    public class ParentMethodWithArg2Command extends ViewCommand<ChildView> {
+        public final String i;
+
+        ParentMethodWithArg2Command(String i) {
+            super("parentMethodWithArg2", ChildDefaultStrategy.class);
+
+            this.i = i;
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethodWithArg2(i);
+        }
+    }
+
+    public class ParentMethodWithArg3Command extends ViewCommand<ChildView> {
+        public final String a;
+
+        ParentMethodWithArg3Command(String a) {
+            super("parentMethodWithArg3", ChildDefaultStrategy.class);
+
+            this.a = a;
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethodWithArg3(a);
+        }
+    }
+
+    public class ChildMethodWithStrategyCommand extends ViewCommand<ChildView> {
+        ChildMethodWithStrategyCommand() {
+            super("childMethodWithStrategy", Strategy2.class);
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.childMethodWithStrategy();
+        }
+    }
+
+    public class ParentMethod3Command extends ViewCommand<ChildView> {
+        ParentMethod3Command() {
+            super("parentMethod3", ChildDefaultStrategy.class);
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethod3();
+        }
+    }
+
+    public class ParentMethodWithStrategyCommand extends ViewCommand<ChildView> {
+        ParentMethodWithStrategyCommand() {
+            super("parentMethodWithStrategy", Strategy1.class);
+        }
+
+        @Override
+        public void apply(ChildView mvpView) {
+            mvpView.parentMethodWithStrategy();
+        }
+    }
 }

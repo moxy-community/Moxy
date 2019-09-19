@@ -1,9 +1,17 @@
 package view;
 
 import moxy.MvpView;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.StateStrategyType;
 
 public interface OverloadingView extends MvpView {
-	void method(String string);
-	void method(int number);
-	void method(Object object);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void method(String string);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void method(int number);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void method(Object object);
 }

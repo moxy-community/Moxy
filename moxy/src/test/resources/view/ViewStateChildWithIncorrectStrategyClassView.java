@@ -1,6 +1,5 @@
 package view;
 
-public interface ViewStateChildWithIncorrectStrategyClassView
-        extends ViewStateParentView, ViewStateParentStrategyClassView {
+public interface ViewStateChildWithIncorrectStrategyClassView extends ViewStateParentView, ViewStateParentStrategyClassView {
 
 }

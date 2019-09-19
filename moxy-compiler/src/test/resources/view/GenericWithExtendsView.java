@@ -1,9 +1,13 @@
 package view;
 
-import moxy.MvpView;
-
 import java.io.Serializable;
 
+import moxy.MvpView;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.StateStrategyType;
+
 public interface GenericWithExtendsView<T extends Serializable> extends MvpView {
-	void testEvent(T param);
+
+    @StateStrategyType(AddToEndSingleStrategy.class)
+    void testEvent(T param);
 }

@@ -2,102 +2,103 @@ package view;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
-import java.lang.Object;
-import java.lang.Override;
-import java.lang.String;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class OverloadingView$$State extends MvpViewState<OverloadingView> implements OverloadingView {
-	@Override
-	public void method(String string) {
-		MethodCommand methodCommand = new MethodCommand(string);
-		mViewCommands.beforeApply(methodCommand);
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void method(String string) {
+        MethodCommand methodCommand = new MethodCommand(string);
+        viewCommands.beforeApply(methodCommand);
 
-		for (OverloadingView view : mViews) {
-			view.method(string);
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(methodCommand);
-	}
+        for (OverloadingView view : views) {
+            view.method(string);
+        }
 
-	@Override
-	public void method(int number) {
-		Method1Command method1Command = new Method1Command(number);
-		mViewCommands.beforeApply(method1Command);
+        viewCommands.afterApply(methodCommand);
+    }
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void method(int number) {
+        Method1Command method1Command = new Method1Command(number);
+        viewCommands.beforeApply(method1Command);
 
-		for (OverloadingView view : mViews) {
-			view.method(number);
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(method1Command);
-	}
+        for (OverloadingView view : views) {
+            view.method(number);
+        }
 
-	@Override
-	public void method(Object object) {
-		Method2Command method2Command = new Method2Command(object);
-		mViewCommands.beforeApply(method2Command);
+        viewCommands.afterApply(method1Command);
+    }
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public void method(Object object) {
+        Method2Command method2Command = new Method2Command(object);
+        viewCommands.beforeApply(method2Command);
 
-		for (OverloadingView view : mViews) {
-			view.method(object);
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(method2Command);
-	}
+        for (OverloadingView view : views) {
+            view.method(object);
+        }
 
-	public class MethodCommand extends ViewCommand<OverloadingView> {
-		public final String string;
+        viewCommands.afterApply(method2Command);
+    }
 
-		MethodCommand(String string) {
-			super("method", AddToEndStrategy.class);
+    public class MethodCommand extends ViewCommand<OverloadingView> {
 
-			this.string = string;
-		}
+        public final String string;
 
-		@Override
-		public void apply(OverloadingView mvpView) {
-			mvpView.method(string);
-		}
-	}
+        MethodCommand(String string) {
+            super("method", AddToEndSingleStrategy.class);
 
-	public class Method1Command extends ViewCommand<OverloadingView> {
-		public final int number;
+            this.string = string;
+        }
 
-		Method1Command(int number) {
-			super("method", AddToEndStrategy.class);
+        @Override
+        public void apply(OverloadingView mvpView) {
+            mvpView.method(string);
+        }
+    }
 
-			this.number = number;
-		}
+    public class Method1Command extends ViewCommand<OverloadingView> {
 
-		@Override
-		public void apply(OverloadingView mvpView) {
-			mvpView.method(number);
-		}
-	}
+        public final int number;
 
-	public class Method2Command extends ViewCommand<OverloadingView> {
-		public final Object object;
+        Method1Command(int number) {
+            super("method", AddToEndSingleStrategy.class);
 
-		Method2Command(Object object) {
-			super("method", AddToEndStrategy.class);
+            this.number = number;
+        }
 
-			this.object = object;
-		}
+        @Override
+        public void apply(OverloadingView mvpView) {
+            mvpView.method(number);
+        }
+    }
 
-		@Override
-		public void apply(OverloadingView mvpView) {
-			mvpView.method(object);
-		}
-	}
+    public class Method2Command extends ViewCommand<OverloadingView> {
+
+        public final Object object;
+
+        Method2Command(Object object) {
+            super("method", AddToEndSingleStrategy.class);
+
+            this.object = object;
+        }
+
+        @Override
+        public void apply(OverloadingView mvpView) {
+            mvpView.method(object);
+        }
+    }
 }

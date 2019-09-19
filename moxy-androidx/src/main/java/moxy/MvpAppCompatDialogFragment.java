@@ -1,15 +1,13 @@
 package moxy;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.Fragment;
-import moxy.MvpDelegate;
 
-@SuppressWarnings({"unused"})
-public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
+@SuppressWarnings({ "unused" })
+public class MvpAppCompatDialogFragment extends AppCompatDialogFragment implements MvpDelegateHolder {
 
-    private boolean mIsStateSaved;
+    private boolean isStateSaved;
 
     private MvpDelegate<? extends MvpAppCompatDialogFragment> mvpDelegate;
 
@@ -24,7 +22,7 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
     public void onResume() {
         super.onResume();
 
-        mIsStateSaved = false;
+        isStateSaved = false;
 
         getMvpDelegate().onAttach();
     }
@@ -33,7 +31,7 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        mIsStateSaved = true;
+        isStateSaved = true;
 
         getMvpDelegate().onSaveInstanceState(outState);
         getMvpDelegate().onDetach();
@@ -66,8 +64,8 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
 
         // When we rotate device isRemoving() return true for fragment placed in backstack
         // http://stackoverflow.com/questions/34649126/fragment-back-stack-and-isremoving
-        if (mIsStateSaved) {
-            mIsStateSaved = false;
+        if (isStateSaved) {
+            isStateSaved = false;
             return;
         }
 
@@ -86,6 +84,7 @@ public class MvpAppCompatDialogFragment extends AppCompatDialogFragment {
     /**
      * @return The {@link MvpDelegate} being used by this Fragment.
      */
+    @Override
     public MvpDelegate getMvpDelegate() {
         if (mvpDelegate == null) {
             mvpDelegate = new MvpDelegate<>(this);

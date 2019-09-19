@@ -2,70 +2,72 @@ package view;
 
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
-import moxy.viewstate.strategy.AddToEndStrategy;
-import java.lang.Number;
-import java.lang.Override;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
 
 public class GenericMethodsView$$State extends MvpViewState<GenericMethodsView> implements GenericMethodsView {
-	@Override
-	public <T> void generic(T param) {
-		GenericCommand genericCommand = new GenericCommand(param);
-		mViewCommands.beforeApply(genericCommand);
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public <T> void generic(T param) {
+        GenericCommand genericCommand = new GenericCommand(param);
+        viewCommands.beforeApply(genericCommand);
 
-		for (GenericMethodsView view : mViews) {
-			view.generic(param);
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(genericCommand);
-	}
+        for (GenericMethodsView view : views) {
+            view.generic(param);
+        }
 
-	@Override
-	public <T extends Number> void genericWithExtends(T param) {
-		GenericWithExtendsCommand genericWithExtendsCommand = new GenericWithExtendsCommand(param);
-		mViewCommands.beforeApply(genericWithExtendsCommand);
+        viewCommands.afterApply(genericCommand);
+    }
 
-		if (hasNotView()) {
-			return;
-		}
+    @Override
+    public <T extends Number> void genericWithExtends(T param) {
+        GenericWithExtendsCommand genericWithExtendsCommand = new GenericWithExtendsCommand(param);
+        viewCommands.beforeApply(genericWithExtendsCommand);
 
-		for (GenericMethodsView view : mViews) {
-			view.genericWithExtends(param);
-		}
+        if (hasNotView()) {
+            return;
+        }
 
-		mViewCommands.afterApply(genericWithExtendsCommand);
-	}
+        for (GenericMethodsView view : views) {
+            view.genericWithExtends(param);
+        }
 
-	public class GenericCommand<T> extends ViewCommand<GenericMethodsView> {
-		public final T param;
+        viewCommands.afterApply(genericWithExtendsCommand);
+    }
 
-		GenericCommand(T param) {
-			super("generic", AddToEndStrategy.class);
+    public class GenericCommand<T> extends ViewCommand<GenericMethodsView> {
 
-			this.param = param;
-		}
+        public final T param;
 
-		@Override
-		public void apply(GenericMethodsView mvpView) {
-			mvpView.generic(param);
-		}
-	}
+        GenericCommand(T param) {
+            super("generic", AddToEndSingleStrategy.class);
 
-	public class GenericWithExtendsCommand<T extends Number> extends ViewCommand<GenericMethodsView> {
-		public final T param;
+            this.param = param;
+        }
 
-		GenericWithExtendsCommand(T param) {
-			super("genericWithExtends", AddToEndStrategy.class);
+        @Override
+        public void apply(GenericMethodsView mvpView) {
+            mvpView.generic(param);
+        }
+    }
 
-			this.param = param;
-		}
+    public class GenericWithExtendsCommand<T extends Number>
+            extends ViewCommand<GenericMethodsView> {
 
-		@Override
-		public void apply(GenericMethodsView mvpView) {
-			mvpView.genericWithExtends(param);
-		}
-	}
+        public final T param;
+
+        GenericWithExtendsCommand(T param) {
+            super("genericWithExtends", AddToEndSingleStrategy.class);
+
+            this.param = param;
+        }
+
+        @Override
+        public void apply(GenericMethodsView mvpView) {
+            mvpView.genericWithExtends(param);
+        }
+    }
 }

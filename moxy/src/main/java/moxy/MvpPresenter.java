@@ -3,7 +3,7 @@ package moxy;
 import java.util.Collections;
 import java.util.Set;
 import java.util.WeakHashMap;
-
+import moxy.locators.ViewStateLocator;
 import moxy.viewstate.MvpViewState;
 
 public abstract class MvpPresenter<View extends MvpView> {
@@ -27,11 +27,11 @@ public abstract class MvpPresenter<View extends MvpView> {
     }
 
     /**
-     * <p>Attach view to view state or to presenter(if view state not exists).</p>
-     * <p>If you use {@link moxy.MvpDelegate}, you should not call this method directly.
-     * It will be called on {@link moxy.MvpDelegate#onAttach()}, if view does not attached.</p>
+     * <p>Attach view to a view state or to a presenter (if a view state doesn't exist).</p>
+     * <p>If you're using a {@link moxy.MvpDelegate}, you should not call this method directly.
+     * It will be called on {@link moxy.MvpDelegate#onAttach()}, if a view is not attached yet.</p>
      *
-     * @param view to attachment
+     * @param view a view to attach
      */
     public void attachView(View view) {
         if (viewState != null) {
@@ -47,20 +47,20 @@ public abstract class MvpPresenter<View extends MvpView> {
     }
 
     /**
-     * <p>Callback after first presenter init and view binding. If this
-     * presenter instance will have to attach some view in future, this method
+     * <p>Callback after the first presenter init and view binding. If this
+     * presenter instance will have to attach more views in the future, this method
      * will not be called.</p>
-     * <p>There you can to interact with {@link #viewState}.</p>
+     * <p>There you can interact with a {@link #viewState}.</p>
      */
     protected void onFirstViewAttach() {
     }
 
     /**
-     * <p>Detach view from view state or from presenter(if view state not exists).</p>
-     * <p>If you use {@link moxy.MvpDelegate}, you should not call this method directly.
+     * <p>Detach view from a view state or from a presenter (if a view state doesn't exist).</p>
+     * <p>If you're using a {@link moxy.MvpDelegate}, you should not call this method directly.
      * It will be called on {@link MvpDelegate#onDetach()}.</p>
      *
-     * @param view view to detach
+     * @param view a view to detach
      */
     @SuppressWarnings("WeakerAccess")
     public void detachView(View view) {
@@ -78,7 +78,7 @@ public abstract class MvpPresenter<View extends MvpView> {
     }
 
     /**
-     * @return views attached to view state, or attached to presenter(if view state not exists)
+     * @return views attached to a view state, or attached to a presenter (if a view state doesn't exist)
      */
     @SuppressWarnings("WeakerAccess")
     public Set<View> getAttachedViews() {
@@ -90,7 +90,7 @@ public abstract class MvpPresenter<View extends MvpView> {
     }
 
     /**
-     * @return view state, casted to view interface for simplify
+     * @return view state, casted to the view interface for simplicity
      */
     @SuppressWarnings("WeakerAccess")
     public View getViewState() {
@@ -98,10 +98,21 @@ public abstract class MvpPresenter<View extends MvpView> {
     }
 
     /**
+     * Set a view state to the presenter
+     *
+     * @param viewState that implements type, setted as View generic param
+     */
+    @SuppressWarnings({ "unchecked", "unused" })
+    public void setViewState(MvpViewState<View> viewState) {
+        viewStateAsView = (View) viewState;
+        this.viewState = viewState;
+    }
+
+    /**
      * Check if view is in restore state or not
      *
-     * @param view view for check
-     * @return true if view state restore state to incoming view. false otherwise.
+     * @param view a view for check
+     * @return true if the view state is in restore state for the given view. False otherwise.
      */
     @SuppressWarnings("unused")
     public boolean isInRestoreState(View view) {
@@ -112,17 +123,6 @@ public abstract class MvpPresenter<View extends MvpView> {
         return false;
     }
 
-    /**
-     * Set view state to presenter
-     *
-     * @param viewState that implements type, setted as View generic param
-     */
-    @SuppressWarnings({"unchecked", "unused"})
-    public void setViewState(MvpViewState<View> viewState) {
-        viewStateAsView = (View) viewState;
-        this.viewState = viewState;
-    }
-
     String getTag() {
         return tag;
     }
@@ -131,16 +131,16 @@ public abstract class MvpPresenter<View extends MvpView> {
         this.tag = tag;
     }
 
-    void setPresenterClass(Class<? extends MvpPresenter> presenterClass) {
-        this.presenterClass = presenterClass;
-    }
-
     Class<? extends MvpPresenter> getPresenterClass() {
         return presenterClass;
     }
 
+    void setPresenterClass(Class<? extends MvpPresenter> presenterClass) {
+        this.presenterClass = presenterClass;
+    }
+
     /**
-     * <p>Called before reference on this presenter will be cleared and instance of presenter
+     * <p>Called before the reference to this presenter will be cleared and an instance of the presenter
      * will be never used.</p>
      */
     public void onDestroy() {
@@ -149,10 +149,10 @@ public abstract class MvpPresenter<View extends MvpView> {
     private static class Binder {
 
         static void bind(MvpPresenter presenter) {
-            MvpView viewState = (MvpView) MoxyReflector.getViewState(presenter.getClass());
+            MvpViewState viewState = ViewStateLocator.getViewState(presenter.getClass());
 
-            presenter.viewStateAsView = viewState;
-            presenter.viewState = (MvpViewState) viewState;
+            presenter.viewStateAsView = (MvpView) viewState;
+            presenter.viewState = viewState;
         }
     }
 }
