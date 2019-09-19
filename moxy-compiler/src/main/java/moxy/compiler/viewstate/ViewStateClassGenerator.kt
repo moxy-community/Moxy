@@ -1,122 +1,123 @@
-package moxy.compiler.viewstate;
+package moxy.compiler.viewstate
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
-import javax.lang.model.element.Modifier;
-import javax.lang.model.type.DeclaredType;
-import moxy.MvpProcessor;
-import moxy.compiler.JavaFilesGenerator;
-import moxy.compiler.MvpCompiler;
-import moxy.compiler.Util;
-import moxy.viewstate.MvpViewState;
-import moxy.viewstate.ViewCommand;
+import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterSpec
+import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.TypeSpec
+import com.squareup.javapoet.TypeSpec.Builder
+import moxy.MvpProcessor
+import moxy.compiler.JavaFilesGenerator
+import moxy.compiler.MvpCompiler
+import moxy.compiler.Util
+import moxy.compiler.Util.decapitalizeString
+import moxy.viewstate.MvpViewState
+import moxy.viewstate.ViewCommand
+import java.util.*
+import javax.lang.model.element.Modifier
+import javax.lang.model.type.DeclaredType
 
-import static moxy.compiler.Util.decapitalizeString;
+class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
 
-public final class ViewStateClassGenerator extends JavaFilesGenerator<ViewInterfaceInfo> {
+    override fun generate(viewInterfaceInfo: ViewInterfaceInfo): List<JavaFile> {
+        val viewName = viewInterfaceInfo.name
+        val nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables()
+        val viewInterfaceType = viewInterfaceInfo.element.asType() as DeclaredType
 
-    private static final int COMMAND_FIELD_NAME_RANDOM_BOUND = 10;
-
-    @Override
-    public List<JavaFile> generate(ViewInterfaceInfo viewInterfaceInfo) {
-        ClassName viewName = viewInterfaceInfo.getName();
-        TypeName nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables();
-        DeclaredType viewInterfaceType = (DeclaredType) viewInterfaceInfo.getElement().asType();
-
-        String typeName = Util.getSimpleClassName(viewInterfaceInfo.getElement()) + MvpProcessor.VIEW_STATE_SUFFIX;
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(typeName)
+        val typeName = Util.getSimpleClassName(viewInterfaceInfo.element) + MvpProcessor.VIEW_STATE_SUFFIX
+        val classBuilder: Builder = TypeSpec.classBuilder(typeName)
             .addModifiers(Modifier.PUBLIC)
-            .superclass(ParameterizedTypeName.get(ClassName.get(MvpViewState.class), nameWithTypeVariables))
+            .superclass(ParameterizedTypeName.get(ClassName.get(MvpViewState::class.java), nameWithTypeVariables))
             .addSuperinterface(nameWithTypeVariables)
-            .addTypeVariables(viewInterfaceInfo.getTypeVariables());
+            .addTypeVariables(viewInterfaceInfo.typeVariables)
 
-        for (ViewMethod method : viewInterfaceInfo.getMethods()) {
-            TypeSpec commandClass = generateCommandClass(method, nameWithTypeVariables);
-            classBuilder.addType(commandClass);
-            classBuilder.addMethod(generateMethod(viewInterfaceType, method, nameWithTypeVariables, commandClass));
+        for (method in viewInterfaceInfo.methods) {
+            val commandClass = generateCommandClass(method, nameWithTypeVariables)
+            classBuilder.addType(commandClass)
+            classBuilder.addMethod(generateMethod(viewInterfaceType, method, nameWithTypeVariables, commandClass))
         }
 
-        JavaFile javaFile = JavaFile.builder(viewName.packageName(), classBuilder.build())
-            .indent("\t")
-            .build();
-        return Collections.singletonList(javaFile);
+        return listOf(
+            JavaFile.builder(viewName.packageName(), classBuilder.build())
+                .indent("\t")
+                .build()
+        )
     }
 
-    private TypeSpec generateCommandClass(ViewMethod method, TypeName viewTypeName) {
-        MethodSpec applyMethod = MethodSpec.methodBuilder("apply")
-            .addAnnotation(Override.class)
+    private fun generateCommandClass(method: ViewMethod, viewTypeName: TypeName): TypeSpec {
+        val applyMethod: MethodSpec? = MethodSpec.methodBuilder("apply")
+            .addAnnotation(Override::class.java)
             .addModifiers(Modifier.PUBLIC)
             .addParameter(viewTypeName, "mvpView")
-            .addExceptions(method.getExceptions())
-            .addStatement("mvpView.$L($L)", method.getName(), method.getArgumentsString())
-            .build();
+            .addExceptions(method.exceptions)
+            .addStatement("mvpView.$1L($2L)", method.name, method.argumentsString)
+            .build()
 
-        TypeSpec.Builder classBuilder = TypeSpec.classBuilder(method.getCommandClassName())
+        val classBuilder = TypeSpec.classBuilder(method.commandClassName)
             .addModifiers(Modifier.PUBLIC) // TODO: private and static
-            .addTypeVariables(method.getTypeVariables())
-            .superclass(ParameterizedTypeName.get(ClassName.get(ViewCommand.class), viewTypeName))
+            .addTypeVariables(method.typeVariables)
+            .superclass(ParameterizedTypeName.get(ClassName.get(ViewCommand::class.java), viewTypeName))
             .addMethod(generateCommandConstructor(method))
-            .addMethod(applyMethod);
+            .addMethod(applyMethod)
 
-        for (ParameterSpec parameter : method.getParameterSpecs()) {
+        for (parameter in method.parameterSpecs) {
             // TODO: private field
-            classBuilder.addField(parameter.type, parameter.name, Modifier.PUBLIC, Modifier.FINAL);
+            classBuilder.addField(parameter.type, parameter.name, Modifier.PUBLIC, Modifier.FINAL)
         }
-
-        return classBuilder.build();
+        return classBuilder.build()
     }
 
-    private MethodSpec generateMethod(DeclaredType enclosingType, ViewMethod method,
-        TypeName viewTypeName, TypeSpec commandClass) {
-        // TODO: String commandFieldName = "$cmd";
-        String commandFieldName = decapitalizeString(method.getCommandClassName());
+    private fun generateMethod(
+        enclosingType: DeclaredType,
+        method: ViewMethod,
+        viewTypeName: TypeName,
+        commandClass: TypeSpec
+    ): MethodSpec? {
+        // TODO: val commandFieldName = "$cmd";
+
+        var commandFieldName: String = decapitalizeString(method.commandClassName)
+        val random = Random()
 
         // Add salt if contains argument with same name
-        Random random = new Random();
-        while (method.getArgumentsString().contains(commandFieldName)) {
-            commandFieldName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND);
+        while (method.argumentsString.contains(commandFieldName)) {
+            commandFieldName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND)
         }
 
-        return MethodSpec.overriding(method.getElement(), enclosingType, MvpCompiler.getTypeUtils())
-            .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName,
-                method.getArgumentsString())
-            .addStatement("viewCommands.beforeApply($L)", commandFieldName)
+        return MethodSpec.overriding(method.element, enclosingType, MvpCompiler.typeUtils)
+            .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName, method.argumentsString)
+            .addStatement("viewCommands.beforeApply($1L)", commandFieldName)
             .addCode("\n")
             .beginControlFlow("if (hasNotView())")
             .addStatement("return")
             .endControlFlow()
             .addCode("\n")
-            .beginControlFlow("for ($T view : views)", viewTypeName)
-            .addStatement("view.$L($L)", method.getName(), method.getArgumentsString())
+            .beginControlFlow("for ($1T view : views)", viewTypeName)
+            .addStatement("view.$1L($2L)", method.name, method.argumentsString)
             .endControlFlow()
             .addCode("\n")
-            .addStatement("viewCommands.afterApply($L)", commandFieldName)
-            .build();
+            .addStatement("viewCommands.afterApply($1L)", commandFieldName)
+            .build()
     }
 
-    private MethodSpec generateCommandConstructor(ViewMethod method) {
-        List<ParameterSpec> parameters = method.getParameterSpecs();
+    private fun generateCommandConstructor(method: ViewMethod): MethodSpec? {
+        val parameters: List<ParameterSpec> = method.parameterSpecs
 
-        MethodSpec.Builder builder = MethodSpec.constructorBuilder()
+        val builder: MethodSpec.Builder = MethodSpec.constructorBuilder()
             .addParameters(parameters)
-            .addStatement("super($S, $T.class)", method.getTag(), method.getStrategy());
+            .addStatement("super($1S, $2T.class)", method.tag, method.strategy)
 
-        if (parameters.size() > 0) {
-            builder.addCode("\n");
+        if (parameters.isNotEmpty()) builder.addCode("\n")
+
+        for (parameter in parameters) {
+            builder.addStatement("this.$1N = $1N", parameter)
         }
 
-        for (ParameterSpec parameter : parameters) {
-            builder.addStatement("this.$1N = $1N", parameter);
-        }
+        return builder.build()
+    }
 
-        return builder.build();
+    companion object {
+        private const val COMMAND_FIELD_NAME_RANDOM_BOUND = 10
     }
 }

@@ -17,7 +17,7 @@ import javax.lang.model.util.Types;
 import moxy.compiler.MvpCompiler;
 import moxy.compiler.Util;
 
-class ViewMethod {
+public class ViewMethod {
 
     private final ExecutableElement methodElement;
 
