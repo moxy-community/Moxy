@@ -78,26 +78,30 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
         // TODO: val commandFieldName = "$cmd";
 
         var commandFieldName: String = decapitalizeString(method.commandClassName)
+        var iterationVariableName = "view"
         val random = Random()
 
         // Add salt if contains argument with same name
         while (method.argumentsString.contains(commandFieldName)) {
             commandFieldName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND)
         }
+        while (method.argumentsString.contains(iterationVariableName)) {
+            iterationVariableName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND)
+        }
 
         return MethodSpec.overriding(method.element, enclosingType, MvpCompiler.typeUtils)
             .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName, method.argumentsString)
-            .addStatement("viewCommands.beforeApply($1L)", commandFieldName)
+            .addStatement("this.viewCommands.beforeApply($1L)", commandFieldName)
             .addCode("\n")
             .beginControlFlow("if (hasNotView())")
             .addStatement("return")
             .endControlFlow()
             .addCode("\n")
-            .beginControlFlow("for ($1T view : views)", viewTypeName)
-            .addStatement("view.$1L($2L)", method.name, method.argumentsString)
+            .beginControlFlow("for ($1T $iterationVariableName : this.views)", viewTypeName)
+            .addStatement("$iterationVariableName.$1L($2L)", method.name, method.argumentsString)
             .endControlFlow()
             .addCode("\n")
-            .addStatement("viewCommands.afterApply($1L)", commandFieldName)
+            .addStatement("this.viewCommands.afterApply($1L)", commandFieldName)
             .build()
     }
 
