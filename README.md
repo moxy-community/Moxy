@@ -80,7 +80,7 @@ In order to avoid tedious task of writing boilerplate code for binding activitie
 [Telegram channel (ru)](https://telegram.me/moxy_ru)<br />
 
 ## Integration
-(Please replace moxyVersion with the latest version number:[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy))
+(Please replace moxyVersion with the latest version number:[ ![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg) ](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
 
 ### Base modules integration:
 ```groovy
