@@ -94,7 +94,6 @@ ext {
         asm: ['org.ow2.asm:asm:7.1', 'org.ow2.asm:asm-util:7.1'],
         autoservice: 'com.google.auto.service:auto-service:1.0-rc5',
         autocommon: 'com.google.auto:auto-common:0.10',
-        guava: 'com.google.guava:guava:23.0',
         kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
         gradleIncapHelperAnnotations: "net.ltgt.gradle.incap:incap:0.2",
         gradleIncapHelperProcessor  : "net.ltgt.gradle.incap:incap-processor:0.2",

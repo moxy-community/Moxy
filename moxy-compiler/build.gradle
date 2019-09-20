@@ -14,9 +14,9 @@ dependencies {
     implementation deps.kotlinStdlib
 
     implementation deps.javapoet
+
     compileOnly deps.autocommon
     compileOnly deps.autoservice
-    implementation deps.guava
     compileOnly deps.gradleIncapHelperAnnotations
 
     kapt deps.gradleIncapHelperProcessor
