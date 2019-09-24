@@ -20,6 +20,8 @@ public abstract class MvpPresenter<View extends MvpView> {
 
     private Class<? extends MvpPresenter> presenterClass;
 
+    OnDestroyListener __coroutineScope;
+
     public MvpPresenter() {
         Binder.bind(this);
 
