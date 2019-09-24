@@ -15,16 +15,16 @@ import kotlin.coroutines.CoroutineContext
  */
 val MvpPresenter<*>.presenterScope: CoroutineScope
     get() {
-        val scope = __coroutineScope as? CoroutineScope?
+        val scope = coroutineScope as? CoroutineScope?
         if (scope != null) {
             return scope
         }
         // The fact that cast failed and field is not null means that presenter destroyed and scope must be cancelled
-        if (__coroutineScope == OnDestroyListener.EMPTY) {
+        if (coroutineScope == OnDestroyListener.EMPTY) {
             return CoroutineScope(Job().apply { cancel() })
         }
         return PresenterCoroutineScope(SupervisorJob() + Dispatchers.Main).also {
-            __coroutineScope = it
+            coroutineScope = it
         }
     }
 

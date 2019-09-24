@@ -229,10 +229,10 @@ public class MvpDelegate<Delegated> {
     }
 
     private void closeCoroutineScope(MvpPresenter presenter) {
-        if (presenter.__coroutineScope != null) {
-            presenter.__coroutineScope.onDestroy();
+        if (presenter.coroutineScope != null) {
+            presenter.coroutineScope.onDestroy();
         } else {
-            presenter.__coroutineScope = OnDestroyListener.EMPTY;
+            presenter.coroutineScope = OnDestroyListener.EMPTY;
         }
     }
 
