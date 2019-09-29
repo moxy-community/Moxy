@@ -3,9 +3,8 @@ package moxy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlin.coroutines.CoroutineContext
 
 /**
  * [CoroutineScope] tied to lifecycle of this [Presenter][MvpPresenter].
@@ -23,13 +22,9 @@ val MvpPresenter<*>.presenterScope: CoroutineScope
         if (coroutineScope == OnDestroyListener.EMPTY) {
             return CoroutineScope(Job().apply { cancel() })
         }
-        return PresenterCoroutineScope(SupervisorJob() + Dispatchers.Main).also {
-            coroutineScope = it
-        }
+        return PresenterCoroutineScope().also { coroutineScope = it }
     }
 
-internal class PresenterCoroutineScope(
-    override val coroutineContext: CoroutineContext
-) : CoroutineScope, OnDestroyListener {
+internal class PresenterCoroutineScope : CoroutineScope by MainScope(), OnDestroyListener {
     override fun onDestroy() = coroutineContext.cancel()
 }
