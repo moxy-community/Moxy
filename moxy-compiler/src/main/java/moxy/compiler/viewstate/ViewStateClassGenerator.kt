@@ -15,13 +15,10 @@ import moxy.compiler.Util
 import moxy.compiler.Util.decapitalizeString
 import moxy.viewstate.MvpViewState
 import moxy.viewstate.ViewCommand
-import java.util.concurrent.atomic.AtomicInteger
 import javax.lang.model.element.Modifier
 import javax.lang.model.type.DeclaredType
 
 class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
-
-    private val atomicInteger: AtomicInteger = AtomicInteger(1)
 
     override fun generate(viewInterfaceInfo: ViewInterfaceInfo): List<JavaFile> {
         val viewName = viewInterfaceInfo.name
@@ -85,8 +82,13 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
         var commandFieldName: String = decapitalizeString(method.commandClassName)
         var iterationVariableName = "view"
 
-        commandFieldName += atomicInteger.getAndIncrement()
-        iterationVariableName += atomicInteger.getAndIncrement()
+        // Add salt if contains argument with same name
+        while (method.argumentsString.contains(commandFieldName)) {
+            commandFieldName += commandFieldName.hashCode() % 10
+        }
+        while (method.argumentsString.contains(iterationVariableName)) {
+            iterationVariableName += iterationVariableName.hashCode() % 10
+        }
 
         return MethodSpec.overriding(method.element, enclosingType, MvpCompiler.typeUtils)
             .addStatement("$1N $2L = new $1N($3L)", commandClass, commandFieldName, method.argumentsString)
