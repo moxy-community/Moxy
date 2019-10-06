@@ -11,22 +11,6 @@ import moxy.presenter.ProvidePresenter
 
 class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 
-    override fun tryTag(tag: String) {
-
-    }
-
-    override fun tryView(view: String) {
-
-    }
-
-    override fun tryViewCommands(viewCommands: String) {
-
-    }
-
-    override fun tryViews(views: String) {
-
-    }
-
     @InjectPresenter
     lateinit var presenter: MainPresenter
 

@@ -11,17 +11,4 @@ interface MainView : MvpView {
 
     @StateStrategyType(OneExecutionStateStrategy::class)
     fun openKtxActivity()
-
-    @StateStrategyType(AddToEndStrategy::class)
-    fun tryView(view: String)
-
-    @StateStrategyType(AddToEndStrategy::class)
-    fun tryViewCommands(viewCommands: String)
-
-    @StateStrategyType(AddToEndStrategy::class)
-    fun tryViews(views: String)
-
-    @StateStrategyType(AddToEndStrategy::class)
-    fun tryTag(tag: String)
-
 }
