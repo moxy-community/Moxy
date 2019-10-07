@@ -15,7 +15,6 @@ import moxy.compiler.Util
 import moxy.compiler.Util.decapitalizeString
 import moxy.viewstate.MvpViewState
 import moxy.viewstate.ViewCommand
-import java.util.*
 import javax.lang.model.element.Modifier
 import javax.lang.model.type.DeclaredType
 
@@ -46,7 +45,10 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
         )
     }
 
-    private fun generateCommandClass(method: ViewMethod, viewTypeName: TypeName): TypeSpec {
+    private fun generateCommandClass(
+        method: ViewMethod,
+        viewTypeName: TypeName
+    ): TypeSpec {
         val applyMethod: MethodSpec? = MethodSpec.methodBuilder("apply")
             .addAnnotation(Override::class.java)
             .addModifiers(Modifier.PUBLIC)
@@ -79,14 +81,13 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
 
         var commandFieldName: String = decapitalizeString(method.commandClassName)
         var iterationVariableName = "view"
-        val random = Random()
 
         // Add salt if contains argument with same name
         while (method.argumentsString.contains(commandFieldName)) {
-            commandFieldName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND)
+            commandFieldName += commandFieldName.hashCode() % 10
         }
         while (method.argumentsString.contains(iterationVariableName)) {
-            iterationVariableName += random.nextInt(COMMAND_FIELD_NAME_RANDOM_BOUND)
+            iterationVariableName += iterationVariableName.hashCode() % 10
         }
 
         return MethodSpec.overriding(method.element, enclosingType, MvpCompiler.typeUtils)
@@ -119,9 +120,5 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
         }
 
         return builder.build()
-    }
-
-    companion object {
-        private const val COMMAND_FIELD_NAME_RANDOM_BOUND = 10
     }
 }
