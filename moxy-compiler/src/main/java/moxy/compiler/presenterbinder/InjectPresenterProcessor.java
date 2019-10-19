@@ -101,10 +101,9 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
             final String name = providerMethod.getSimpleName().toString();
 
             TypeMirror presenterClass = Util.getAnnotationValueAsTypeMirror(annotation, "presenterClass");
-            String type = Util.getAnnotationValueAsString(annotation, "type");
             String presenterId = Util.getAnnotationValueAsString(annotation, "presenterId");
 
-            providers.add(new TagProviderMethod(presenterClass, name, type, presenterId));
+            providers.add(new TagProviderMethod(presenterClass, name, presenterId));
         }
         return providers;
     }
