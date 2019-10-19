@@ -3,7 +3,7 @@ package moxy.compiler
 import org.intellij.lang.annotations.Language
 import org.junit.Test
 
-class ViewStateNegativeTest2 : CompilerTest() {
+class ViewStateNegativeTestKt : CompilerTest() {
 
     @Test
     fun errorIfInjectViewStateNotOnPresenter() {

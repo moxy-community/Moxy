@@ -2,7 +2,7 @@ package moxy.compiler
 
 import org.junit.Test
 
-class PresentersBinderErrorTest2 : CompilerTest() {
+class PresentersBinderErrorTestKt : CompilerTest() {
 
     @Test
     fun injectPresenterWithoutEmptyConstructor() {
