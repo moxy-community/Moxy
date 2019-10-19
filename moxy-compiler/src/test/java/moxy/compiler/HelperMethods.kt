@@ -30,7 +30,7 @@ fun String.toJavaFile(): JavaFileObject {
     val fullyQualifiedName = if (contains("public class ")) {
         lines().first { it.contains("public class ") }
             .substringAfter("public class ")
-            .takeWhile { it.isLetterOrDigit() }
+            .takeWhile { it.isLetterOrDigit() || it == '$' }
     } else {
         lines().first { it.contains("public interface ") }
             .substringAfter("public interface ")
