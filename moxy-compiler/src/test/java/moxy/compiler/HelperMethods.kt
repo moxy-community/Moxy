@@ -7,8 +7,6 @@ fun generateViewStateFor(view: String): JavaFileObject {
     return JavaFileObjects.forSourceString(
         "InjectViewStateForViewPresenter",
         """
-        package presenter;
-
         import moxy.InjectViewState;
         import moxy.MvpPresenter;
         
