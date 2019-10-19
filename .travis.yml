@@ -40,4 +40,4 @@ before_script:
 
 script:
   - ./gradlew clean
-  - ./gradlew checkstyle assembleDebug moxy-compiler:test
+  - ./gradlew checkstyle assembleDebug moxy-compiler:test moxy:test
