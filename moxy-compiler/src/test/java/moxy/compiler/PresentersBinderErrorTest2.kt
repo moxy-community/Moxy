@@ -73,4 +73,24 @@ class PresentersBinderErrorTest2 : CompilerTest() {
             compilation.generatedFiles(),
             expectedCompilation.generatedFiles())
     }
+
+    @Test
+    fun injectPresenterOnNonPresenterField() {
+        // language=JAVA
+        val view = """
+            import moxy.MvpView;
+            import moxy.presenter.InjectPresenter;
+    
+            public class ObjectInjectPresenterView implements MvpView {
+    
+                @InjectPresenter
+                public Object mObject;
+            }
+        """.toJavaFile()
+
+        // TODO add clarifying message if @InjectPresenter placed not on MvpPresenter subclass
+
+        compileSourcesWithProcessor(view)
+            .assertFailed()
+    }
 }
