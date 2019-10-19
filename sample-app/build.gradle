@@ -80,21 +80,4 @@ dependencies {
     //kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
-    testImplementation "androidx.test:monitor:1.1.1"
-    testImplementation deps.mockito
-
-    testImplementation deps.truth
-    testImplementation deps.android
-    testImplementation deps.robolectric
-    testImplementation deps.androidJunit
-    testImplementation deps.compiletesting
-    testImplementation project(':moxy-compiler')
-    testImplementation deps.javapoet
-    testImplementation 'androidx.test:runner:1.1.1'
-    testImplementation "org.mockito:mockito-core:2.27.0"
-    testImplementation "androidx.test:core:1.1.0"
-    testImplementation "androidx.test.ext:junit:1.1.0"
-    testImplementation deps.android
-    kaptAndroidTest project(':moxy-compiler')
 }
