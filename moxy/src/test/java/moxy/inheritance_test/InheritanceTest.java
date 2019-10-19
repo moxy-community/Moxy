@@ -6,10 +6,8 @@ import moxy.inheritance_test.resources.ChildViewWithoutInject;
 import moxy.inheritance_test.resources.SuperViewWithInject;
 import moxy.inheritance_test.resources.ViewWithoutInject;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Requires compilation") // TODO
 public class InheritanceTest {
 
     @Test

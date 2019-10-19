@@ -12,9 +12,9 @@ dependencies {
     testImplementation deps.junit
     testImplementation deps.mockito
     testImplementation deps.truth
-    testImplementation deps.android
     testImplementation deps.compiletesting
     testImplementation deps.javapoet
+    testAnnotationProcessor project(":moxy-compiler")
 }
 
 moxyPublishing {

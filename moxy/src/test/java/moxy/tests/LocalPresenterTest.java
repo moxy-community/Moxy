@@ -23,7 +23,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
-@Ignore("Requires compilation") // TODO
 public class LocalPresenterTest {
 
     @Mock
