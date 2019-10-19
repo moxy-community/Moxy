@@ -18,8 +18,7 @@ class TargetPresenterField(
         TypeName.get(clazz)
     }
 
-    val generatedClassName: String
-        get() = name.first().toUpperCase() + name.drop(1) + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX
+    val generatedClassName: String get() = name.capitalize() + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX
 
     var presenterProviderMethodName: String? = null
     var presenterTagProviderMethodName: String? = null

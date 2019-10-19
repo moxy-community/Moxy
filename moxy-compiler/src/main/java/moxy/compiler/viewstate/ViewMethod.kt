@@ -5,7 +5,7 @@ import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
 import moxy.compiler.MvpCompiler.Companion.typeUtils
 import moxy.compiler.Util
-import java.util.*
+import moxy.compiler.asTypeElement
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.DeclaredType
@@ -41,13 +41,10 @@ class ViewMethod constructor(
         }
     }
 
-    val commandClassName: String get() = name.first().toUpperCase() + name.drop(1) + uniqueSuffix + "Command"
+    val commandClassName: String get() = name.capitalize() + uniqueSuffix + "Command"
 
-    val enclosedClassName: String
-        get() {
-            val typeElement = element.enclosingElement as TypeElement
-            return typeElement.qualifiedName.toString()
-        }
+    val enclosedClassName: String get() = element.enclosingElement.asTypeElement().qualifiedName.toString()
+
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

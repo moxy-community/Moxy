@@ -4,11 +4,7 @@ import com.squareup.javapoet.ClassName
 import javax.lang.model.element.TypeElement
 
 class TargetClassInfo constructor(
-    name: TypeElement,
+    val name: ClassName,
     val fields: List<TargetPresenterField>,
     val superPresenterBinder: TypeElement?
-) {
-
-    val name: ClassName = ClassName.get(name)
-
-}
+)

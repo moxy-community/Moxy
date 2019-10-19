@@ -1,5 +1,7 @@
 package moxy.compiler.presenterbinder;
 
+import com.squareup.javapoet.ClassName;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.AnnotationMirror;
@@ -187,7 +189,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
         bindProvidersToFields(fields, collectPresenterProviders(presentersContainer));
         bindTagProvidersToFields(fields, collectTagProviders(presentersContainer));
 
-        return new TargetClassInfo(presentersContainer, fields,
+        return new TargetClassInfo(ClassName.get(presentersContainer), fields,
             findSuperPresenterContainer(presentersContainer));
     }
 
