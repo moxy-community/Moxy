@@ -1,19 +1,15 @@
 package moxy.tests;
 
 import android.os.Bundle;
-import moxy.MvpDelegate;
-import moxy.view.DelegateLocalPresenterTestView;
-import moxy.view.TestView;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 
-@RunWith(RobolectricTestRunner.class)
-@Config(manifest = Config.NONE)
+import moxy.MvpDelegate;
+import moxy.view.DelegateLocalPresenterTestView;
+import moxy.view.TestView;
+
 public class MvpDelegateTest {
 
     private DelegateLocalPresenterTestView mTestView = new DelegateLocalPresenterTestView();
@@ -22,7 +18,7 @@ public class MvpDelegateTest {
 
     @Before
     public void init() {
-        mvpDelegate.onCreate(Mockito.mock(Bundle.class));
+        mvpDelegate.onCreate(new Bundle());
         mvpDelegate.onAttach();
     }
 
