@@ -34,8 +34,8 @@ public class InjectViewStateProcessor extends ElementProcessor<TypeElement, Pres
     }
 
     @Override
-    public moxy.compiler.viewstateprovider.PresenterInfo process(TypeElement element) {
-        return new moxy.compiler.viewstateprovider.PresenterInfo(element, getViewStateClassName(element));
+    public PresenterInfo process(TypeElement element) {
+        return new PresenterInfo(element, getViewStateClassName(element));
     }
 
     private String getViewStateClassName(TypeElement typeElement) {
