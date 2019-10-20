@@ -222,8 +222,17 @@ public class MvpDelegate<Delegated> {
             boolean isRejected = presentersCounter.rejectPresenter(presenter, delegateTag);
             if (isRejected) {
                 presenterStore.remove(presenter.getTag());
+                closeCoroutineScope(presenter);
                 presenter.onDestroy();
             }
+        }
+    }
+
+    private void closeCoroutineScope(MvpPresenter presenter) {
+        if (presenter.coroutineScope != null) {
+            presenter.coroutineScope.onDestroy();
+        } else {
+            presenter.coroutineScope = OnDestroyListener.EMPTY;
         }
     }
 
