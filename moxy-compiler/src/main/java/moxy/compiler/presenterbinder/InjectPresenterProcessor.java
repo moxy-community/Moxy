@@ -117,7 +117,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
         }
 
         for (PresenterProviderMethod presenterProvider : presenterProviders) {
-            TypeMirror providerTypeMirror = presenterProvider.getClazz().asElement().asType();
+            TypeMirror providerTypeMirror = presenterProvider.getReturnType().asElement().asType();
 
             for (TargetPresenterField field : fields) {
                 if ((field.getClazz()).equals(providerTypeMirror)) {
@@ -136,7 +136,7 @@ public class InjectPresenterProcessor extends ElementProcessor<VariableElement, 
                         continue;
                     }
 
-                    field.setPresenterProviderMethodName(presenterProvider.getName());
+                    field.setPresenterProviderMethodName(presenterProvider.getMethodName());
                 }
             }
         }

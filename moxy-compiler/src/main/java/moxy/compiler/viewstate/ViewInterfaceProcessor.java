@@ -206,7 +206,7 @@ public class ViewInterfaceProcessor extends ElementProcessor<TypeElement, moxy.c
         }
 
         if (!differentParts.isEmpty()) {
-            String arguments = method.getParameterSpecs().stream()
+            String arguments = method.getParameters().stream()
                 .map(ParameterSpec::toString)
                 .collect(Collectors.joining(", "));
 

@@ -12,18 +12,29 @@ import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.ExecutableType
 import javax.lang.model.type.TypeMirror
 
+/**
+ * Represents method from view interface.
+ * One `ViewCommand` inner class and one `ViewState` method will be generated based on data from this class.
+ * [strategy] and [tag] are parameters of `@StateStrategyType` annotation.
+ */
 class ViewMethod constructor(
-    targetInterfaceElement: DeclaredType?,
-    val element: ExecutableElement,
+    targetInterfaceElement: DeclaredType?, // enclosing interface
+    val element: ExecutableElement, // actual method element
     val strategy: TypeElement,
     val tag: String
 ) {
-    val name: String = element.simpleName.toString()
+    /**
+     * Joined parameter list ready to be inserted in generated code
+     */
     val argumentsString: String = element.parameters.joinToString { it.simpleName }
+    val name: String = element.simpleName.toString()
     val exceptions: List<TypeName> = element.thrownTypes.map { TypeName.get(it) }
     val typeVariables: List<TypeVariableName> = element.typeParameters.map { TypeVariableName.get(it) }
-    val parameterSpecs: List<ParameterSpec>
+    val parameters: List<ParameterSpec>
 
+    /**
+     * Updated if interface has overloaded methods
+     */
     var uniqueSuffix: String = ""
 
 
@@ -32,7 +43,7 @@ class ViewMethod constructor(
         val executableType = typeUtils.asMemberOf(targetInterfaceElement, element) as ExecutableType
         val resolvedParameterTypes: List<TypeMirror> = executableType.parameterTypes
 
-        parameterSpecs = element.parameters.zip(resolvedParameterTypes) { parameterElement, parameterType ->
+        parameters = element.parameters.zip(resolvedParameterTypes) { parameterElement, parameterType ->
             val type = TypeName.get(parameterType)
             val name = parameterElement.simpleName.toString()
             ParameterSpec.builder(type, name)
@@ -52,14 +63,14 @@ class ViewMethod constructor(
         other as ViewMethod
         return name == other.name &&
                 Util.equalsBy(
-                    parameterSpecs,
-                    other.parameterSpecs
+                    parameters,
+                    other.parameters
                 ) { first, second -> first.type == second.type }
     }
 
     override fun hashCode(): Int {
         var result = 31 + name.hashCode()
-        for (spec in parameterSpecs) {
+        for (spec in parameters) {
             result = 31 * result + spec.type.hashCode()
         }
         return result

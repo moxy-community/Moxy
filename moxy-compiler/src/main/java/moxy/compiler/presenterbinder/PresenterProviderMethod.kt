@@ -2,9 +2,13 @@ package moxy.compiler.presenterbinder
 
 import javax.lang.model.type.DeclaredType
 
-class PresenterProviderMethod(
-    val clazz: DeclaredType,
-    val name: String,
+/**
+ * Represents method annotated with `@ProvidePresenter`.
+ * [tag] and [presenterId] are annotation parameters.
+ */
+class PresenterProviderMethod constructor(
+    val returnType: DeclaredType,
+    val methodName: String,
     val tag: String?,
     val presenterId: String?
 )
