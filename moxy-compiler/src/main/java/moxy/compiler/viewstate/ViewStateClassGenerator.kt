@@ -22,7 +22,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
 
     override fun generate(viewInterfaceInfo: ViewInterfaceInfo): List<JavaFile> {
         val viewName = viewInterfaceInfo.name
-        val nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables()
+        val nameWithTypeVariables = viewInterfaceInfo.nameWithTypeVariables
         val viewInterfaceType = viewInterfaceInfo.element.asType() as DeclaredType
 
         val typeName = Util.getSimpleClassName(viewInterfaceInfo.element) + MvpProcessor.VIEW_STATE_SUFFIX
@@ -64,7 +64,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
             .addMethod(generateCommandConstructor(method))
             .addMethod(applyMethod)
 
-        for (parameter in method.parameterSpecs) {
+        for (parameter in method.parameters) {
             // TODO: private field
             classBuilder.addField(parameter.type, parameter.name, Modifier.PUBLIC, Modifier.FINAL)
         }
@@ -107,7 +107,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
     }
 
     private fun generateCommandConstructor(method: ViewMethod): MethodSpec? {
-        val parameters: List<ParameterSpec> = method.parameterSpecs
+        val parameters: List<ParameterSpec> = method.parameters
 
         val builder: MethodSpec.Builder = MethodSpec.constructorBuilder()
             .addParameters(parameters)
