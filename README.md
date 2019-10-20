@@ -80,7 +80,7 @@ In order to avoid tedious task of writing boilerplate code for binding activitie
 [Telegram channel (ru)](https://telegram.me/moxy_ru)<br />
 
 ## Integration
-(Please replace moxyVersion with the latest version number:[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy))
+(Please replace moxyVersion with the latest version number:[ ![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg) ](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
 
 ### Base modules integration:
 ```groovy
@@ -173,33 +173,33 @@ While using standalone `moxy` you need in including rules from [this file](https
 * [ ] Research possibility of removing @InjectViewState annotation
 
 ## Moxy Community
-Brave people who created the library
+Brave people who created the library:
 
-[@senneco](https://github.com/senneco)
-[@jordan1997](https://github.com/jordan1997)
-[@xanderblinov](https://github.com/xanderblinov)
-[@asitnkova](https://github.com/asitnkova)
-[@alaershov](https://github.com/alaershov)
-[@bejibx](https://github.com/bejibx)
-[@katkoff](https://github.com/katkoff)
-[@ekursakov](https://github.com/ekursakov)
-[@SavinMike](https://github.com/SavinMike)
-[@sychyow](https://github.com/sychyow)
-[@AlexeyKorshun](https://github.com/AlexeyKorshun)
-[@dmdevgo](https://github.com/dmdevgo)
-[@rsajob](https://github.com/rsajob)
-[@terrakok](https://github.com/terrakok)
-[@mohaxspb](https://github.com/mohaxspb)
-[@CherryPerry](https://github.com/CherryPerry)
-[@fl1pflops](https://github.com/fl1pflops)
-[@phoenixxt](https://github.com/phoenixxt)
-[@Dosssik](https://github.com/Dosssik)
-[@AcoustickSan](https://github.com/AcoustickSan)
-[@seven332](https://github.com/seven332)
-[@v-grishechko](https://github.com/v-grishechko)
-[@sbogolepov](https://github.com/sbogolepov)
-[@A-Zaiats](https://github.com/A-Zaiats)
-[@lion4ik](https://github.com/lion4ik)
+[@senneco](https://github.com/senneco)  
+[@jordan1997](https://github.com/jordan1997)  
+[@xanderblinov](https://github.com/xanderblinov)  
+[@asitnkova](https://github.com/asitnkova)  
+[@alaershov](https://github.com/alaershov)  
+[@bejibx](https://github.com/bejibx)  
+[@katkoff](https://github.com/katkoff)  
+[@ekursakov](https://github.com/ekursakov)  
+[@SavinMike](https://github.com/SavinMike)  
+[@sychyow](https://github.com/sychyow)  
+[@AlexeyKorshun](https://github.com/AlexeyKorshun)  
+[@dmdevgo](https://github.com/dmdevgo)  
+[@rsajob](https://github.com/rsajob)  
+[@terrakok](https://github.com/terrakok)  
+[@mohaxspb](https://github.com/mohaxspb)  
+[@CherryPerry](https://github.com/CherryPerry)  
+[@fl1pflops](https://github.com/fl1pflops)  
+[@phoenixxt](https://github.com/phoenixxt)  
+[@Dosssik](https://github.com/Dosssik)  
+[@AcoustickSan](https://github.com/AcoustickSan)  
+[@seven332](https://github.com/seven332)  
+[@v-grishechko](https://github.com/v-grishechko)  
+[@sbogolepov](https://github.com/sbogolepov)  
+[@A-Zaiats](https://github.com/A-Zaiats)  
+[@lion4ik](https://github.com/lion4ik)  
 
 
 You may also find them in [contributors page of the old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)

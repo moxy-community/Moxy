@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixes
 - Compilation error if View interface method's parameter name clash with generated code
 
+### Added
+- `MvpPresenter.presenterScope` extension for kotlin coroutines
+
+
+## [2.0.2] - 2019-09-20
+- Guava conflicts fixes
+
+## [2.0.1] - 2019-09-19
+- No public changes since 2.0-beta01. Release to maven central
+
 ## [2.0.0] - 2019-09-19
 - No public changes since 2.0-beta01
 
