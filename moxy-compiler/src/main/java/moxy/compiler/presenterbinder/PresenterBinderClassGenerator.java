@@ -134,12 +134,12 @@ public final class PresenterBinderClassGenerator extends JavaFilesGenerator<Targ
             builder.addStatement("return delegated.$L()", field.getPresenterProviderMethodName());
         } else {
             boolean hasEmptyConstructor = Util
-                .hasEmptyConstructor((TypeElement) ((DeclaredType) field.getClazz()).asElement());
+                .hasEmptyConstructor((TypeElement) ((DeclaredType) field.getType()).asElement());
 
             if (hasEmptyConstructor) {
                 builder.addStatement("return new $T()", field.getTypeName());
             } else {
-                builder.addStatement("throw new $T($S + $S)", IllegalStateException.class, field.getClazz(),
+                builder.addStatement("throw new $T($S + $S)", IllegalStateException.class, field.getType(),
                     " hasn't got a default constructor. You can apply @ProvidePresenter to a method which will "
                         + "construct Presenter. Also you can make it default constructor");
             }

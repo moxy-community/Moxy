@@ -7,9 +7,11 @@ import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
 import com.squareup.javapoet.WildcardTypeName
+import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.DeclaredType
+import javax.lang.model.type.TypeMirror
 import kotlin.reflect.KClass
 
 fun DeclaredType.asTypeElement() = asElement() as TypeElement
@@ -29,4 +31,16 @@ fun TypeSpec.toJavaFile(packageName: String): JavaFile {
     return JavaFile.builder(packageName, this)
         .indent("\t")
         .build()
+}
+
+fun <T : Annotation> Element.getAnnotationMirror(type: KClass<T>): AnnotationMirror? {
+    return Util.getAnnotation(this, type.java.name)
+}
+
+fun AnnotationMirror.getValueAsString(property: String): String? {
+    return Util.getAnnotationValueAsString(this, property)
+}
+
+fun AnnotationMirror.getValueAsTypeMirror(property: String): TypeMirror? {
+    return Util.getAnnotationValueAsTypeMirror(this, property)
 }

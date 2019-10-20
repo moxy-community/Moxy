@@ -9,20 +9,20 @@ import javax.lang.model.type.TypeMirror
  * Represents field with `@InjectPresenter` annotation.
  * `PresenterField` inner class will be generated based on data from this class.
  * [tag] and [presenterId] are annotation parameters.
- * [clazz] is field class.
+ * [type] is field type.
  * [name] as field name.
  */
 class TargetPresenterField constructor(
-    val clazz: TypeMirror,
+    val type: TypeMirror,
     val name: String,
     val tag: String?,
     val presenterId: String?
 ) {
-    private val isParametrized = TypeName.get(clazz) is ParameterizedTypeName
+    private val isParametrized = TypeName.get(type) is ParameterizedTypeName
     val typeName: TypeName = if (isParametrized) {
-        (TypeName.get(clazz) as ParameterizedTypeName).rawType
+        (TypeName.get(type) as ParameterizedTypeName).rawType
     } else {
-        TypeName.get(clazz)
+        TypeName.get(type)
     }
 
     val generatedClassName: String get() = name.capitalize() + MvpProcessor.PRESENTER_BINDER_INNER_SUFFIX
