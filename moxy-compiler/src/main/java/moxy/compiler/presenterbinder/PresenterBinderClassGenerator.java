@@ -15,6 +15,7 @@ import javax.lang.model.type.DeclaredType;
 import moxy.MvpPresenter;
 import moxy.MvpProcessor;
 import moxy.PresenterBinder;
+import moxy.compiler.ExtensionsKt;
 import moxy.compiler.JavaFilesGenerator;
 import moxy.compiler.Util;
 import moxy.presenter.PresenterField;
@@ -176,12 +177,8 @@ public final class PresenterBinderClassGenerator extends JavaFilesGenerator<Targ
             classBuilder.addType(generatePresenterBinderClass(field, targetClassName));
         }
 
-        classBuilder.addMethod(
-            generateGetPresentersMethod(fields, targetClassName, superPresenterBinder));
+        classBuilder.addMethod(generateGetPresentersMethod(fields, targetClassName, superPresenterBinder));
 
-        JavaFile javaFile = JavaFile.builder(targetClassName.packageName(), classBuilder.build())
-            .indent("\t")
-            .build();
-        return Collections.singletonList(javaFile);
+        return Collections.singletonList(ExtensionsKt.toJavaFile(classBuilder.build(), targetClassName));
     }
 }

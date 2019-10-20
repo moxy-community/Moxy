@@ -3,6 +3,7 @@ package moxy.compiler.viewstate
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
+import moxy.compiler.toJavaFile
 import javax.lang.model.element.Modifier
 
 object EmptyStrategyHelperGenerator {
@@ -53,8 +54,6 @@ object EmptyStrategyHelperGenerator {
 
         classBuilder.addMethod(methodSpecBuilder.build())
 
-        return JavaFile.builder("moxy", classBuilder.build())
-            .indent("\t")
-            .build()
+        return classBuilder.build().toJavaFile("moxy")
     }
 }
