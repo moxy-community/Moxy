@@ -25,6 +25,7 @@ fun ClassName.parametrizedWith(types: List<TypeVariableName>): ParameterizedType
 fun KClass<*>.className(): ClassName = ClassName.get(java)
 fun KClass<*>.subtypeWildcard(): WildcardTypeName = WildcardTypeName.subtypeOf(java)
 fun KClass<*>.supertypeWildcard(): WildcardTypeName = WildcardTypeName.supertypeOf(java)
+fun ClassName.supertypeWildcard(): WildcardTypeName = WildcardTypeName.supertypeOf(this)
 
 fun TypeSpec.toJavaFile(className: ClassName): JavaFile = toJavaFile(className.packageName())
 fun TypeSpec.toJavaFile(packageName: String): JavaFile {

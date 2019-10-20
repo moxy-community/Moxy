@@ -17,7 +17,7 @@ import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 
-class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassInfo?>() {
+class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassInfo>() {
 
     // Cache to prevent generating PresenterBinder more than once for one class
     private val presentersContainers: MutableList<TypeElement> = mutableListOf()
