@@ -44,3 +44,5 @@ fun AnnotationMirror.getValueAsString(property: String): String? {
 fun AnnotationMirror.getValueAsTypeMirror(property: String): TypeMirror? {
     return Util.getAnnotationValueAsTypeMirror(this, property)
 }
+
+fun TypeMirror.getFullClassName(): String = Util.getFullClassName(this)
