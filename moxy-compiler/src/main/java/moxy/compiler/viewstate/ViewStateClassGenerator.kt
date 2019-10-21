@@ -19,7 +19,7 @@ import moxy.viewstate.ViewCommand
 import javax.lang.model.element.Modifier
 import javax.lang.model.type.DeclaredType
 
-class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
+class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
 
     override fun generate(viewInterfaceInfo: ViewInterfaceInfo): List<JavaFile> {
         val viewName = viewInterfaceInfo.name

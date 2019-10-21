@@ -17,7 +17,7 @@ import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 
-class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo>() {
+class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
 
     val usedViews = mutableSetOf<TypeElement>()
 

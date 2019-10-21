@@ -23,7 +23,7 @@ class ViewInterfaceProcessor(
     private val disableEmptyStrategyCheck: Boolean,
     private val enableEmptyStrategyHelper: Boolean,
     defaultStrategy: String?
-) : ElementProcessor<TypeElement, ViewInterfaceInfo>() {
+) : ElementProcessor<TypeElement, ViewInterfaceInfo> {
 
     private val frameworkDefaultStrategy: TypeElement
     private var viewInterfaceElement: TypeElement? = null

@@ -1,8 +1,11 @@
 package moxy.compiler;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import javax.lang.model.element.Element;
 
-public abstract class ElementProcessor<E extends Element, R> {
-
-    public abstract R process(E element);
+public interface ElementProcessor<E extends Element, R> {
+    @Nullable
+    R process(@NotNull E element);
 }

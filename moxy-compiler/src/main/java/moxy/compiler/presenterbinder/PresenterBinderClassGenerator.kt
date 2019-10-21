@@ -25,7 +25,7 @@ import javax.lang.model.type.DeclaredType
  *
  * Generates PresenterBinder for a class annotated with @InjectPresenters
  */
-class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo>() {
+class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
 
     override fun generate(targetClassInfo: TargetClassInfo): List<JavaFile> {
         val targetClassName = targetClassInfo.name
