@@ -38,10 +38,12 @@ fun <T : Annotation> Element.getAnnotationMirror(type: KClass<T>): AnnotationMir
     return Util.getAnnotation(this, type.java.name)
 }
 
+// Pass property name, like StateStrategyType::value.name
 fun AnnotationMirror.getValueAsString(property: String): String? {
     return Util.getAnnotationValueAsString(this, property)
 }
 
+// Pass property name, like StateStrategyType::value.name
 fun AnnotationMirror.getValueAsTypeMirror(property: String): TypeMirror? {
     return Util.getAnnotationValueAsTypeMirror(this, property)
 }
