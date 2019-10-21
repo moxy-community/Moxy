@@ -95,4 +95,28 @@ class ViewStateTestKt : CompilerTest() {
             compileSources(view, expected).generatedFiles()
         )
     }
+
+    @Test
+    fun testStateStrategyNotInherited() {
+        // language=JAVA
+        val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.AddToEndSingleStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            
+            @StateStrategyType(value = AddToEndSingleStrategy.class)
+            interface ParentView extends MvpView {
+                void parentMethod();
+            }
+            
+            public interface ChildView extends ParentView {
+                void childMethod();
+            }
+        """.toJavaFile()
+
+
+        compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
+            .assertThatIt()
+            .hadErrorContaining("A View method has no strategy!")
+    }
 }
