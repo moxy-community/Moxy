@@ -4,6 +4,8 @@ import com.squareup.javapoet.JavaFile
 import moxy.compiler.ElementProcessor
 import moxy.compiler.MvpCompiler.Companion.elementUtils
 import moxy.compiler.MvpCompiler.Companion.messager
+import moxy.compiler.asDeclaredType
+import moxy.compiler.asTypeElement
 import moxy.compiler.getAnnotationMirror
 import moxy.compiler.getValueAsString
 import moxy.compiler.getValueAsTypeMirror
@@ -15,7 +17,6 @@ import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
-import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic.Kind
 
@@ -129,7 +130,7 @@ class ViewInterfaceProcessor(
         val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
 
         val strategyClass: TypeElement = if (strategyClassFromAnnotation != null) {
-            (strategyClassFromAnnotation as DeclaredType).asElement() as TypeElement
+            strategyClassFromAnnotation.asTypeElement()
         } else {
             if (defaultStrategy == null && !disableEmptyStrategyCheck) {
                 if (enableEmptyStrategyHelper) {
@@ -149,7 +150,7 @@ class ViewInterfaceProcessor(
         val methodTag: String = tagFromAnnotation ?: methodElement.simpleName.toString()
 
         return ViewMethod(
-            viewInterfaceElement!!.asType() as DeclaredType,
+            viewInterfaceElement!!.asDeclaredType(),
             methodElement,
             strategyClass,
             methodTag)
@@ -185,7 +186,7 @@ class ViewInterfaceProcessor(
         superinterfacesMethods: MutableList<ViewMethod>
     ): List<ViewMethod> {
         for (typeMirror in parentElement.interfaces) {
-            val anInterface = (typeMirror as DeclaredType).asElement() as TypeElement
+            val anInterface = typeMirror.asTypeElement()
 
             val typeArguments = typeMirror.typeArguments
             val typeParameters = anInterface.typeParameters
@@ -207,7 +208,7 @@ class ViewInterfaceProcessor(
         val annotation = typeElement.getAnnotationMirror(StateStrategyType::class)
         val value = annotation?.getValueAsTypeMirror(StateStrategyType::value)
         return if (value != null && value.kind == TypeKind.DECLARED) {
-            (value as DeclaredType).asElement() as TypeElement
+            value.asTypeElement()
         } else {
             null
         }

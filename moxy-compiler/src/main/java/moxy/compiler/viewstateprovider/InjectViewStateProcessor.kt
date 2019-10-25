@@ -9,10 +9,10 @@ import moxy.compiler.ElementProcessor
 import moxy.compiler.MvpCompiler.Companion.elementUtils
 import moxy.compiler.Util
 import moxy.compiler.Util.fillGenerics
+import moxy.compiler.asTypeElement
 import moxy.compiler.getFullClassName
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.TypeParameterElement
-import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
@@ -77,7 +77,7 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
         var parentTypes = emptyMap<String, String>()
 
         while (superclass.kind != TypeKind.NONE) {
-            val superclassElement = (superclass as DeclaredType).asElement() as TypeElement
+            val superclassElement = superclass.asTypeElement()
 
             val typeArguments: List<TypeMirror> = superclass.typeArguments
             val typeParameters: List<TypeParameterElement?> = superclassElement.typeParameters

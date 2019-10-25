@@ -2,6 +2,8 @@ package moxy.compiler.presenterbinder
 
 import com.squareup.javapoet.ClassName
 import moxy.compiler.ElementProcessor
+import moxy.compiler.asDeclaredType
+import moxy.compiler.asTypeElement
 import moxy.compiler.getAnnotationMirror
 import moxy.compiler.getValueAsString
 import moxy.compiler.getValueAsTypeMirror
@@ -60,7 +62,7 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
                     ?: return@mapNotNull null
 
                 // TODO: simplify?
-                val fieldType: TypeMirror = (element.asType() as DeclaredType).asElement().asType()
+                val fieldType: TypeMirror = element.asDeclaredType().asElement().asType()
                 val fieldName = element.toString()
 
                 val tag = annotation.getValueAsString(InjectPresenter::tag)
@@ -152,7 +154,7 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
             val superclass = currentTypeElement.superclass
             if (superclass.kind != TypeKind.DECLARED) break
 
-            currentTypeElement = (superclass as DeclaredType).asElement() as TypeElement
+            currentTypeElement = superclass.asTypeElement()
 
             if (currentTypeElement.containsInjectPresenterField()) {
                 return currentTypeElement

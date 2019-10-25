@@ -12,11 +12,24 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeMirror
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 
-fun DeclaredType.asTypeElement() = asElement() as TypeElement
+/**
+ * TypeMirror must be of kind TypeKind.DECLARED
+ */
+@UseExperimental(ExperimentalContracts::class)
+fun TypeMirror.asTypeElement(): TypeElement {
+    contract {
+        returns() implies (this@asTypeElement is DeclaredType)
+    }
+    return (this as DeclaredType).asElement() as TypeElement
+}
+
 fun Element.asTypeElement() = this as TypeElement
+fun Element.asDeclaredType() = this.asType() as DeclaredType
 
 fun ClassName.parametrizedWith(type: TypeName) = ParameterizedTypeName.get(this, type)
 fun ClassName.parametrizedWith(types: List<TypeVariableName>): ParameterizedTypeName {

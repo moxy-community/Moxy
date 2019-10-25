@@ -11,6 +11,7 @@ import moxy.compiler.JavaFilesGenerator
 import moxy.compiler.MvpCompiler
 import moxy.compiler.Util
 import moxy.compiler.Util.decapitalizeString
+import moxy.compiler.asDeclaredType
 import moxy.compiler.className
 import moxy.compiler.parametrizedWith
 import moxy.compiler.toJavaFile
@@ -24,7 +25,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
     override fun generate(viewInterfaceInfo: ViewInterfaceInfo): List<JavaFile> {
         val viewName = viewInterfaceInfo.name
         val nameWithTypeVariables = viewInterfaceInfo.nameWithTypeVariables
-        val viewInterfaceType = viewInterfaceInfo.element.asType() as DeclaredType
+        val viewInterfaceType = viewInterfaceInfo.element.asDeclaredType()
 
         val typeName = Util.getSimpleClassName(viewInterfaceInfo.element) + MvpProcessor.VIEW_STATE_SUFFIX
         val classBuilder: Builder = TypeSpec.classBuilder(typeName)

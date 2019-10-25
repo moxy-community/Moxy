@@ -9,6 +9,7 @@ import moxy.MvpProcessor
 import moxy.PresenterBinder
 import moxy.compiler.JavaFilesGenerator
 import moxy.compiler.Util
+import moxy.compiler.asTypeElement
 import moxy.compiler.className
 import moxy.compiler.parametrizedWith
 import moxy.compiler.subtypeWildcard
@@ -18,7 +19,6 @@ import moxy.presenter.PresenterField
 import java.util.*
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
-import javax.lang.model.type.DeclaredType
 
 /**
  * 18.12.2015
@@ -160,7 +160,7 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
         if (field.presenterProviderMethodName != null) {
             builder.addStatement("return delegated.$1L()", field.presenterProviderMethodName)
         } else {
-            val hasEmptyConstructor = Util.hasEmptyConstructor((field.type as DeclaredType).asElement() as TypeElement)
+            val hasEmptyConstructor = Util.hasEmptyConstructor(field.type.asTypeElement())
 
             if (hasEmptyConstructor) {
                 builder.addStatement("return new $1T()", field.typeName)
