@@ -126,7 +126,7 @@ class ViewInterfaceProcessor(
         val annotation: AnnotationMirror? = methodElement.getAnnotationMirror(StateStrategyType::class)
 
         // get strategy from annotation
-        val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value.name)
+        val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
 
         val strategyClass: TypeElement = if (strategyClassFromAnnotation != null) {
             (strategyClassFromAnnotation as DeclaredType).asElement() as TypeElement
@@ -145,7 +145,7 @@ class ViewInterfaceProcessor(
         }
 
         // get tag from annotation
-        val tagFromAnnotation = annotation?.getValueAsString(StateStrategyType::tag.name)
+        val tagFromAnnotation = annotation?.getValueAsString(StateStrategyType::tag)
         val methodTag: String = tagFromAnnotation ?: methodElement.simpleName.toString()
 
         return ViewMethod(
@@ -205,7 +205,7 @@ class ViewInterfaceProcessor(
 
     private fun getInterfaceStateStrategyType(typeElement: TypeElement): TypeElement? {
         val annotation = typeElement.getAnnotationMirror(StateStrategyType::class)
-        val value = annotation?.getValueAsTypeMirror(StateStrategyType::value.name)
+        val value = annotation?.getValueAsTypeMirror(StateStrategyType::value)
         return if (value != null && value.kind == TypeKind.DECLARED) {
             (value as DeclaredType).asElement() as TypeElement
         } else {

@@ -63,8 +63,8 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
                 val fieldType: TypeMirror = (element.asType() as DeclaredType).asElement().asType()
                 val fieldName = element.toString()
 
-                val tag = annotation.getValueAsString(InjectPresenter::tag.name)
-                val presenterId = annotation.getValueAsString(InjectPresenter::presenterId.name)
+                val tag = annotation.getValueAsString(InjectPresenter::tag)
+                val presenterId = annotation.getValueAsString(InjectPresenter::presenterId)
 
                 TargetPresenterField(fieldType, fieldName, tag, presenterId)
             }
@@ -84,8 +84,8 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
                 val methodName = element.simpleName.toString()
                 val returnType = element.returnType as DeclaredType
 
-                val tag = annotation.getValueAsString(ProvidePresenter::tag.name)
-                val presenterId = annotation.getValueAsString(ProvidePresenter::presenterId.name)
+                val tag = annotation.getValueAsString(ProvidePresenter::tag)
+                val presenterId = annotation.getValueAsString(ProvidePresenter::presenterId)
 
                 PresenterProviderMethod(returnType, methodName, tag, presenterId)
             }
@@ -104,8 +104,8 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
 
                 val methodName = element.simpleName.toString()
 
-                val presenterClass = annotation.getValueAsTypeMirror(ProvidePresenterTag::presenterClass.name)!!
-                val presenterId = annotation.getValueAsString(ProvidePresenterTag::presenterId.name)
+                val presenterClass = annotation.getValueAsTypeMirror(ProvidePresenterTag::presenterClass)!!
+                val presenterId = annotation.getValueAsString(ProvidePresenterTag::presenterId)
 
                 TagProviderMethod(presenterClass, methodName, presenterId)
             }

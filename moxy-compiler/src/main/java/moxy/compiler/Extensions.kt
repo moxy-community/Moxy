@@ -13,6 +13,7 @@ import javax.lang.model.element.TypeElement
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeMirror
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty1
 
 fun DeclaredType.asTypeElement() = asElement() as TypeElement
 fun Element.asTypeElement() = this as TypeElement
@@ -38,14 +39,14 @@ fun <T : Annotation> Element.getAnnotationMirror(type: KClass<T>): AnnotationMir
     return Util.getAnnotation(this, type.java.name)
 }
 
-// Pass property name, like StateStrategyType::value.name
-fun AnnotationMirror.getValueAsString(property: String): String? {
-    return Util.getAnnotationValueAsString(this, property)
+// Pass property name, like StateStrategyType::value
+fun AnnotationMirror.getValueAsString(property: KProperty1<*, *>): String? {
+    return Util.getAnnotationValueAsString(this, property.name)
 }
 
-// Pass property name, like StateStrategyType::value.name
-fun AnnotationMirror.getValueAsTypeMirror(property: String): TypeMirror? {
-    return Util.getAnnotationValueAsTypeMirror(this, property)
+// Pass property name, like StateStrategyType::value
+fun AnnotationMirror.getValueAsTypeMirror(property: KProperty1<*, *>): TypeMirror? {
+    return Util.getAnnotationValueAsTypeMirror(this, property.name)
 }
 
 fun TypeMirror.getFullClassName(): String = Util.getFullClassName(this)
