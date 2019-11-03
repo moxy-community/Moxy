@@ -3,17 +3,21 @@ package moxy.compiler;
 import com.google.common.base.Joiner;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
+
+import junit.framework.AssertionFailedError;
+import junit.framework.ComparisonFailure;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.util.TraceClassVisitor;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Optional;
+
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
-import junit.framework.AssertionFailedError;
-import junit.framework.ComparisonFailure;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.util.TraceClassVisitor;
 
 import static com.google.testing.compile.Compiler.javac;
 
@@ -33,10 +37,7 @@ public abstract class CompilerTest {
     }
 
     protected Compilation compileLibSourcesWithProcessor(JavaFileObject... sources) {
-        return javac()
-            .withOptions("-implicit:none")
-            .withProcessors(new MvpCompiler())
-            .compile(sources);
+        return compileSourcesWithProcessor(sources);
     }
 
     /**
