@@ -27,10 +27,8 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
     override fun process(variableElement: VariableElement): TargetClassInfo? {
         val presentersContainer: Element = variableElement.enclosingElement
 
-        if (presentersContainer !is TypeElement) {
-            throw RuntimeException(
-                "Only class fields could be annotated as @InjectPresenter: $variableElement at $presentersContainer"
-            )
+        require(presentersContainer is TypeElement) {
+            "Only class fields could be annotated as @InjectPresenter: $variableElement at $presentersContainer"
         }
 
         if (presentersContainers.contains(presentersContainer)) {
