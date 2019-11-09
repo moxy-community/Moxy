@@ -59,7 +59,7 @@ class PresentersBinderErrorTestKt : CompilerTest() {
             
                     @Override
                     public MvpPresenter<?> providePresenter(SomeView delegated) {
-                        throw new IllegalStateException("PresenterWithoutEmptyConstructor" + " hasn't got a default constructor. You can apply @ProvidePresenter to a method which will construct Presenter. Also you can make it default constructor");
+                        throw new IllegalStateException("PresenterWithoutEmptyConstructor" + " hasn't got a default constructor. You can apply @ProvidePresenter to a method which will construct Presenter. Otherwise you can add empty constructor to presenter.");
                     }
                 }
             }

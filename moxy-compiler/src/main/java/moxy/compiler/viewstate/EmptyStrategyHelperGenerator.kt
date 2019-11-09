@@ -3,6 +3,7 @@ package moxy.compiler.viewstate
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
+import moxy.compiler.toJavaFile
 import javax.lang.model.element.Modifier
 
 object EmptyStrategyHelperGenerator {
@@ -15,7 +16,7 @@ object EmptyStrategyHelperGenerator {
     @JvmStatic
     fun generate(migrationMethods: List<MigrationMethod>): JavaFile {
 
-        val exampleView = migrationMethods[0].clazz.simpleName
+        val exampleView = migrationMethods[0].viewInterface.simpleName
 
         val classBuilder = TypeSpec
             .classBuilder("EmptyStrategyHelper")
@@ -46,15 +47,13 @@ object EmptyStrategyHelperGenerator {
         methodSpecBuilder.addComment("If you are using Intellij IDEA or Android Studio, use Go to declaration (Ctrl/⌘+B or Ctrl/⌘+Click)")
         methodSpecBuilder.addComment("to navigate to '${migrationMethods.first().method.simpleName}()'")
 
-        for ((clazz, method) in migrationMethods) {
-            val statement = "new %s().%s()".format(clazz.qualifiedName, method.simpleName)
+        for ((viewInterface, method) in migrationMethods) {
+            val statement = "new %s().%s()".format(viewInterface.qualifiedName, method.simpleName)
             methodSpecBuilder.addStatement(statement)
         }
 
         classBuilder.addMethod(methodSpecBuilder.build())
 
-        return JavaFile.builder("moxy", classBuilder.build())
-            .indent("\t")
-            .build()
+        return classBuilder.build().toJavaFile("moxy")
     }
 }

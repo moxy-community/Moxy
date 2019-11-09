@@ -1,10 +1,8 @@
 package moxy.compiler.viewstate
 
-import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeSpec.Builder
@@ -13,22 +11,26 @@ import moxy.compiler.JavaFilesGenerator
 import moxy.compiler.MvpCompiler
 import moxy.compiler.Util
 import moxy.compiler.Util.decapitalizeString
+import moxy.compiler.asDeclaredType
+import moxy.compiler.className
+import moxy.compiler.parametrizedWith
+import moxy.compiler.toJavaFile
 import moxy.viewstate.MvpViewState
 import moxy.viewstate.ViewCommand
 import javax.lang.model.element.Modifier
 import javax.lang.model.type.DeclaredType
 
-class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
+class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
 
     override fun generate(viewInterfaceInfo: ViewInterfaceInfo): List<JavaFile> {
         val viewName = viewInterfaceInfo.name
-        val nameWithTypeVariables = viewInterfaceInfo.getNameWithTypeVariables()
-        val viewInterfaceType = viewInterfaceInfo.element.asType() as DeclaredType
+        val nameWithTypeVariables = viewInterfaceInfo.nameWithTypeVariables
+        val viewInterfaceType = viewInterfaceInfo.element.asDeclaredType()
 
         val typeName = Util.getSimpleClassName(viewInterfaceInfo.element) + MvpProcessor.VIEW_STATE_SUFFIX
         val classBuilder: Builder = TypeSpec.classBuilder(typeName)
             .addModifiers(Modifier.PUBLIC)
-            .superclass(ParameterizedTypeName.get(ClassName.get(MvpViewState::class.java), nameWithTypeVariables))
+            .superclass(MvpViewState::class.className().parametrizedWith(nameWithTypeVariables))
             .addSuperinterface(nameWithTypeVariables)
             .addTypeVariables(viewInterfaceInfo.typeVariables)
 
@@ -38,11 +40,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
             classBuilder.addMethod(generateMethod(viewInterfaceType, method, nameWithTypeVariables, commandClass))
         }
 
-        return listOf(
-            JavaFile.builder(viewName.packageName(), classBuilder.build())
-                .indent("\t")
-                .build()
-        )
+        return listOf(classBuilder.build().toJavaFile(viewName))
     }
 
     private fun generateCommandClass(
@@ -60,11 +58,11 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
         val classBuilder = TypeSpec.classBuilder(method.commandClassName)
             .addModifiers(Modifier.PUBLIC) // TODO: private and static
             .addTypeVariables(method.typeVariables)
-            .superclass(ParameterizedTypeName.get(ClassName.get(ViewCommand::class.java), viewTypeName))
+            .superclass(ViewCommand::class.className().parametrizedWith(viewTypeName))
             .addMethod(generateCommandConstructor(method))
             .addMethod(applyMethod)
 
-        for (parameter in method.parameterSpecs) {
+        for (parameter in method.parameters) {
             // TODO: private field
             classBuilder.addField(parameter.type, parameter.name, Modifier.PUBLIC, Modifier.FINAL)
         }
@@ -107,7 +105,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo>() {
     }
 
     private fun generateCommandConstructor(method: ViewMethod): MethodSpec? {
-        val parameters: List<ParameterSpec> = method.parameterSpecs
+        val parameters: List<ParameterSpec> = method.parameters
 
         val builder: MethodSpec.Builder = MethodSpec.constructorBuilder()
             .addParameters(parameters)
