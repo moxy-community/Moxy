@@ -12,11 +12,7 @@ import moxy.compiler.getValueAsTypeMirror
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 import java.util.*
-import javax.lang.model.element.AnnotationMirror
-import javax.lang.model.element.ElementKind
-import javax.lang.model.element.ExecutableElement
-import javax.lang.model.element.Modifier
-import javax.lang.model.element.TypeElement
+import javax.lang.model.element.*
 import javax.lang.model.type.TypeKind
 import javax.tools.Diagnostic.Kind
 
@@ -124,7 +120,7 @@ class ViewInterfaceProcessor(
             messager.printMessage(Kind.ERROR, message, methodElement)
         }
 
-        val annotation: AnnotationMirror? = methodElement.getAnnotationMirror(StateStrategyType::class)
+        val annotation: AnnotationMirror? = getStateStrategyTypeMirror(methodElement)
 
         // get strategy from annotation
         val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
@@ -154,6 +150,38 @@ class ViewInterfaceProcessor(
             methodElement,
             strategyClass,
             methodTag)
+    }
+
+    private fun getStateStrategyTypeMirror(methodElement: ExecutableElement): AnnotationMirror? {
+        val strategies = getStateStrategyTypeMirrors(methodElement)
+
+        if (strategies.size > 1) {
+            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for method " +
+                    "'${methodElement.simpleName}(${methodElement.parameters.joinToString { it.asType().toString() }})'" +
+                    " in interface '${methodElement.enclosingElement.asType()}'", methodElement)
+        }
+
+        return strategies.firstOrNull()
+    }
+
+    private fun getStateStrategyTypeMirror(typeElement: TypeElement): AnnotationMirror? {
+        val strategies = getStateStrategyTypeMirrors(typeElement)
+
+        if (strategies.size > 1) {
+            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for " +
+                    "'${typeElement.simpleName}'", typeElement)
+        }
+
+        return strategies.firstOrNull()
+    }
+
+    private fun getStateStrategyTypeMirrors(element: Element): List<AnnotationMirror> {
+        val enclosed = listOfNotNull(element.getAnnotationMirror(StateStrategyType::class))
+
+        val aliased = element.annotationMirrors
+            .mapNotNull { it.annotationType.asTypeElement().getAnnotationMirror(StateStrategyType::class) }
+
+        return enclosed + aliased
     }
 
     private fun checkStrategyAndTagEquals(
@@ -205,7 +233,7 @@ class ViewInterfaceProcessor(
     }
 
     private fun getInterfaceStateStrategyType(typeElement: TypeElement): TypeElement? {
-        val annotation = typeElement.getAnnotationMirror(StateStrategyType::class)
+        val annotation = getStateStrategyTypeMirror(typeElement)
         val value = annotation?.getValueAsTypeMirror(StateStrategyType::value)
         return if (value != null && value.kind == TypeKind.DECLARED) {
             value.asTypeElement()
