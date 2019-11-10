@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `MvpPresenter.presenterScope` extension for kotlin coroutines
 
+### Behaviour change
+- Added ability to define alias annotations for `@StateStrategyType` annotation. More info [in this issue](https://github.com/moxy-community/Moxy/issues/72)
+
 
 ## [2.0.2] - 2019-09-20
 - Guava conflicts fixes
