@@ -187,7 +187,7 @@ class MvpCompiler : AbstractProcessor() {
     companion object {
 
         private const val OPTION_DISABLE_EMPTY_STRATEGY_CHECK = "disableEmptyStrategyCheck"
-        private const val DEFAULT_MOXY_STRATEGY = "defaultMoxyStrategy"
+        const val DEFAULT_MOXY_STRATEGY = "defaultMoxyStrategy"
         private const val OPTION_ENABLE_EMPTY_STRATEGY_HELPER = "enableEmptyStrategyHelper"
 
         @get:JvmStatic

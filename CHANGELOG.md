@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
 ## [Unreleased]
 ### Fixes
 - Compilation error if View interface method's parameter name clash with generated code
@@ -11,18 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - `MvpPresenter.presenterScope` extension for kotlin coroutines
 
+### Behaviour change
+- Changed strategy resolution algorithm. Child view interface strategies will not propagate to superinterface views. More info [in this issue](https://github.com/moxy-community/Moxy/issues/70)
+
 
 ## [2.0.2] - 2019-09-20
 - Guava conflicts fixes
 
+
 ## [2.0.1] - 2019-09-19
 - No public changes since 2.0-beta01. Release to maven central
+
 
 ## [2.0.0] - 2019-09-19
 - No public changes since 2.0-beta01
 
+
 ## [2.0-beta01] - 2019-09-19
 - No public changes since 2.0-alpha06
+
 
 ## [2.0-alpha06] - 2019-09-07
 ### Added

@@ -19,9 +19,9 @@ public interface ChildView extends ParentView {
     @Override
     void parentMethodWithArg(final String i); // ParentDefaultStrategy -> ChildDefaultStrategy
 
-    void parentMethodWithArg2(@Nullable String i); // ParentDefaultStrategy
+    void parentMethodWithArg2(@Nullable String i); // ParentDefaultStrategy -> ChildDefaultStrategy
 
-    void parentMethodWithArg3(String a); // ParentDefaultStrategy
+    void parentMethodWithArg3(String a); // ParentDefaultStrategy -> ChildDefaultStrategy
 
     @StateStrategyType(Strategy2.class)
     void childMethodWithStrategy(); // Strategy2
