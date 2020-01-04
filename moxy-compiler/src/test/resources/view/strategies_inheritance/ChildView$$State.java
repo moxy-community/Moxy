@@ -3,6 +3,7 @@ package view.strategies_inheritance;
 import moxy.viewstate.MvpViewState;
 import moxy.viewstate.ViewCommand;
 import view.strategies_inheritance.strategies.ChildDefaultStrategy;
+import view.strategies_inheritance.strategies.ParentDefaultStrategy;
 import view.strategies_inheritance.strategies.Strategy1;
 import view.strategies_inheritance.strategies.Strategy2;
 
@@ -242,7 +243,7 @@ public class ChildView$$State extends MvpViewState<ChildView> implements ChildVi
 
     public class ParentMethod3Command extends ViewCommand<ChildView> {
         ParentMethod3Command() {
-            super("parentMethod3", ChildDefaultStrategy.class);
+            super("parentMethod3", ParentDefaultStrategy.class);
         }
 
         @Override
