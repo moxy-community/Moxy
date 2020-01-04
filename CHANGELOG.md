@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `MvpPresenter.presenterScope` extension for kotlin coroutines
 
 ### Behaviour change
-- Changed strategy resolution algorithm. Child view interface strategies will not propogate to superinterface views. More info [in this issue](https://github.com/moxy-community/Moxy/issues/70)
+- Changed strategy resolution algorithm. Child view interface strategies will not propagate to superinterface views. More info [in this issue](https://github.com/moxy-community/Moxy/issues/70)
 
 
 ## [2.0.2] - 2019-09-20
