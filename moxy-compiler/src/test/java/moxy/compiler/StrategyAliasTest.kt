@@ -80,43 +80,7 @@ class StrategyAliasTest : CompilerTest() {
             }
         """.toJavaFile()
 
-       val expected = """
-            package moxy;
-
-            import java.lang.Override;
-            import moxy.viewstate.MvpViewState;
-            import moxy.viewstate.ViewCommand;
-            import moxy.viewstate.strategy.OneExecutionStateStrategy;
-
-            public class ViewInterface${"$$"}State extends MvpViewState<ViewInterface> implements ViewInterface {
-            	@Override
-            	public void testMethod() {
-            		TestMethodCommand testMethodCommand = new TestMethodCommand();
-            		this.viewCommands.beforeApply(testMethodCommand);
-
-            		if (hasNotView()) {
-            			return;
-            		}
-
-            		for (ViewInterface view : this.views) {
-            			view.testMethod();
-            		}
-
-            		this.viewCommands.afterApply(testMethodCommand);
-            	}
-
-            	public class TestMethodCommand extends ViewCommand<ViewInterface> {
-            		TestMethodCommand() {
-            			super("testMethod", OneExecutionStateStrategy.class);
-            		}
-
-            		@Override
-            		public void apply(ViewInterface mvpView) {
-            			mvpView.testMethod();
-            		}
-            	}
-            }
-        """.toJavaFile()
+        val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
         val presenter = generateViewStateFor("moxy.ViewInterface")
         val compilation = compileSourcesWithProcessor(viewInterface, presenter)
@@ -147,7 +111,48 @@ class StrategyAliasTest : CompilerTest() {
             }
         """.toJavaFile()
 
-        val expected = """
+        val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
+
+        val presenter = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+
+        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+
+        assertExceptedFilesGenerated(
+            compilation.generatedFiles(),
+            expectedCompilation.generatedFiles())
+    }
+
+    @Test
+    fun testLibraryOneExecutionAliasStateStrategy() {
+        @Language("JAVA") val viewInterface = """
+            package moxy;
+            
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.alias.OneExecution;
+            
+            @OneExecution
+            public interface ViewInterface extends MvpView {
+                void testMethod();
+            }
+        """.toJavaFile()
+
+        val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
+
+        val presenter = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+
+        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+
+        assertExceptedFilesGenerated(
+            compilation.generatedFiles(),
+            expectedCompilation.generatedFiles())
+    }
+
+    companion object {
+        private val GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD = """
             package moxy;
 
             import java.lang.Override;
@@ -184,15 +189,6 @@ class StrategyAliasTest : CompilerTest() {
             	}
             }
         """.toJavaFile()
-
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
-
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
-
-        assertExceptedFilesGenerated(
-            compilation.generatedFiles(),
-            expectedCompilation.generatedFiles())
     }
 
 }
