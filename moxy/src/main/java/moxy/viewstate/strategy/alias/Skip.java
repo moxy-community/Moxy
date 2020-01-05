@@ -11,6 +11,8 @@ import moxy.viewstate.strategy.StateStrategyType;
 /**
  * State strategy alias for {@link SkipStrategy}.
  * Applying this annotation has the same effect as applying {@code @StateStrategyType(SkipStrategy.class)}.
+ * <br><br>
+ * With this strategy command will not be put in the commands queue
  */
 @Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)

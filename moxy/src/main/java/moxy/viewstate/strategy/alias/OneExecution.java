@@ -11,6 +11,8 @@ import moxy.viewstate.strategy.StateStrategyType;
 /**
  * State strategy alias for {@link OneExecutionStateStrategy}.
  * Applying this annotation has the same effect as applying {@code @StateStrategyType(OneExecutionStateStrategy.class)}.
+ * <br><br>
+ * With this strategy command will be saved in the commands queue, but will be removed after its first execution.
  */
 @Target(value = {ElementType.TYPE, ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
