@@ -6,7 +6,7 @@ Moxy 2 is out! Check out the [migration guide](https://github.com/moxy-community
 
 Moxy is a library that allows for hassle-free implementation of the MVP pattern in an Android Application. Without troubles of lifecycle and boilerplate code!
 
-First principles of using Moxy:
+Illustration of how Moxy is working:
 ![schematic_using](https://habrastorage.org/files/a2e/b51/8b4/a2eb518b465a4df9b47e68794519270d.gif)
 
 ## Capabilities
@@ -21,26 +21,16 @@ View interface
 ```kotlin
 interface MainView : MvpView {
 
-    @StateStrategyType(AddToEndSingleStrategy::class)
-    fun printLog(msg: String)
+    @AddToEndSingle
+    fun displayUser(user: User)
 }
 
-class MainActivity : MvpAppCompatActivity(), MainView {
+class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 
-    @InjectPresenter
-    internal lateinit var presenter: MainPresenter
+    private val presenter by moxyPresenter { MainPresenter() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-
-    override fun printLog(msg: String) {
-        Log.e(TAG, "printLog : msg : $msg activity hash code : ${hashCode()}")
-    }
-
-    companion object {
-        const val TAG = "MoxyDebug"
+    override fun displayUser(user: User) {
+        userLayout.showUser(user)
     }
 }
 ```
@@ -49,25 +39,32 @@ Presenter
 @InjectViewState
 class MainPresenter : MvpPresenter<MainView>() {
     override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        Log.e(MainActivity.TAG, "presenter hash code : ${hashCode()}")
-        viewState.printLog("TEST")
+        viewState.showUser(getCurrentUser())
     }
 }
 ```
 
 ## Inject with Dagger2
+Kotlin:
 ```kotlin
 @Inject
-lateinit var daggerPresenter: Lazy<MainPresenter>
+lateinit var presenterProvider: Provider<MainPresenter>
 
+private val presenter by moxyPresenter { presenterProvider.get() }
+```
+Java:
+```java
 @InjectPresenter
-lateinit var presenter: MainPresenter
+MainPresenter presenter;
+
+@Inject
+Provider<MainPresenter> presenterProvider;
 
 @ProvidePresenter
-fun providePresenter(): MainPresenter = daggerPresenter.get()
+MainPresenter providePresenter() {
+    return presenterProvider.get();
+}
 ```
-
 
 ## Android studio and Intellij templates
 **We will change this template in future**
@@ -82,7 +79,7 @@ In order to avoid tedious task of writing boilerplate code for binding activitie
 ## Integration
 (Please replace moxyVersion with the latest version number:[ ![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg) ](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
 
-### Base modules integration:
+### Base library:
 ```groovy
 implementation "com.github.moxy-community:moxy:$moxyVersion"
 ```
@@ -97,28 +94,28 @@ apply plugin: 'kotlin-kapt'
 ```groovy
 kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 ```
-### Default android module integration
+### Default android module
 For additional base view classes `MvpActivity` and `MvpFragment` add this:
 ```groovy
 implementation "com.github.moxy-community:moxy-android:$moxyVersion"
 ```
-### AppCompat module integration
-If you are going to use AppCompat, you'll need `MvpAppCompatActivity` and `MvpAppCompatFragment` classes. Add this:
+### AppCompat module
+If you are using AppCompat, you'll need `MvpAppCompatActivity` and `MvpAppCompatFragment` classes. Add this:
 ```groovy
 implementation "com.github.moxy-community:moxy-app-compat:$moxyVersion"
 ```
-### AndroidX module integration
+### AndroidX module
 If you're using AndroidX, you'll need a different implementation for `MvpAppCompatActivity` and `MvpAppCompatFragment` classes. Use this one:
 ```groovy
 implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
 ```
-### AndroidX (Google material) module integration
+### AndroidX (Google material) module
 If you're using Google material, use `MvpBottomSheetDialogFragment` and add this:
 ```groovy
 implementation "com.github.moxy-community:moxy-material:$moxyVersion"
 ```
-### Kotlin extensions integration
-If you use kotlin, you can declare presenters in your views using property delegate:
+### Kotlin extensions
+Declare presenters in your views using property delegate:
 ```kotlin
 class MyFragment: MvpFragment() {
     ...
@@ -126,14 +123,24 @@ class MyFragment: MvpFragment() {
     ...
 }
 ```
-To use `MvpDelegateHolder.moxyPresenter`, add this:
+Launch coroutines in presenter scope:
+```kotlin
+class MyPresenter : MvpPresenter<MvpView>() {
+    override fun onFirstViewAttach() {
+        presenterScope.launch {
+            // Coroutine that will be canceled when presenter is destroyed
+        }
+    }
+}
+```
+To use `MvpDelegateHolder.moxyPresenter` and `MvpPresenter.presenterScope`, add this:
 ```groovy
 implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
 ```
 ## New Features and Compiler option for Migration from old version
 
 By default, each `MvpView` method must have an annotation `@StateStrategyType`.
-In the old version of Moxy it was allowed to miss a strategy for methods. In this case a default strategy was applied.
+In the version 1 of Moxy it was allowed to omit stategies for methods. In this case a default strategy was applied.
 
 You can fallback to the old behavior. To do this, set the `disableEmptyStrategyCheck` parameter to true.
 ```kotlin
@@ -156,7 +163,7 @@ To switch the error output method enable this option
 enableEmptyStrategyHelper : 'true'
 ```
 
-How to correctly use compilation flags see in the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
+How to correctly use compilation flags check out the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
 
 ## ProGuard\R8
 `moxy-android`, `moxy-appcompat`, `moxy-androidx` and `moxy-material` artifacts already include ProGuard rule files, no additional configuration required.
