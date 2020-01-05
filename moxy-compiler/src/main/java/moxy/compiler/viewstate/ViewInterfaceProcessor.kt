@@ -117,7 +117,7 @@ class ViewInterfaceProcessor(
             messager.printMessage(Kind.ERROR, message, methodElement)
         }
 
-        val annotation: AnnotationMirror? = methodElement.getAnnotationMirror(StateStrategyType::class)
+        val annotation: AnnotationMirror? = getStateStrategyTypeMirror(methodElement)
 
         // get strategy from annotation
         val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
@@ -146,6 +146,38 @@ class ViewInterfaceProcessor(
             methodElement,
             strategyClass,
             methodTag)
+    }
+
+    private fun getStateStrategyTypeMirror(methodElement: ExecutableElement): AnnotationMirror? {
+        val strategies = getStateStrategyTypeMirrors(methodElement)
+
+        if (strategies.size > 1) {
+            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for method " +
+                    "'${methodElement.simpleName}(${methodElement.parameters.joinToString { it.asType().toString() }})'" +
+                    " in interface '${methodElement.enclosingElement.asType()}'", methodElement)
+        }
+
+        return strategies.firstOrNull()
+    }
+
+    private fun getStateStrategyTypeMirror(typeElement: TypeElement): AnnotationMirror? {
+        val strategies = getStateStrategyTypeMirrors(typeElement)
+
+        if (strategies.size > 1) {
+            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for " +
+                    "'${typeElement.simpleName}'", typeElement)
+        }
+
+        return strategies.firstOrNull()
+    }
+
+    private fun getStateStrategyTypeMirrors(element: Element): List<AnnotationMirror> {
+        val enclosed = listOfNotNull(element.getAnnotationMirror(StateStrategyType::class))
+
+        val aliased = element.annotationMirrors
+            .mapNotNull { it.annotationType.asTypeElement().getAnnotationMirror(StateStrategyType::class) }
+
+        return enclosed + aliased
     }
 
     /**
@@ -191,7 +223,7 @@ class ViewInterfaceProcessor(
      * Returns default StateStrategyType for this [viewInterface], if specified
      */
     private fun getInterfaceStateStrategyType(viewInterface: TypeElement): TypeElement? {
-        val annotation = viewInterface.getAnnotationMirror(StateStrategyType::class)
+        val annotation = getStateStrategyTypeMirror(viewInterface)
         val value = annotation?.getValueAsTypeMirror(StateStrategyType::value)
         return if (value != null && value.kind == TypeKind.DECLARED) {
             value.asTypeElement()
