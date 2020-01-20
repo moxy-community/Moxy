@@ -1,11 +1,7 @@
 package example.com.androidxsample.view
 
-import android.util.Log
-import example.com.androidxsample.view.Logger.Companion.MOXY_TAG
-import moxy.InjectViewState
 import moxy.MvpPresenter
 
-@InjectViewState
 class MainPresenter constructor(
     private val logger: Logger
 ) : MvpPresenter<MainView>() {
