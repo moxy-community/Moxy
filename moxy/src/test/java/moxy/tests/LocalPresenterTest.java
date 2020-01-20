@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -13,13 +12,11 @@ import java.lang.reflect.Field;
 import moxy.MvpDelegate;
 import moxy.MvpPresenter;
 import moxy.presenter.InjectViewStatePresenter;
-import moxy.presenter.NoViewStatePresenter;
 import moxy.view.DelegateLocalPresenterTestView;
 import moxy.view.TestView;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
@@ -70,20 +67,6 @@ public class LocalPresenterTest {
             mViewState.setAccessible(true);
             assertNotNull("ViewState is null for InjectViewStatePresenter",
                     mViewState.get(injectViewStatePresenter));
-        } catch (IllegalAccessException | NoSuchFieldException e) {
-            fail(e.getLocalizedMessage());
-        }
-    }
-
-    @Test
-    public void checkWithoutViewState() {
-        NoViewStatePresenter noViewStatePresenter = new NoViewStatePresenter();
-        noViewStatePresenter.attachView(mTestView);
-        try {
-            Field mViewState = MvpPresenter.class.getDeclaredField("viewState");
-
-            mViewState.setAccessible(true);
-            assertNull("ViewState is not null for NoViewStatePresenter", mViewState.get(noViewStatePresenter));
         } catch (IllegalAccessException | NoSuchFieldException e) {
             fail(e.getLocalizedMessage());
         }
