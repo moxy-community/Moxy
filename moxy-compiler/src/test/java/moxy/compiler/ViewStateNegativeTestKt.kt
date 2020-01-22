@@ -7,13 +7,13 @@ class ViewStateNegativeTestKt : CompilerTest() {
 
     //TODO: can't test it for kotlin sources
     @Test
-    fun successIfInjectViewStateNotOnPresenter() {
+    fun successWithoutInjectViewStateOnPresenter() {
         @Language("JAVA") val presenter = """
             import moxy.InjectViewState;
             import moxy.MvpPresenter;
             import moxy.view.TestView;
             
-            public class InjectViewStateNotOnPresenter extends MvpPresenter<TestView> {
+            public class WithoutInjectViewStatePresenter extends MvpPresenter<TestView> {
         
             }
         """.toJavaFile()
@@ -27,7 +27,7 @@ class ViewStateNegativeTestKt : CompilerTest() {
         @Language("JAVA") val presenter = """
             import moxy.MvpPresenter;
             
-            public class InjectViewStateNotOnPresenter extends MvpPresenter<EmptyView> {
+            public class WithoutInjectViewStatePresenter extends MvpPresenter<EmptyView> {
         
             }
         """.toJavaFile()
