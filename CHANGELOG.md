@@ -10,8 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Compilation error if View interface method's parameter name clash with generated code
 
 ### Added
-- `MvpPresenter.presenterScope` extension for kotlin coroutines
+- Added `MvpPresenter.presenterScope` extension for kotlin coroutines
 - Added ability to define alias annotations for `@StateStrategyType` annotation, and added some default aliases to the library. More info [in this issue](https://github.com/moxy-community/Moxy/issues/72)
+- Added `@Inherited` annotation to `@InjectViewState`. It means `@InjectViewState` is now optional, `ViewState` will be generated even without explicit annotation on `MvpPresenter` subclass
 
 ### Behaviour change
 - Changed strategy resolution algorithm. Child view interface strategies will not propagate to superinterface views. More info [in this issue](https://github.com/moxy-community/Moxy/issues/70)
