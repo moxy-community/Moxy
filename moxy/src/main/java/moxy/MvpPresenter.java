@@ -6,6 +6,7 @@ import java.util.WeakHashMap;
 import moxy.locators.ViewStateLocator;
 import moxy.viewstate.MvpViewState;
 
+@InjectViewState
 public abstract class MvpPresenter<View extends MvpView> {
 
     private boolean isFirstLaunch = true;
