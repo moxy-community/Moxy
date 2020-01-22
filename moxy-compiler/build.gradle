@@ -22,7 +22,7 @@ dependencies {
     kapt deps.gradleIncapHelperProcessor
     kapt deps.autoservice
 
-    testImplementation project(':moxy')
+    testImplementation project(':moxy').sourceSets.test.output
     testImplementation deps.junit
     testImplementation deps.truth
     testImplementation deps.compiletesting
