@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -19,7 +18,6 @@ import moxy.view.TestView;
 
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
@@ -76,14 +74,15 @@ public class LocalPresenterTest {
     }
 
     @Test
-    public void checkWithoutViewState() {
-        NoViewStatePresenter noViewStatePresenter = new NoViewStatePresenter();
-        noViewStatePresenter.attachView(mTestView);
+    public void checkWithoutInjectViewState() {
+        NoViewStatePresenter presenter = new NoViewStatePresenter();
+        presenter.attachView(mTestView);
         try {
             Field mViewState = MvpPresenter.class.getDeclaredField("viewState");
 
             mViewState.setAccessible(true);
-            assertNull("ViewState is not null for NoViewStatePresenter", mViewState.get(noViewStatePresenter));
+            assertNotNull("ViewState is null for NoViewStatePresenter",
+                    mViewState.get(presenter));
         } catch (IllegalAccessException | NoSuchFieldException e) {
             fail(e.getLocalizedMessage());
         }
