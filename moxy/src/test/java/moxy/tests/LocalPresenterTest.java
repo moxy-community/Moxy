@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import moxy.MvpDelegate;
 import moxy.MvpPresenter;
 import moxy.presenter.InjectViewStatePresenter;
+import moxy.presenter.NoViewStatePresenter;
 import moxy.view.DelegateLocalPresenterTestView;
 import moxy.view.TestView;
 
@@ -67,6 +68,21 @@ public class LocalPresenterTest {
             mViewState.setAccessible(true);
             assertNotNull("ViewState is null for InjectViewStatePresenter",
                     mViewState.get(injectViewStatePresenter));
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void checkWithoutInjectViewState() {
+        NoViewStatePresenter presenter = new NoViewStatePresenter();
+        presenter.attachView(mTestView);
+        try {
+            Field mViewState = MvpPresenter.class.getDeclaredField("viewState");
+
+            mViewState.setAccessible(true);
+            assertNotNull("ViewState is null for NoViewStatePresenter",
+                    mViewState.get(presenter));
         } catch (IllegalAccessException | NoSuchFieldException e) {
             fail(e.getLocalizedMessage());
         }
