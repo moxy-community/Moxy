@@ -36,7 +36,6 @@ class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 ```
 Presenter
 ```kotlin
-@InjectViewState
 class MainPresenter : MvpPresenter<MainView>() {
     override fun onFirstViewAttach() {
         viewState.showUser(getCurrentUser())
@@ -167,7 +166,7 @@ How to correctly use compilation flags check out the [sample-app build.gradle fi
 
 ## ProGuard\R8
 `moxy-android`, `moxy-appcompat`, `moxy-androidx` and `moxy-material` artifacts already include ProGuard rule files, no additional configuration required.
-While using standalone `moxy` you need in including rules from [this file](https://github.com/moxy-community/Moxy/blob/develop/proguard-rules.pro) manually.
+While using standalone `moxy` you have to manually add rules from [this file](https://github.com/moxy-community/Moxy/blob/develop/proguard-rules.pro).
 
 
 ## Road Map
@@ -176,8 +175,8 @@ While using standalone `moxy` you need in including rules from [this file](https
 * [✓] ~~Remove reflectors and common presenter store~~
 * [✓] ~~Add delivery module support~~
 * [х] ~~Add separate Annotation Processor for migration~~
+* [✓] ~~Research possibility of removing @InjectViewState annotation~~
 * [ ] Provide Runtime Implementation
-* [ ] Research possibility of removing @InjectViewState annotation
 
 ## Moxy Community
 Brave people who created the library:
