@@ -80,7 +80,7 @@ private void updatePublishVersion(String module) {
 
 ext {
     groupId = 'com.github.moxy-community'
-    targetVersion = "2.0.2"
+    targetVersion = "2.1.0"
 
     deps = [
         android: 'com.google.android:android:1.6_r2',
