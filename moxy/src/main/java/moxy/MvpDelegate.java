@@ -202,6 +202,7 @@ public class MvpDelegate<Delegated> {
         childDelegatesClone.addAll(childDelegates);
 
         for (MvpDelegate childDelegate : childDelegatesClone) {
+            childDelegate.onSaveInstanceState();
             childDelegate.onDestroyView();
         }
 
