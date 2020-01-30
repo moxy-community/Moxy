@@ -93,7 +93,7 @@ public final class Util {
             } else if (param instanceof TypeVariable) {
                 String type = types.get(param.toString());
                 if (type == null) {
-                    type = param.toString();
+                    type = ((TypeVariable) param).getUpperBound().toString();
                 }
                 result += type;
             } else {

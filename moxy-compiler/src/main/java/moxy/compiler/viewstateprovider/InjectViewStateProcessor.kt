@@ -26,8 +26,8 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
     }
 
     private fun getViewStateClassName(typeElement: TypeElement): String? {
-        getViewStateClassFromAnnotationParams(typeElement)
-            .ifNotNull { return it }
+        val viewState = getViewStateClassFromAnnotationParams(typeElement)
+        if (viewState != null) return viewState
 
         val view = getViewClassFromPresenterTypeElement(typeElement)
 
@@ -101,10 +101,6 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
             superclass = superclassElement.superclass
         }
         return ""
-    }
-
-    private inline fun <T> T.ifNotNull(block: (T) -> Unit) {
-        if (this != null) block(this)
     }
 
     private inline fun catchTypeMirror(block: () -> Unit): TypeMirror? {
