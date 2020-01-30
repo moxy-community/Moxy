@@ -207,6 +207,7 @@ Brave people who created the library:
 [@A-Zaiats](https://github.com/A-Zaiats)  
 [@lion4ik](https://github.com/lion4ik)  
 [@NotPerfectBlue](https://github.com/NotPerfectBlue)  
+[@IlyaGulya](https://github.com/IlyaGulya)  
 
 
 You may also find them in [contributors page of the old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)

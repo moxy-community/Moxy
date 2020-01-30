@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixes
-- Compilation error if View interface method's parameter name clash with generated code
+- Fixed compilation error if View interface method's parameter name clash with generated code
+- Fixed restoration of childDelegate delegateTag in fragments. More info in [this PR](https://github.com/moxy-community/Moxy/pull/80)
 
 ### Added
 - Added `MvpPresenter.presenterScope` extension for kotlin coroutines
