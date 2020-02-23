@@ -20,7 +20,7 @@ android {
 dependencies {
     api project(":moxy")
 
-    compileOnly deps.android
+    compileOnly Deps.android
     compileOnly project(':stub-androidx')
 }
 
