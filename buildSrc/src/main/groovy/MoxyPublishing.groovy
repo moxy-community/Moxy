@@ -21,7 +21,7 @@ class MoxyPublishing implements Plugin<Project> {
 
         project.afterEvaluate {
             if (extension.groupId == null) {
-                extension.groupId = project.rootProject.ext.groupId
+                extension.groupId = "com.github.moxy-community"
             }
             if (extension.publishingProperties == null) {
                 Properties properties = new Properties()

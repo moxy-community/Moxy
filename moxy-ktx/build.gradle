@@ -5,12 +5,12 @@ apply plugin: MoxyPublishing
 
 dependencies {
     api project(":moxy")
-    implementation deps.kotlinStdlib
-    compileOnly deps.coroutines
+    implementation Deps.kotlinStdlib
+    compileOnly Deps.coroutines
 
-    testImplementation deps.junit
-    testImplementation deps.coroutines
-    testImplementation deps.coroutinesTest
+    testImplementation Deps.junit
+    testImplementation Deps.coroutines
+    testImplementation Deps.coroutinesTest
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8

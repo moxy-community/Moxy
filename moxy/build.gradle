@@ -7,13 +7,13 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
-    compileOnly deps.android
+    compileOnly Deps.android
 
-    testImplementation deps.junit
-    testImplementation deps.mockito
-    testImplementation deps.truth
-    testImplementation deps.compiletesting
-    testImplementation deps.javapoet
+    testImplementation Deps.junit
+    testImplementation Deps.mockito
+    testImplementation Deps.truth
+    testImplementation Deps.compiletesting
+    testImplementation Deps.javapoet
     testAnnotationProcessor project(":moxy-compiler")
 }
 
@@ -29,11 +29,11 @@ bintrayUpload.dependsOn install
 // Tasks for sources and javadocs jars
 task sourcesJar(type: Jar) {
     from sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    getArchiveClassifier().set('sources')
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    getArchiveClassifier().set('javadoc')
     from javadoc.destinationDir
 }
 

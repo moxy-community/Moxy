@@ -11,22 +11,22 @@ targetCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     implementation project(':moxy')
 
-    implementation deps.kotlinStdlib
+    implementation Deps.kotlinStdlib
 
-    implementation deps.javapoet
+    implementation Deps.javapoet
 
-    compileOnly deps.autocommon
-    compileOnly deps.autoservice
-    compileOnly deps.gradleIncapHelperAnnotations
+    compileOnly Deps.autocommon
+    compileOnly Deps.autoservice
+    compileOnly Deps.gradleIncapHelperAnnotations
 
-    kapt deps.gradleIncapHelperProcessor
-    kapt deps.autoservice
+    kapt Deps.gradleIncapHelperProcessor
+    kapt Deps.autoservice
 
     testImplementation project(':moxy').sourceSets.test.output
-    testImplementation deps.junit
-    testImplementation deps.truth
-    testImplementation deps.compiletesting
-    testImplementation deps.asm
+    testImplementation Deps.junit
+    testImplementation Deps.truth
+    testImplementation Deps.compiletesting
+    testImplementation Deps.asm
 
     //workaround to use test resources (https://stackoverflow.com/q/24870464)
     testRuntime files(sourceSets.test.output.resourcesDir)
