@@ -82,22 +82,48 @@ In order to avoid tedious task of writing boilerplate code for binding activitie
 ## Integration
 Please replace `moxyVersion` with the latest version number: [![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg)](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
 
-### Base library:
+### Base modules
+
+#### Java
+
 ```groovy
-implementation "com.github.moxy-community:moxy:$moxyVersion"
-```
-#### Java project
-```groovy
-annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
+dependencies {
+  // ...
+  implementation "com.github.moxy-community:moxy:$moxyVersion"
+  annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
+}
 ```
 #### Kotlin
+
 ```groovy
 apply plugin: 'kotlin-kapt'
+// ...
+dependencies {
+  // ...
+  implementation "com.github.moxy-community:moxy:$moxyVersion"
+  kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+}
 ```
+
+#### Java 8
+
+Moxy uses [Java 8 features](https://developer.android.com/studio/write/java8-support), so you also need to specify source and target compatibility for each Module that uses Moxy:
+
 ```groovy
-kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+android {
+  ...
+  // For Java projects
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+  // For Kotlin projects
+  kotlinOptions {
+    jvmTarget = "1.8"
+  }
+}
 ```
-### Default android module
+### Default Android module
 For additional base view classes `MvpActivity` and `MvpFragment` add this:
 ```groovy
 implementation "com.github.moxy-community:moxy-android:$moxyVersion"
