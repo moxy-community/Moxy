@@ -44,14 +44,18 @@ class MainPresenter : MvpPresenter<MainView>() {
 ```
 
 ## Inject with Dagger2
-Kotlin:
+
+### Kotlin
+
 ```kotlin
 @Inject
 lateinit var presenterProvider: Provider<MainPresenter>
 
 private val presenter by moxyPresenter { presenterProvider.get() }
 ```
-Java:
+
+### Java
+
 ```java
 @InjectPresenter
 MainPresenter presenter;
@@ -76,7 +80,7 @@ In order to avoid tedious task of writing boilerplate code for binding activitie
 [Telegram channel (ru)](https://telegram.me/moxy_ru)<br />
 
 ## Integration
-(Please replace moxyVersion with the latest version number:[ ![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg) ](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
+Please replace `moxyVersion` with the latest version number: [![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg)](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
 
 ### Base library:
 ```groovy
@@ -143,7 +147,7 @@ In the version 1 of Moxy it was allowed to omit stategies for methods. In this c
 
 You can fallback to the old behavior. To do this, set the `disableEmptyStrategyCheck` parameter to true.
 ```kotlin
-disableEmptyStrategyCheck : ‘true’
+disableEmptyStrategyCheck : 'true'
 ```
 
 In this case the default strategy will be `AddToEndSingleStrategy`. In the old version the default strategy was `AddToEndStrategy`.
