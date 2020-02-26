@@ -15,6 +15,7 @@
       android:gravity="center"
       android:text="Activity Main"
       />
+
   <Button
       android:id="@+id/activity_main_button_ktx"
       android:layout_width="match_parent"

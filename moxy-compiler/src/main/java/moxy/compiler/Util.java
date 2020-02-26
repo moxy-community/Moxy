@@ -16,7 +16,8 @@
  */
 package moxy.compiler;
 
-import com.google.common.base.Preconditions;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -224,9 +225,8 @@ public final class Util {
     public static <T> boolean equalsBy(
         Collection<T> first,
         Collection<T> second,
-        BiFunction<T, T, Boolean> predicate) {
+        @NotNull BiFunction<T, T, Boolean> predicate) {
 
-        Preconditions.checkArgument(predicate != null, "Require non null predicate!");
         if (first != null && second != null) {
             if (first.size() != second.size()) {
                 return false;

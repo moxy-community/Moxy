@@ -6,6 +6,7 @@ import java.util.WeakHashMap;
 import moxy.locators.ViewStateLocator;
 import moxy.viewstate.MvpViewState;
 
+@InjectViewState
 public abstract class MvpPresenter<View extends MvpView> {
 
     private boolean isFirstLaunch = true;
@@ -19,6 +20,8 @@ public abstract class MvpPresenter<View extends MvpView> {
     private MvpViewState<View> viewState;
 
     private Class<? extends MvpPresenter> presenterClass;
+
+    OnDestroyListener coroutineScope;
 
     public MvpPresenter() {
         Binder.bind(this);

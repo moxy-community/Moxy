@@ -9,15 +9,12 @@ targetCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     compileOnly deps.android
 
-    testImplementation project(':moxy-compiler')
     testImplementation deps.junit
     testImplementation deps.mockito
     testImplementation deps.truth
-    testImplementation deps.android
-    testImplementation deps.robolectric
-    testImplementation deps.androidJunit
     testImplementation deps.compiletesting
     testImplementation deps.javapoet
+    testAnnotationProcessor project(":moxy-compiler")
 }
 
 moxyPublishing {

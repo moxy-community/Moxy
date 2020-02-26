@@ -1,10 +1,8 @@
 package example.com.androidxsample.view.ktx
 
 import example.com.androidxsample.view.Logger
-import moxy.InjectViewState
 import moxy.MvpPresenter
 
-@InjectViewState
 class KtxPresenter constructor(
     private val logger: Logger
 ) : MvpPresenter<KtxView>() {
