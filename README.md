@@ -88,9 +88,9 @@ Please replace `moxyVersion` with the latest version number: [![Bintray](https:/
 
 ```groovy
 dependencies {
-  // ...
-  implementation "com.github.moxy-community:moxy:$moxyVersion"
-  annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
+    // ...
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    annotationProcessor "com.github.moxy-community:moxy-compiler:$moxyVersion"
 }
 ```
 #### Kotlin
@@ -99,9 +99,9 @@ dependencies {
 apply plugin: 'kotlin-kapt'
 // ...
 dependencies {
-  // ...
-  implementation "com.github.moxy-community:moxy:$moxyVersion"
-  kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+    // ...
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 }
 ```
 
@@ -111,16 +111,16 @@ Moxy uses [Java 8 features](https://developer.android.com/studio/write/java8-sup
 
 ```groovy
 android {
-  ...
-  // For Java projects
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-  // For Kotlin projects
-  kotlinOptions {
-    jvmTarget = "1.8"
-  }
+    ...
+    // For Java projects
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // For Kotlin projects
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 ```
 ### Default Android module
