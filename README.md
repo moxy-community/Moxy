@@ -195,8 +195,7 @@ enableEmptyStrategyHelper : 'true'
 How to correctly use compilation flags check out the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
 
 ## ProGuard\R8
-`moxy-android`, `moxy-appcompat`, `moxy-androidx` and `moxy-material` artifacts already include ProGuard rule files, no additional configuration required.
-While using standalone `moxy` you have to manually add rules from [this file](https://github.com/moxy-community/Moxy/blob/develop/proguard-rules.pro).
+If you are using R8 then no additional configuration required. If you use ProGuard then you have to manually add rules from [this file](https://github.com/moxy-community/Moxy/blob/develop/moxy/src/main/resources/META-INF/proguard/moxy.pro).
 
 
 ## Road Map

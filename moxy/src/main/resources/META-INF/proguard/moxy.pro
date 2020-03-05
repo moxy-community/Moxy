@@ -12,3 +12,5 @@
 -keep class **$$ViewStateProvider { *; }
 # Keep Moxy classes
 -keep class moxy.** { *; }
+# Don't warn about unresolved references of coroutines, androidx classes etc
+-dontwarn moxy.**
