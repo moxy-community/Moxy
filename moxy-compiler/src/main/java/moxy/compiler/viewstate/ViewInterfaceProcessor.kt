@@ -1,6 +1,7 @@
 package moxy.compiler.viewstate
 
 import com.squareup.javapoet.JavaFile
+import moxy.MvpView
 import moxy.compiler.ElementProcessor
 import moxy.compiler.MvpCompiler
 import moxy.compiler.MvpCompiler.Companion.elementUtils
@@ -12,13 +13,13 @@ import moxy.compiler.getValueAsString
 import moxy.compiler.getValueAsTypeMirror
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import java.util.*
 import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
+import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.tools.Diagnostic.Kind
@@ -54,7 +55,7 @@ class ViewInterfaceProcessor(
         this.viewInterfaceName = element.simpleName.toString()
 
         // Get methods from input interface
-        val methods = getMethods(element)
+        val methods = getMethods(element).validateAndMap(element)
 
         // Allow methods to have equal names
         val methodsCounter = mutableMapOf<String, Int>()
@@ -72,7 +73,7 @@ class ViewInterfaceProcessor(
     /**
      * Returns ViewMethod for each suitable method from this interface and its superinterfaces
      */
-    private fun getMethods(element: TypeElement): Set<ViewMethod> {
+    private fun getMethods(element: TypeElement): List<StockViewMethod> {
         // Get methods from input class
         val enclosedMethods = getEnclosedMethods(element)
 
@@ -94,7 +95,7 @@ class ViewInterfaceProcessor(
     /**
      * Returns ViewMethod for each suitable enclosed method into this interface (but not superinterface)
      */
-    private fun getEnclosedMethods(viewInterface: TypeElement): Set<ViewMethod> {
+    private fun getEnclosedMethods(viewInterface: TypeElement): List<StockViewMethod> {
         val defaultStrategy = getInterfaceStateStrategyType(viewInterface)
         return viewInterface.enclosedElements
             .filter {
@@ -102,14 +103,13 @@ class ViewInterfaceProcessor(
                 it.kind == ElementKind.METHOD && !it.isStatic()
             }
             .map { getViewMethod(it as ExecutableElement, viewInterface, defaultStrategy) }
-            .toSet()
     }
 
     private fun getViewMethod(
-        methodElement: ExecutableElement,
-        viewInterface: TypeElement,
-        defaultStrategy: TypeElement?
-    ): ViewMethod {
+            methodElement: ExecutableElement,
+            viewInterface: TypeElement,
+            defaultStrategy: TypeElement?
+    ): StockViewMethod {
         if (methodElement.returnType.kind != TypeKind.VOID) {
             val message = "You are trying to generate ViewState for ${viewInterface.simpleName}. " +
                     "But ${viewInterface.simpleName} contains non-void method \"${methodElement.simpleName}\" " +
@@ -122,14 +122,15 @@ class ViewInterfaceProcessor(
         // get strategy from annotation
         val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
 
-        val strategyClass: TypeElement = if (strategyClassFromAnnotation != null) {
-            strategyClassFromAnnotation.asTypeElement()
+        val strategyClass: TypeElement? = if (strategyClassFromAnnotation != null || viewInterface.isNotMvpViewExtend()) {
+            strategyClassFromAnnotation?.asTypeElement()
         } else {
             if (defaultStrategy == null && !disableEmptyStrategyCheck) {
                 if (enableEmptyStrategyHelper) {
                     migrationMethods.add(MigrationMethod(viewInterface, methodElement))
                 } else {
                     val message = ("A View method has no strategy! " +
+                            "Method \"::${methodElement.simpleName}\". " +
                             "Add @StateStrategyType annotation to this method, or to the View interface. " +
                             "You can also specify default strategy via compiler option.")
                     messager.printMessage(Kind.ERROR, message, methodElement)
@@ -141,7 +142,7 @@ class ViewInterfaceProcessor(
         val tagFromAnnotation = annotation?.getValueAsString(StateStrategyType::tag)
         val methodTag: String = tagFromAnnotation ?: methodElement.simpleName.toString()
 
-        return ViewMethod(
+        return StockViewMethod(
             viewInterfaceElement.asDeclaredType(),
             methodElement,
             strategyClass,
@@ -185,14 +186,14 @@ class ViewInterfaceProcessor(
      */
     private fun iterateInterfaces(
         viewInterface: TypeElement
-    ): Set<ViewMethod> {
+    ): List<StockViewMethod> {
         return viewInterface.interfaces
             .map {
                 getTypeAndValidateGenerics(it)
             }
-            .flatMapToSet {
+            .flatMap { typeElement ->
                 // implicit recursion
-                getMethods(it)
+                getMethods(typeElement)
             }
     }
 
@@ -213,9 +214,9 @@ class ViewInterfaceProcessor(
      * Combines methods, comparing by [ViewMethod.equals], discarding duplicates from superinterface
      */
     private fun combineMethods(
-        methods: Set<ViewMethod>,
-        superInterfaceMethods: Set<ViewMethod>
-    ): Set<ViewMethod> {
+        methods: List<StockViewMethod>,
+        superInterfaceMethods: List<StockViewMethod>
+    ): List<StockViewMethod> {
         return methods + superInterfaceMethods
     }
 
@@ -236,13 +237,42 @@ class ViewInterfaceProcessor(
         return modifiers.contains(Modifier.STATIC)
     }
 
-    private inline fun <T, R> List<T>.flatMapToSet(transform: (T) -> Iterable<R>): Set<R> {
-        return flatMapTo(LinkedHashSet(), transform)
-    }
-
     companion object {
         private const val OPTION_DEFAULT_STRATEGY = MvpCompiler.DEFAULT_MOXY_STRATEGY
         private val DEFAULT_STATE_STRATEGY: TypeElement =
             elementUtils.getTypeElement(AddToEndSingleStrategy::class.java.canonicalName)
+    }
+
+    class StockViewMethod(
+            val targetInterfaceElement: DeclaredType,
+            val element: ExecutableElement,
+            val strategy: TypeElement?,
+            val tag: String
+    )
+
+    private fun StockViewMethod.toViewMethod(): ViewMethod {
+        if(strategy == null) throw IllegalStateException("Strategy can't be null")
+        return ViewMethod(targetInterfaceElement, element, strategy, tag)
+    }
+
+    private fun TypeElement.isNotMvpViewExtend(): Boolean {
+        return this.interfaces.find { parent ->
+            if ((parent as DeclaredType).toString() == MvpView::class.java.canonicalName) true
+            else !parent.asTypeElement().isNotMvpViewExtend()
+        } == null
+    }
+
+    private fun List<StockViewMethod>.validateAndMap(viewInterface: TypeElement): Set<ViewMethod> {
+        val methods = this
+        return filter { method ->
+            if (method.strategy == null && methods.none { it.element.simpleName == method.element.simpleName && it.strategy != null }) {
+                val message = ("A View method has no strategy! " +
+                        "Method \"::${method.element.simpleName}\". " +
+                        "Add @StateStrategyType annotation to this method, or to the View interface. " +
+                        "You can also specify default strategy via compiler option.")
+                messager.printMessage(Kind.ERROR, message, viewInterface)
+            }
+            method.strategy != null
+        }.map { it.toViewMethod() }.toSet()
     }
 }
