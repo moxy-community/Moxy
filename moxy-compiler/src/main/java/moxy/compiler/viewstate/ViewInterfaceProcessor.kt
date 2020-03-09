@@ -40,7 +40,8 @@ class ViewInterfaceProcessor(
             if (localDefaultStrategy == null) {
                 messager.printMessage(
                     Kind.ERROR,
-                    "Unable to parse option '$OPTION_DEFAULT_STRATEGY'. Check $defaultStrategy exists")
+                    "Unable to parse option '$OPTION_DEFAULT_STRATEGY'. Check $defaultStrategy exists"
+                )
                 localDefaultStrategy = DEFAULT_STATE_STRATEGY
             }
             frameworkDefaultStrategy = localDefaultStrategy
@@ -145,16 +146,23 @@ class ViewInterfaceProcessor(
             viewInterfaceElement.asDeclaredType(),
             methodElement,
             strategyClass,
-            methodTag)
+            methodTag
+        )
     }
 
     private fun getStateStrategyTypeMirror(methodElement: ExecutableElement): AnnotationMirror? {
         val strategies = getStateStrategyTypeMirrors(methodElement)
 
         if (strategies.size > 1) {
-            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for method " +
-                    "'${methodElement.simpleName}(${methodElement.parameters.joinToString { it.asType().toString() }})'" +
-                    " in interface '${methodElement.enclosingElement.asType()}'", methodElement)
+            val interfaceName = methodElement.enclosingElement.asType()
+            val methodName = methodElement.simpleName
+            val methodParams = methodElement.parameters.joinToString { it.asType().toString() }
+            messager.printMessage(
+                Kind.ERROR,
+                "There's more than one state strategy type defined for method " +
+                        "'$methodName($methodParams)' in interface '$interfaceName'",
+                methodElement
+            )
         }
 
         return strategies.firstOrNull()
@@ -164,8 +172,11 @@ class ViewInterfaceProcessor(
         val strategies = getStateStrategyTypeMirrors(typeElement)
 
         if (strategies.size > 1) {
-            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for " +
-                    "'${typeElement.simpleName}'", typeElement)
+            messager.printMessage(
+                Kind.ERROR,
+                "There's more than one state strategy type defined for '${typeElement.simpleName}'",
+                typeElement
+            )
         }
 
         return strategies.firstOrNull()

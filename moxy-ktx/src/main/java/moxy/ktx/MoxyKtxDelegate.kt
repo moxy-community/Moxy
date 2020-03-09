@@ -25,6 +25,7 @@ class MoxyKtxDelegate<T : MvpPresenter<*>>(
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
         return presenter ?: throw IllegalStateException(
-            "Presenter can be accessed only after MvpDelegate.onCreate() call")
+            "Presenter can be accessed only after MvpDelegate.onCreate() call"
+        )
     }
 }
