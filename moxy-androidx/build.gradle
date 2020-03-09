@@ -13,7 +13,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
 
-        consumerProguardFiles '../proguard-rules.pro'
+        consumerProguardFiles '../moxy/src/main/resources/META-INF/proguard/moxy.pro'
     }
 }
 

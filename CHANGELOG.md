@@ -4,26 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+- Fixed R8 obfuscating names of presenters without explicit `@InjectViewState` ([#87](https://github.com/moxy-community/Moxy/issues/87))
+- Added proguard rules to moxy artifact
+
+
 ## [2.1.1] - 2020-01-31
 - Fixed compiler crash when type variable used in presenter class ([#81](https://github.com/moxy-community/Moxy/issues/81))
 
 
 ## [2.1.0] - 2020-01-30
 ### Fixes
-- Fixed compilation error if View interface method's parameter name clash with generated code
-- Fixed restoration of childDelegate delegateTag in fragments. More info in [this PR](https://github.com/moxy-community/Moxy/pull/80)
+- Fixed compilation error if View interface method's parameter name clash with generated code ([#53](https://github.com/moxy-community/Moxy/issues/53))
+- Fixed restoration of childDelegate delegateTag in fragments ([#80](https://github.com/moxy-community/Moxy/pull/80))
 
 ### Added
-- Added `MvpPresenter.presenterScope` extension for kotlin coroutines
-- Added ability to define alias annotations for `@StateStrategyType` annotation, and added some default aliases to the library. More info [in this issue](https://github.com/moxy-community/Moxy/issues/72)
-- Added `@Inherited` annotation to `@InjectViewState`. It means `@InjectViewState` is now optional, `ViewState` will be generated even without explicit annotation on `MvpPresenter` subclass
+- Added `MvpPresenter.presenterScope` extension for kotlin coroutines ([#59](https://github.com/moxy-community/Moxy/issues/59))
+- Added ability to define alias annotations for `@StateStrategyType` annotation, and added some default aliases to the library ([#72](https://github.com/moxy-community/Moxy/issues/72))
+- Added `@Inherited` annotation to `@InjectViewState`. It means `@InjectViewState` is implicitly applied to all presenters, `ViewState` will be generated even without explicit annotation on `MvpPresenter` subclass ([#76](https://github.com/moxy-community/Moxy/pull/76))
 
 ### Behaviour change
-- Changed strategy resolution algorithm. Child view interface strategies will not propagate to superinterface views. More info [in this issue](https://github.com/moxy-community/Moxy/issues/70)
+- Changed strategy resolution algorithm. Child view interface strategies will not propagate to superinterface views ([#70](https://github.com/moxy-community/Moxy/issues/70))
 
 
 ## [2.0.2] - 2019-09-20
-- Guava conflicts fixes
+- Guava conflicts fixes ([#56](https://github.com/moxy-community/Moxy/issues/56))
 
 
 ## [2.0.1] - 2019-09-19
