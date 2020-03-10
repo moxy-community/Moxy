@@ -1,161 +1,117 @@
 package moxy.compiler
 
-import com.tschuchort.compiletesting.KotlinCompilation
-import com.tschuchort.compiletesting.SourceFile
 import org.intellij.lang.annotations.Language
-import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ViewStateNotMvpInterfaceTest : CompilerTest() {
 
-    @Test
-    fun successOtherModuleViewInterface() {
-        @Language("kotlin") val sources = """
-            import moxy.InjectViewState
-            import moxy.MvpPresenter
-            import moxy.view.TestView
-            import moxy.MvpView
-            import moxy.viewstate.strategy.AddToEndStrategy
-            import moxy.viewstate.strategy.StateStrategyType
-            import moxy.viewstate.strategy.OneExecutionStateStrategy
-            
-            interface OtherModuleView {
-                fun helloFromOtherModule()
+    companion object {
+        @Language("JAVA")
+        const val otherModuleInterfaceSource = """            
+            public interface OtherModuleView {
+                void helloFromOtherModule();
+                void helloFromOtherModule(String reload);
             }
-            
-            interface MainView : MvpView, OtherModuleView {
-                @StateStrategyType(AddToEndStrategy::class)
-                fun printLog(msg: String)
-            
-                @StateStrategyType(OneExecutionStateStrategy::class)
-                fun openKtxActivity()
-            
-                @StateStrategyType(AddToEndStrategy::class)
-                override fun helloFromOtherModule()
-            }
+        """
 
-            class MainPresenter: MvpPresenter<MainView>() {
-            
-                override fun onFirstViewAttach() {
-                    super.onFirstViewAttach()
-                    viewState.printLog("TEST")
+        @Language("JAVA") val presenterSource = """      
+            import moxy.InjectViewState;
+            import moxy.MvpPresenter;
+
+            @InjectViewState
+            public class MainPresenter extends MvpPresenter<MainView> {
+                @Override
+                protected void onFirstViewAttach() {
+                    super.onFirstViewAttach();
+                    getViewState().printLog("TEST");
                 }
             
-                fun printLog() {
-                    viewState.printLog("TEST print log ${hashCode()}")
+                void printLog() {
+                    getViewState().printLog("TEST print log " + hashCode());
                 }
             
-                fun onOpenKtxButtonClick() {
-                    viewState.openKtxActivity()
+                void onOpenKtxButtonClick() {
+                    getViewState().openKtxActivity();
                 }
             }
         """
-        val result = compileKotlinSourcesWithProcessor(SourceFile.kotlin("KClass.kt", sources))
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode
-            .OK
-        )
+    }
+
+    @Test
+    fun successOtherModuleViewInterface() {
+        val otherModuleInterface = otherModuleInterfaceSource.toJavaFile()
+        val presenter = presenterSource.toJavaFile()
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.AddToEndStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;      
+            public interface MainView extends MvpView, OtherModuleView {
+                @StateStrategyType(AddToEndStrategy.class)
+                void printLog(String msg);
+            
+                @StateStrategyType(OneExecutionStateStrategy.class)
+                void openKtxActivity();
+            
+                @StateStrategyType(AddToEndStrategy.class)
+                @Override
+                void helloFromOtherModule();
+            
+                @StateStrategyType(AddToEndStrategy.class)
+                @Override
+                void helloFromOtherModule(String reload);
+            }
+        """.toJavaFile()
+        val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
+        compilation.assertSucceededWithoutWarnings()
     }
 
     @Test
     fun successOtherModuleViewInterfaceDefaultStrategy() {
-        @Language("kotlin") val sources = """
-            import moxy.InjectViewState
-            import moxy.MvpPresenter
-            import moxy.view.TestView
-            import moxy.MvpView
-            import moxy.viewstate.strategy.AddToEndStrategy
-            import moxy.viewstate.strategy.StateStrategyType
-            import moxy.viewstate.strategy.OneExecutionStateStrategy
+        val otherModuleInterface = otherModuleInterfaceSource.toJavaFile()
+        val presenter = presenterSource.toJavaFile()
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.AddToEndStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;      
             
-            interface OtherModuleView {
-                fun helloFromOtherModule()
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            public interface MainView extends MvpView, OtherModuleView {
+                void printLog(String msg);
+            
+                void openKtxActivity();
+            
+                @Override
+                void helloFromOtherModule();
+            
+                @Override
+                void helloFromOtherModule(String reload);
             }
-            
-            @StateStrategyType(OneExecutionStateStrategy::class)
-            interface MainView : MvpView, OtherModuleView {
-                fun printLog(msg: String)
-            
-                fun openKtxActivity()
-            
-                override fun helloFromOtherModule()
-            }
-
-            class MainPresenter: MvpPresenter<MainView>() {
-            
-                override fun onFirstViewAttach() {
-                    super.onFirstViewAttach()
-                    viewState.printLog("TEST")
-                }
-            
-                fun printLog() {
-                    viewState.printLog("TEST print log ${hashCode()}")
-                }
-            
-                fun onOpenKtxButtonClick() {
-                    viewState.openKtxActivity()
-                }
-            }
-        """
-        val result = compileKotlinSourcesWithProcessor(SourceFile.kotlin("KClass.kt", sources))
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode
-            .OK
-        )
+        """.toJavaFile()
+        val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
+        compilation.assertSucceededWithoutWarnings()
     }
 
     @Test
     fun failureOtherModuleViewInterface() {
-        @Language("kotlin") val sources = """
-            import moxy.InjectViewState
-            import moxy.MvpPresenter
-            import moxy.view.TestView
-            import moxy.MvpView
-            import moxy.viewstate.strategy.AddToEndStrategy
-            import moxy.viewstate.strategy.StateStrategyType
-            import moxy.viewstate.strategy.OneExecutionStateStrategy
+        val otherModuleInterface = otherModuleInterfaceSource.toJavaFile()
+        val presenter = presenterSource.toJavaFile()
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.AddToEndStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;      
             
-            interface OtherModuleView {
-                fun helloFromOtherModule()
+            public interface MainView extends MvpView, OtherModuleView {
+                @StateStrategyType(AddToEndStrategy.class)
+                void printLog(String msg);
+            
+                @StateStrategyType(OneExecutionStateStrategy.class)
+                void openKtxActivity();
             }
-            
-            interface MainView : MvpView, OtherModuleView {
-                @StateStrategyType(AddToEndStrategy::class)
-                fun printLog(msg: String)
-            
-                @StateStrategyType(OneExecutionStateStrategy::class)
-                fun openKtxActivity()
-            
-                override fun helloFromOtherModule()
-            }
-
-            class MainPresenter: MvpPresenter<MainView>() {
-            
-                override fun onFirstViewAttach() {
-                    super.onFirstViewAttach()
-                    viewState.printLog("TEST")
-                }
-            
-                fun printLog() {
-                    viewState.printLog("TEST print log ${hashCode()}")
-                }
-            
-                fun onOpenKtxButtonClick() {
-                    viewState.openKtxActivity()
-                }
-            }
-        """
-        val result = compileKotlinSourcesWithProcessor(SourceFile.kotlin("KClass.kt", sources))
-        assertEquals(result.exitCode, KotlinCompilation.ExitCode
-            .COMPILATION_ERROR
-        )
-    }
-
-    private fun compileKotlinSourcesWithProcessor(vararg sourceFiles: SourceFile): KotlinCompilation.Result {
-        return KotlinCompilation().apply {
-            sources = sourceFiles.toList()
-            annotationProcessors = listOf(MvpCompiler())
-            messageOutputStream = System.out
-            inheritClassPath = true
-        }
-            .compile()
+        """.toJavaFile()
+        val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
+        compilation.assertFailed()
     }
 }
