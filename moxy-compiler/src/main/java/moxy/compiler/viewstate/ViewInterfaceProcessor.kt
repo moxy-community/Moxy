@@ -19,7 +19,6 @@ import javax.lang.model.element.ElementKind
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
-import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 import javax.tools.Diagnostic.Kind
@@ -73,7 +72,7 @@ class ViewInterfaceProcessor(
     /**
      * Returns ViewMethod for each suitable method from this interface and its superinterfaces
      */
-    private fun getMethods(element: TypeElement): List<StockViewMethod> {
+    private fun getMethods(element: TypeElement): List<ProcessingViewMethod> {
         // Get methods from input class
         val enclosedMethods = getEnclosedMethods(element)
 
@@ -95,7 +94,7 @@ class ViewInterfaceProcessor(
     /**
      * Returns ViewMethod for each suitable enclosed method into this interface (but not superinterface)
      */
-    private fun getEnclosedMethods(viewInterface: TypeElement): List<StockViewMethod> {
+    private fun getEnclosedMethods(viewInterface: TypeElement): List<ProcessingViewMethod> {
         val defaultStrategy = getInterfaceStateStrategyType(viewInterface)
         return viewInterface.enclosedElements
             .filter {
@@ -109,7 +108,7 @@ class ViewInterfaceProcessor(
             methodElement: ExecutableElement,
             viewInterface: TypeElement,
             defaultStrategy: TypeElement?
-    ): StockViewMethod {
+    ): ProcessingViewMethod {
         if (methodElement.returnType.kind != TypeKind.VOID) {
             val message = "You are trying to generate ViewState for ${viewInterface.simpleName}. " +
                     "But ${viewInterface.simpleName} contains non-void method \"${methodElement.simpleName}\" " +
@@ -122,7 +121,7 @@ class ViewInterfaceProcessor(
         // get strategy from annotation
         val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
 
-        val strategyClass: TypeElement? = if (strategyClassFromAnnotation != null || viewInterface.isNotMvpViewExtend()) {
+        val strategyClass: TypeElement? = if (strategyClassFromAnnotation != null || viewInterface.notMvpViewExtend()) {
             strategyClassFromAnnotation?.asTypeElement()
         } else {
             if (defaultStrategy == null && !disableEmptyStrategyCheck) {
@@ -130,7 +129,7 @@ class ViewInterfaceProcessor(
                     migrationMethods.add(MigrationMethod(viewInterface, methodElement))
                 } else {
                     val message = ("A View method has no strategy! " +
-                            "Method \"::${methodElement.simpleName}\". " +
+                        "Method \"::${methodElement.simpleName}(${methodElement.parameters})\". " +
                             "Add @StateStrategyType annotation to this method, or to the View interface. " +
                             "You can also specify default strategy via compiler option.")
                     messager.printMessage(Kind.ERROR, message, methodElement)
@@ -142,7 +141,7 @@ class ViewInterfaceProcessor(
         val tagFromAnnotation = annotation?.getValueAsString(StateStrategyType::tag)
         val methodTag: String = tagFromAnnotation ?: methodElement.simpleName.toString()
 
-        return StockViewMethod(
+        return ProcessingViewMethod(
             viewInterfaceElement.asDeclaredType(),
             methodElement,
             strategyClass,
@@ -186,7 +185,7 @@ class ViewInterfaceProcessor(
      */
     private fun iterateInterfaces(
         viewInterface: TypeElement
-    ): List<StockViewMethod> {
+    ): List<ProcessingViewMethod> {
         return viewInterface.interfaces
             .map {
                 getTypeAndValidateGenerics(it)
@@ -214,9 +213,9 @@ class ViewInterfaceProcessor(
      * Combines methods, comparing by [ViewMethod.equals], discarding duplicates from superinterface
      */
     private fun combineMethods(
-        methods: List<StockViewMethod>,
-        superInterfaceMethods: List<StockViewMethod>
-    ): List<StockViewMethod> {
+        methods: List<ProcessingViewMethod>,
+        superInterfaceMethods: List<ProcessingViewMethod>
+    ): List<ProcessingViewMethod> {
         return methods + superInterfaceMethods
     }
 
@@ -243,31 +242,18 @@ class ViewInterfaceProcessor(
             elementUtils.getTypeElement(AddToEndSingleStrategy::class.java.canonicalName)
     }
 
-    class StockViewMethod(
-            val targetInterfaceElement: DeclaredType,
-            val element: ExecutableElement,
-            val strategy: TypeElement?,
-            val tag: String
-    )
-
-    private fun StockViewMethod.toViewMethod(): ViewMethod {
-        if(strategy == null) throw IllegalStateException("Strategy can't be null")
-        return ViewMethod(targetInterfaceElement, element, strategy, tag)
+    private fun TypeElement.notMvpViewExtend(): Boolean {
+        return interfaces.all { parent ->
+            parent.toString() != MvpView::class.java.canonicalName && parent.asTypeElement().notMvpViewExtend()
+        }
     }
 
-    private fun TypeElement.isNotMvpViewExtend(): Boolean {
-        return this.interfaces.find { parent ->
-            if ((parent as DeclaredType).toString() == MvpView::class.java.canonicalName) true
-            else !parent.asTypeElement().isNotMvpViewExtend()
-        } == null
-    }
-
-    private fun List<StockViewMethod>.validateAndMap(viewInterface: TypeElement): Set<ViewMethod> {
+    private fun List<ProcessingViewMethod>.validateAndMap(viewInterface: TypeElement): Set<ViewMethod> {
         val methods = this
         return filter { method ->
-            if (method.strategy == null && methods.none { it.element.simpleName == method.element.simpleName && it.strategy != null }) {
+            if (method.strategy == null && methods.none { it == method && it.strategy != null }) {
                 val message = ("A View method has no strategy! " +
-                        "Method \"::${method.element.simpleName}\". " +
+                        "Method \"::${method.element.simpleName}(${method.argumentsString})\". " +
                         "Add @StateStrategyType annotation to this method, or to the View interface. " +
                         "You can also specify default strategy via compiler option.")
                 messager.printMessage(Kind.ERROR, message, viewInterface)

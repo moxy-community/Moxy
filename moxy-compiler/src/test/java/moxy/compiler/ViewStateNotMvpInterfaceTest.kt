@@ -10,7 +10,7 @@ class ViewStateNotMvpInterfaceTest : CompilerTest() {
         const val otherModuleInterfaceSource = """            
             public interface OtherModuleView {
                 void helloFromOtherModule();
-                void helloFromOtherModule(String reload);
+                void helloFromOtherModule(String reload, String method);
             }
         """
 
@@ -59,7 +59,7 @@ class ViewStateNotMvpInterfaceTest : CompilerTest() {
             
                 @StateStrategyType(AddToEndStrategy.class)
                 @Override
-                void helloFromOtherModule(String reload);
+                void helloFromOtherModule(String reload, String method);
             }
         """.toJavaFile()
         val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
@@ -86,7 +86,7 @@ class ViewStateNotMvpInterfaceTest : CompilerTest() {
                 void helloFromOtherModule();
             
                 @Override
-                void helloFromOtherModule(String reload);
+                void helloFromOtherModule(String reload, String method);
             }
         """.toJavaFile()
         val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
@@ -109,6 +109,34 @@ class ViewStateNotMvpInterfaceTest : CompilerTest() {
             
                 @StateStrategyType(OneExecutionStateStrategy.class)
                 void openKtxActivity();
+            }
+        """.toJavaFile()
+        val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
+        compilation.assertFailed()
+    }
+
+    @Test
+    fun failureOnReloadMethodWithoutStrategy() {
+        val otherModuleInterface = otherModuleInterfaceSource.toJavaFile()
+        val presenter = presenterSource.toJavaFile()
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.AddToEndStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;      
+            public interface MainView extends MvpView, OtherModuleView {
+                @StateStrategyType(AddToEndStrategy.class)
+                void printLog(String msg);
+            
+                @StateStrategyType(OneExecutionStateStrategy.class)
+                void openKtxActivity();
+            
+                @StateStrategyType(AddToEndStrategy.class)
+                @Override
+                void helloFromOtherModule();
+            
+                @Override
+                void helloFromOtherModule(String reload, String method);
             }
         """.toJavaFile()
         val compilation = compileSourcesWithProcessor(otherModuleInterface, view, presenter)
