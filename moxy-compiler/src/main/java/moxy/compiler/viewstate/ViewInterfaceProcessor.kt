@@ -21,7 +21,7 @@ import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
-import javax.tools.Diagnostic.Kind
+import javax.tools.Diagnostic.Kind.ERROR
 
 class ViewInterfaceProcessor(
     private val disableEmptyStrategyCheck: Boolean,
@@ -39,7 +39,7 @@ class ViewInterfaceProcessor(
             var localDefaultStrategy: TypeElement? = elementUtils.getTypeElement(defaultStrategy)
             if (localDefaultStrategy == null) {
                 messager.printMessage(
-                    Kind.ERROR,
+                    ERROR,
                     "Unable to parse option '$OPTION_DEFAULT_STRATEGY'. Check $defaultStrategy exists")
                 localDefaultStrategy = DEFAULT_STATE_STRATEGY
             }
@@ -54,7 +54,7 @@ class ViewInterfaceProcessor(
         this.viewInterfaceName = element.simpleName.toString()
 
         // Get methods from input interface
-        val methods = getMethods(element).validateAndMap(element)
+        val methods = getMethods(element).validateAndMap()
 
         // Allow methods to have equal names
         val methodsCounter = mutableMapOf<String, Int>()
@@ -113,7 +113,7 @@ class ViewInterfaceProcessor(
             val message = "You are trying to generate ViewState for ${viewInterface.simpleName}. " +
                     "But ${viewInterface.simpleName} contains non-void method \"${methodElement.simpleName}\" " +
                     "with the return type of ${methodElement.returnType}."
-            messager.printMessage(Kind.ERROR, message, methodElement)
+            messager.printMessage(ERROR, message, methodElement)
         }
 
         val annotation: AnnotationMirror? = getStateStrategyTypeMirror(methodElement)
@@ -128,11 +128,7 @@ class ViewInterfaceProcessor(
                 if (enableEmptyStrategyHelper) {
                     migrationMethods.add(MigrationMethod(viewInterface, methodElement))
                 } else {
-                    val message = ("A View method has no strategy! " +
-                        "Method \"::${methodElement.simpleName}(${methodElement.parameters})\". " +
-                            "Add @StateStrategyType annotation to this method, or to the View interface. " +
-                            "You can also specify default strategy via compiler option.")
-                    messager.printMessage(Kind.ERROR, message, methodElement)
+                    printErrorMessageMethodHasNoStrategy(methodElement)
                 }
             }
             defaultStrategy ?: frameworkDefaultStrategy
@@ -148,11 +144,20 @@ class ViewInterfaceProcessor(
             methodTag)
     }
 
+    private fun printErrorMessageMethodHasNoStrategy(methodElement: ExecutableElement) {
+        val message = ("A View method has no strategy! " +
+            "Method \"::${methodElement.simpleName}(${methodElement.parameters})\". " +
+            "Add @StateStrategyType annotation to this method, or to the View interface. " +
+            "You can also specify default strategy via compiler option.")
+        messager.printMessage(ERROR, message, methodElement)
+    }
+
     private fun getStateStrategyTypeMirror(methodElement: ExecutableElement): AnnotationMirror? {
         val strategies = getStateStrategyTypeMirrors(methodElement)
 
         if (strategies.size > 1) {
-            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for method " +
+            messager.printMessage(
+                ERROR, "There's more than one state strategy type defined for method " +
                     "'${methodElement.simpleName}(${methodElement.parameters.joinToString { it.asType().toString() }})'" +
                     " in interface '${methodElement.enclosingElement.asType()}'", methodElement)
         }
@@ -164,7 +169,8 @@ class ViewInterfaceProcessor(
         val strategies = getStateStrategyTypeMirrors(typeElement)
 
         if (strategies.size > 1) {
-            messager.printMessage(Kind.ERROR, "There's more than one state strategy type defined for " +
+            messager.printMessage(
+                ERROR, "There's more than one state strategy type defined for " +
                     "'${typeElement.simpleName}'", typeElement)
         }
 
@@ -248,15 +254,11 @@ class ViewInterfaceProcessor(
         }
     }
 
-    private fun List<ProcessingViewMethod>.validateAndMap(viewInterface: TypeElement): Set<ViewMethod> {
+    private fun List<ProcessingViewMethod>.validateAndMap(): Set<ViewMethod> {
         val methods = this
         return filter { method ->
             if (method.strategy == null && methods.none { it == method && it.strategy != null }) {
-                val message = ("A View method has no strategy! " +
-                        "Method \"::${method.element.simpleName}(${method.argumentsString})\". " +
-                        "Add @StateStrategyType annotation to this method, or to the View interface. " +
-                        "You can also specify default strategy via compiler option.")
-                messager.printMessage(Kind.ERROR, message, viewInterface)
+                printErrorMessageMethodHasNoStrategy(method.element)
             }
             method.strategy != null
         }.map { it.toViewMethod() }.toSet()
