@@ -67,11 +67,13 @@ class MvpCompiler : AbstractProcessor() {
         } catch (e: RuntimeException) {
             messager.printMessage(
                 Diagnostic.Kind.OTHER,
-                "Moxy compilation has failed. Could you copy stack trace above and write us (or open an issue on Github)?")
+                "Moxy compilation has failed. Could you copy stack trace above and write us (or open an issue on Github)?"
+            )
             e.printStackTrace()
             messager.printMessage(
                 Diagnostic.Kind.ERROR,
-                "Moxy compilation failed; see the compiler error output for details ($e)")
+                "Moxy compilation failed; see the compiler error output for details ($e)"
+            )
         }
 
         return true
@@ -80,7 +82,8 @@ class MvpCompiler : AbstractProcessor() {
     private fun throwableProcess(roundEnv: RoundEnvironment): Boolean {
         checkInjectors(
             roundEnv,
-            PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT))
+            PresenterInjectorRules(ElementKind.FIELD, Modifier.PUBLIC, Modifier.DEFAULT)
+        )
 
         val injectViewStateProcessor = InjectViewStateProcessor()
         val viewStateProviderClassGenerator = ViewStateProviderClassGenerator()
@@ -94,22 +97,26 @@ class MvpCompiler : AbstractProcessor() {
         val viewInterfaceProcessor = ViewInterfaceProcessor(
             disableEmptyStrategyCheck,
             enableEmptyStrategyHelper,
-            defaultStrategy)
+            defaultStrategy
+        )
         val viewStateClassGenerator = ViewStateClassGenerator()
 
         processInjectors(
             roundEnv, InjectViewState::class.java, ElementKind.CLASS,
-            injectViewStateProcessor, viewStateProviderClassGenerator)
+            injectViewStateProcessor, viewStateProviderClassGenerator
+        )
         processInjectors(
             roundEnv, InjectPresenter::class.java, ElementKind.FIELD,
-            injectPresenterProcessor, presenterBinderClassGenerator)
+            injectPresenterProcessor, presenterBinderClassGenerator
+        )
 
         for (usedView in injectViewStateProcessor.usedViews) {
             generateCode(
                 usedView,
                 ElementKind.INTERFACE,
                 viewInterfaceProcessor,
-                viewStateClassGenerator)
+                viewStateClassGenerator
+            )
         }
 
         val migrationHelper = viewInterfaceProcessor.makeMigrationHelper()
@@ -148,7 +155,8 @@ class MvpCompiler : AbstractProcessor() {
                 messager.printMessage(
                     Diagnostic.Kind.ERROR,
                     "$element must be ${kind.name}, or do not annotate it with @${clazz.simpleName}",
-                    element)
+                    element
+                )
             }
 
             generateCode(element, kind, processor, classGenerator)
@@ -165,7 +173,8 @@ class MvpCompiler : AbstractProcessor() {
             messager.printMessage(
                 Diagnostic.Kind.ERROR,
                 "$element must be ${kind.name}",
-                element)
+                element
+            )
         }
 
         @Suppress("UNCHECKED_CAST")

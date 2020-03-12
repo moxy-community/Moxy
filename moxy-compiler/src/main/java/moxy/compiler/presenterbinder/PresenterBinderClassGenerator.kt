@@ -47,7 +47,9 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
             generateGetPresentersMethod(
                 fields,
                 targetClassName,
-                superPresenterBinder))
+                superPresenterBinder
+            )
+        )
 
         return listOf(classBuilder.build().toJavaFile(targetClassName))
     }
@@ -75,7 +77,8 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
             PresenterField::class.java,
             containerClassName.supertypeWildcard(),
             ArrayList::class.java,
-            fields.size)
+            fields.size
+        )
 
         for (field in fields) {
             builder.addStatement("presenters.add(new $1L())", field.generatedClassName)
@@ -84,7 +87,8 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
         if (superPresenterBinder != null) {
             builder.addStatement(
                 "presenters.addAll(new $1L().getPresenterFields())",
-                superPresenterBinder.qualifiedName.toString() + MvpProcessor.PRESENTER_BINDER_SUFFIX)
+                superPresenterBinder.qualifiedName.toString() + MvpProcessor.PRESENTER_BINDER_SUFFIX
+            )
         }
 
         builder.addStatement("return presenters")
@@ -170,7 +174,8 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
                     IllegalStateException::class.java,
                     field.type,
                     " hasn't got a default constructor. You can apply @ProvidePresenter to a method which will "
-                            + "construct Presenter. Otherwise you can add empty constructor to presenter.")
+                            + "construct Presenter. Otherwise you can add empty constructor to presenter."
+                )
             }
         }
 
