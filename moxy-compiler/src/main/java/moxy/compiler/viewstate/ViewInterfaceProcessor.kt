@@ -48,6 +48,14 @@ class ViewInterfaceProcessor(
         }
     }
 
+    fun makeMigrationHelper(): JavaFile? {
+        return if (enableEmptyStrategyHelper && migrationMethods.isNotEmpty()) {
+            EmptyStrategyHelperGenerator.generate(migrationMethods)
+        } else {
+            null
+        }
+    }
+
     override fun process(element: TypeElement): ViewInterfaceInfo {
         this.viewInterfaceElement = element
 
@@ -55,15 +63,7 @@ class ViewInterfaceProcessor(
         val viewInterfaceMethods = getMethods(element)
         val methods = validateForEmptyStrategies(viewInterfaceMethods)
 
-        // Allow methods to have equal names
-        val methodsCounter = mutableMapOf<String, Int>()
-        for (method in methods) {
-            val counter = methodsCounter[method.name] ?: 0
-            if (counter > 0) {
-                method.uniqueSuffix = counter.toString()
-            }
-            methodsCounter[method.name] = counter + 1
-        }
+        addUniqueSuffixToMethodsWithTheSameName(methods)
 
         return ViewInterfaceInfo(element, methods.toList())
     }
@@ -80,14 +80,6 @@ class ViewInterfaceProcessor(
 
         // Combine and exclude overridden methods
         return combineMethods(enclosedMethods, methodsFromSuperinterfaces)
-    }
-
-    fun makeMigrationHelper(): JavaFile? {
-        return if (enableEmptyStrategyHelper && migrationMethods.isNotEmpty()) {
-            EmptyStrategyHelperGenerator.generate(migrationMethods)
-        } else {
-            null
-        }
     }
 
     /**
@@ -136,15 +128,6 @@ class ViewInterfaceProcessor(
         return StrategyWithTag(strategyType, tag)
     }
 
-    private fun getStateStrategyTypeMirrors(element: Element): List<AnnotationMirror> {
-        val enclosed = listOfNotNull(element.getAnnotationMirror(StateStrategyType::class))
-
-        val aliased = element.annotationMirrors
-            .mapNotNull { it.annotationType.asTypeElement().getAnnotationMirror(StateStrategyType::class) }
-
-        return enclosed + aliased
-    }
-
     /**
      * Returns ViewMethods for all superinterfaces, or empty set if element does not have superinterfaces
      */
@@ -182,7 +165,7 @@ class ViewInterfaceProcessor(
         superInterfaces: List<Set<ViewInterfaceMethod>>
     ): Set<ViewInterfaceMethod> {
         val superInterfaceMethods = combineMethodsFromSuperinterfaces(superInterfaces)
-        // order and + operator are very important. Refer to Set.add() and Set.addAll() for more info
+        // order is very important. Refer to Set.add() and Set.addAll() for more info
         return methods + superInterfaceMethods
     }
 
@@ -217,6 +200,18 @@ class ViewInterfaceProcessor(
                         "Override this method in $viewInterfaceElement to choose appropriate strategy",
                 viewInterfaceElement
             )
+        }
+    }
+
+    private fun addUniqueSuffixToMethodsWithTheSameName(methods: List<ViewStateMethod>) {
+        // Allow methods to have equal names
+        val methodsCounter = mutableMapOf<String, Int>()
+        for (method in methods) {
+            val counter = methodsCounter[method.name] ?: 0
+            if (counter > 0) {
+                method.uniqueSuffix = counter.toString()
+            }
+            methodsCounter[method.name] = counter + 1
         }
     }
 
@@ -260,7 +255,11 @@ class ViewInterfaceProcessor(
     }
 
     private fun getStateStrategyAnnotation(element: Element): AnnotationMirror? {
-        val strategies = getStateStrategyTypeMirrors(element)
+        val enclosed = listOfNotNull(element.getAnnotationMirror(StateStrategyType::class))
+        val aliased = element.annotationMirrors
+            .mapNotNull { it.annotationType.asTypeElement().getAnnotationMirror(StateStrategyType::class) }
+
+        val strategies = enclosed + aliased
 
         if (strategies.size > 1) {
             if (element is ExecutableElement) {
