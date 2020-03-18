@@ -1,9 +1,10 @@
-package moxy.compiler.viewstate
+package moxy.compiler.viewstate.entity
 
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
 import moxy.compiler.equalsByType
+import moxy.compiler.viewstate.ViewMethodParameters
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.type.DeclaredType
 

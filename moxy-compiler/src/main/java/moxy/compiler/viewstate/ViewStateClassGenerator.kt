@@ -15,6 +15,8 @@ import moxy.compiler.asDeclaredType
 import moxy.compiler.className
 import moxy.compiler.parametrizedWith
 import moxy.compiler.toJavaFile
+import moxy.compiler.viewstate.entity.ViewInterfaceInfo
+import moxy.compiler.viewstate.entity.ViewStateMethod
 import moxy.viewstate.MvpViewState
 import moxy.viewstate.ViewCommand
 import javax.lang.model.element.Modifier

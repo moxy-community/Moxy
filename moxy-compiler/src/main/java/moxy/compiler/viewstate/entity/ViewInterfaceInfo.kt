@@ -1,4 +1,4 @@
-package moxy.compiler.viewstate
+package moxy.compiler.viewstate.entity
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName

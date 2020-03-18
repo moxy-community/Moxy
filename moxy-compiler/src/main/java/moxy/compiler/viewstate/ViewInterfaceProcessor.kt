@@ -10,6 +10,11 @@ import moxy.compiler.asTypeElement
 import moxy.compiler.getAnnotationMirror
 import moxy.compiler.getValueAsString
 import moxy.compiler.getValueAsTypeMirror
+import moxy.compiler.viewstate.entity.MigrationMethod
+import moxy.compiler.viewstate.entity.StrategyWithTag
+import moxy.compiler.viewstate.entity.ViewInterfaceInfo
+import moxy.compiler.viewstate.entity.ViewInterfaceMethod
+import moxy.compiler.viewstate.entity.ViewStateMethod
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
 import javax.lang.model.element.AnnotationMirror
