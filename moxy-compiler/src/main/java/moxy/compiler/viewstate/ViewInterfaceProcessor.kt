@@ -12,7 +12,6 @@ import moxy.compiler.getValueAsString
 import moxy.compiler.getValueAsTypeMirror
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
-import java.util.*
 import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -31,7 +30,6 @@ class ViewInterfaceProcessor(
 
     private val frameworkDefaultStrategy: TypeElement
     private lateinit var viewInterfaceElement: TypeElement
-    private lateinit var viewInterfaceName: String
     private val migrationMethods = mutableListOf<MigrationMethod>()
 
     init {
@@ -52,10 +50,10 @@ class ViewInterfaceProcessor(
 
     override fun process(element: TypeElement): ViewInterfaceInfo {
         this.viewInterfaceElement = element
-        this.viewInterfaceName = element.simpleName.toString()
 
         // Get methods from input interface
-        val methods = getMethods(element)
+        val viewInterfaceMethods = getMethods(element)
+        val methods = validateForEmptyStrategies(viewInterfaceMethods)
 
         // Allow methods to have equal names
         val methodsCounter = mutableMapOf<String, Int>()
@@ -73,7 +71,7 @@ class ViewInterfaceProcessor(
     /**
      * Returns ViewMethod for each suitable method from this interface and its superinterfaces
      */
-    private fun getMethods(element: TypeElement): Set<ViewMethod> {
+    private fun getMethods(element: TypeElement): Set<ViewInterfaceMethod> {
         // Get methods from input class
         val enclosedMethods = getEnclosedMethods(element)
 
@@ -95,22 +93,22 @@ class ViewInterfaceProcessor(
     /**
      * Returns ViewMethod for each suitable enclosed method into this interface (but not superinterface)
      */
-    private fun getEnclosedMethods(viewInterface: TypeElement): Set<ViewMethod> {
-        val defaultStrategy = getInterfaceStateStrategyType(viewInterface)
+    private fun getEnclosedMethods(viewInterface: TypeElement): Set<ViewInterfaceMethod> {
+        val viewInterfaceStrategy = getInterfaceStateStrategyType(viewInterface)
         return viewInterface.enclosedElements
             .filter {
                 // ignore all but non-static methods
                 it.kind == ElementKind.METHOD && !it.isStatic()
             }
-            .map { getViewMethod(it as ExecutableElement, viewInterface, defaultStrategy) }
+            .map { getViewMethod(it as ExecutableElement, viewInterface, viewInterfaceStrategy) }
             .toSet()
     }
 
     private fun getViewMethod(
         methodElement: ExecutableElement,
         viewInterface: TypeElement,
-        defaultStrategy: TypeElement?
-    ): ViewMethod {
+        viewInterfaceStrategyType: TypeElement?
+    ): ViewInterfaceMethod {
         if (methodElement.returnType.kind != TypeKind.VOID) {
             val message = "You are trying to generate ViewState for ${viewInterface.simpleName}. " +
                     "But ${viewInterface.simpleName} contains non-void method \"${methodElement.simpleName}\" " +
@@ -118,68 +116,24 @@ class ViewInterfaceProcessor(
             messager.printMessage(Kind.ERROR, message, methodElement)
         }
 
-        val annotation: AnnotationMirror? = getStateStrategyTypeMirror(methodElement)
+        val strategy: StrategyWithTag? = getStateStrategy(methodElement)
+            ?: viewInterfaceStrategyType?.let { type -> StrategyWithTag(type, methodElement.defaultTag()) }
 
-        // get strategy from annotation
-        val strategyClassFromAnnotation = annotation?.getValueAsTypeMirror(StateStrategyType::value)
-
-        val strategyClass: TypeElement = if (strategyClassFromAnnotation != null) {
-            strategyClassFromAnnotation.asTypeElement()
-        } else {
-            if (defaultStrategy == null && !disableEmptyStrategyCheck) {
-                if (enableEmptyStrategyHelper) {
-                    migrationMethods.add(MigrationMethod(viewInterface, methodElement))
-                } else {
-                    val message = ("A View method has no strategy! " +
-                            "Add @StateStrategyType annotation to this method, or to the View interface. " +
-                            "You can also specify default strategy via compiler option.")
-                    messager.printMessage(Kind.ERROR, message, methodElement)
-                }
-            }
-            defaultStrategy ?: frameworkDefaultStrategy
-        }
-
-        val tagFromAnnotation = annotation?.getValueAsString(StateStrategyType::tag)
-        val methodTag: String = tagFromAnnotation ?: methodElement.simpleName.toString()
-
-        return ViewMethod(
+        return ViewInterfaceMethod(
             viewInterfaceElement.asDeclaredType(),
             methodElement,
-            strategyClass,
-            methodTag
+            strategy
         )
     }
 
-    private fun getStateStrategyTypeMirror(methodElement: ExecutableElement): AnnotationMirror? {
-        val strategies = getStateStrategyTypeMirrors(methodElement)
+    private fun getStateStrategy(methodElement: ExecutableElement): StrategyWithTag? {
+        val annotation = getStateStrategyAnnotation(methodElement) ?: return null
 
-        if (strategies.size > 1) {
-            val interfaceName = methodElement.enclosingElement.asType()
-            val methodName = methodElement.simpleName
-            val methodParams = methodElement.parameters.joinToString { it.asType().toString() }
-            messager.printMessage(
-                Kind.ERROR,
-                "There's more than one state strategy type defined for method " +
-                        "'$methodName($methodParams)' in interface '$interfaceName'",
-                methodElement
-            )
-        }
+        val strategyClassFromAnnotation = annotation.getValueAsTypeMirror(StateStrategyType::value) ?: return null
+        val strategyType = strategyClassFromAnnotation.asTypeElement()
+        val tag = annotation.getValueAsString(StateStrategyType::tag) ?: methodElement.defaultTag()
 
-        return strategies.firstOrNull()
-    }
-
-    private fun getStateStrategyTypeMirror(typeElement: TypeElement): AnnotationMirror? {
-        val strategies = getStateStrategyTypeMirrors(typeElement)
-
-        if (strategies.size > 1) {
-            messager.printMessage(
-                Kind.ERROR,
-                "There's more than one state strategy type defined for '${typeElement.simpleName}'",
-                typeElement
-            )
-        }
-
-        return strategies.firstOrNull()
+        return StrategyWithTag(strategyType, tag)
     }
 
     private fun getStateStrategyTypeMirrors(element: Element): List<AnnotationMirror> {
@@ -196,12 +150,12 @@ class ViewInterfaceProcessor(
      */
     private fun iterateInterfaces(
         viewInterface: TypeElement
-    ): Set<ViewMethod> {
+    ): List<Set<ViewInterfaceMethod>> {
         return viewInterface.interfaces
             .map {
                 getTypeAndValidateGenerics(it)
             }
-            .flatMapToSet {
+            .map {
                 // implicit recursion
                 getMethods(it)
             }
@@ -221,20 +175,56 @@ class ViewInterfaceProcessor(
     }
 
     /**
-     * Combines methods, comparing by [ViewMethod.equals], discarding duplicates from superinterface
+     * Combines methods, discarding duplicates from superinterface
      */
     private fun combineMethods(
-        methods: Set<ViewMethod>,
-        superInterfaceMethods: Set<ViewMethod>
-    ): Set<ViewMethod> {
+        methods: Set<ViewInterfaceMethod>,
+        superInterfaces: List<Set<ViewInterfaceMethod>>
+    ): Set<ViewInterfaceMethod> {
+        val superInterfaceMethods = combineMethodsFromSuperinterfaces(superInterfaces)
+        // order and + operator are very important. Refer to Set.add() and Set.addAll() for more info
         return methods + superInterfaceMethods
+    }
+
+    private fun combineMethodsFromSuperinterfaces(
+        superInterfaceMethods: List<Set<ViewInterfaceMethod>>
+    ): Set<ViewInterfaceMethod> {
+        val resultSet = mutableSetOf<ViewInterfaceMethod>()
+        for (superInterface in superInterfaceMethods) {
+            for (superInterfaceMethod in superInterface) {
+                val isAdded = resultSet.add(superInterfaceMethod)
+                if (!isAdded) {
+                    val contained = resultSet.first { it == superInterfaceMethod }
+                    reportSuperinterfaceMethodsClash(superInterfaceMethod, contained)
+                }
+            }
+        }
+        return resultSet
+    }
+
+    private fun reportSuperinterfaceMethodsClash(methodA: ViewInterfaceMethod, methodB: ViewInterfaceMethod) {
+        if (methodA.strategy != methodB.strategy
+            && methodA.strategy != null
+            && methodB.strategy != null
+        ) {
+            messager.printMessage(
+                Kind.WARNING,
+                "Strategy clash in superinterfaces of $viewInterfaceElement. " +
+                        "Interface ${methodB.enclosedClassName} defines ${methodB.signature} " +
+                        "with strategy ${methodB.strategy.strategyClass.simpleName}, " +
+                        "but ${methodA.enclosedClassName} defines this method " +
+                        "with strategy ${methodA.strategy.strategyClass.simpleName}. " +
+                        "Override this method in $viewInterfaceElement to choose appropriate strategy",
+                viewInterfaceElement
+            )
+        }
     }
 
     /**
      * Returns default StateStrategyType for this [viewInterface], if specified
      */
     private fun getInterfaceStateStrategyType(viewInterface: TypeElement): TypeElement? {
-        val annotation = getStateStrategyTypeMirror(viewInterface)
+        val annotation = getStateStrategyAnnotation(viewInterface)
         val value = annotation?.getValueAsTypeMirror(StateStrategyType::value)
         return if (value != null && value.kind == TypeKind.DECLARED) {
             value.asTypeElement()
@@ -243,12 +233,59 @@ class ViewInterfaceProcessor(
         }
     }
 
-    private fun Element.isStatic(): Boolean {
-        return modifiers.contains(Modifier.STATIC)
+    private fun validateForEmptyStrategies(
+        methods: Set<ViewInterfaceMethod>
+    ): List<ViewStateMethod> {
+        return methods.map { method ->
+            if (method.strategy == null) {
+                reportEmptyStrategy(method.methodElement)
+                method.toViewMethod(StrategyWithTag(frameworkDefaultStrategy, method.methodElement.defaultTag()))
+            } else {
+                method.toViewMethod()
+            }
+        }
     }
 
-    private inline fun <T, R> List<T>.flatMapToSet(transform: (T) -> Iterable<R>): Set<R> {
-        return flatMapTo(LinkedHashSet(), transform)
+    private fun reportEmptyStrategy(methodElement: ExecutableElement) {
+        if (!disableEmptyStrategyCheck) {
+            if (enableEmptyStrategyHelper) {
+                migrationMethods.add(MigrationMethod(viewInterfaceElement, methodElement))
+            } else {
+                val message = ("A View method has no strategy! " +
+                        "Add @StateStrategyType annotation to this method, or to the View interface. " +
+                        "You can also specify default strategy via compiler option.")
+                messager.printMessage(Kind.ERROR, message, methodElement)
+            }
+        }
+    }
+
+    private fun getStateStrategyAnnotation(element: Element): AnnotationMirror? {
+        val strategies = getStateStrategyTypeMirrors(element)
+
+        if (strategies.size > 1) {
+            if (element is ExecutableElement) {
+                messager.printMessage(
+                    Kind.ERROR, "There's more than one state strategy type defined for method " +
+                            "'${element.simpleName}(${element.parameters.joinToString {
+                                it.asType().toString()
+                            }})'" +
+                            " in interface '${element.enclosingElement.asType()}'", element
+                )
+            } else if (element is TypeElement) {
+                messager.printMessage(
+                    Kind.ERROR, "There's more than one state strategy type defined for " +
+                            "'${element.simpleName}'", element
+                )
+            }
+        }
+
+        return strategies.firstOrNull()
+    }
+
+    private fun ExecutableElement.defaultTag(): String = simpleName.toString()
+
+    private fun Element.isStatic(): Boolean {
+        return modifiers.contains(Modifier.STATIC)
     }
 
     companion object {

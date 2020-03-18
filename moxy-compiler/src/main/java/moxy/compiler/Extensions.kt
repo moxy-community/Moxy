@@ -2,6 +2,7 @@ package moxy.compiler
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
@@ -63,3 +64,9 @@ fun AnnotationMirror.getValueAsTypeMirror(property: KProperty1<*, *>): TypeMirro
 }
 
 fun TypeMirror.getFullClassName(): String = Util.getFullClassName(this)
+
+fun List<ParameterSpec>.equalsByType(other: List<ParameterSpec>): Boolean {
+    return Util.equalsBy(this, other) { first, second ->
+        first.type == second.type
+    }
+}
