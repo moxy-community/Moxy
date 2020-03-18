@@ -56,7 +56,7 @@ class ViewStateInheritanceTest : CompilerTest() {
     }
 
     @Test
-    fun superInterfaceStrategyDoesNotInheritedByChild() {
+    fun superInterfaceStrategyNotInheritedByChild() {
         @Language("JAVA") val view = """
             import moxy.MvpView;
             import moxy.viewstate.strategy.OneExecutionStateStrategy;
@@ -83,7 +83,7 @@ class ViewStateInheritanceTest : CompilerTest() {
     }
 
     @Test
-    fun superInterfaceMethodsClashWarns() {
+    fun superInterfaceMethodsClashFails() {
         @Language("JAVA") val view = """
             import moxy.MvpView;
             import moxy.viewstate.strategy.OneExecutionStateStrategy;
@@ -108,7 +108,7 @@ class ViewStateInheritanceTest : CompilerTest() {
         val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
 
         compilation.assertThatIt()
-            .hadWarningContaining("Strategy clash in superinterfaces of ExtendBothViews. Interface ViewA defines someFun(java.lang.String) with strategy OneExecutionStateStrategy, but ViewB defines this method with strategy AddToEndSingleStrategy. Override this method in ExtendBothViews to choose appropriate strategy")
+            .hadErrorContaining("Strategy clash in superinterfaces of ExtendBothViews. Interface ViewA defines someFun(java.lang.String) with strategy OneExecutionStateStrategy, but ViewB defines this method with strategy AddToEndSingleStrategy. Override this method in ExtendBothViews to choose appropriate strategy")
             .inFile(view)
     }
 
@@ -127,7 +127,7 @@ class ViewStateInheritanceTest : CompilerTest() {
             
             interface ViewB extends MvpView {
                 @OneExecution
-                void someFun(int moshiMoshi);
+                void someFun(int hi);
             }
             
             public interface ExtendBothViews extends ViewA, ViewB {
@@ -195,8 +195,6 @@ class ViewStateInheritanceTest : CompilerTest() {
 
         val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
 
-        compilation.assertThatIt()
-            .hadWarningContaining("Strategy clash in superinterfaces of SomeView")
-            .inFile(view)
+        compilation.assertSucceeded()
     }
 }

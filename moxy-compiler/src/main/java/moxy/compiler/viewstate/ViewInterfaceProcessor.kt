@@ -66,8 +66,9 @@ class ViewInterfaceProcessor(
 
         // Get methods from input interface
         val viewInterfaceMethods = getMethods(element)
-        val methods = validateForEmptyStrategies(viewInterfaceMethods)
+        validateSuperInterfaceMethodClashes(viewInterfaceMethods)
 
+        val methods = validateForEmptyStrategies(viewInterfaceMethods)
         addUniqueSuffixToMethodsWithTheSameName(methods)
 
         return ViewInterfaceInfo(element, methods.toList())
@@ -118,6 +119,7 @@ class ViewInterfaceProcessor(
 
         return ViewInterfaceMethod(
             viewInterfaceElement.asDeclaredType(),
+            viewInterface.asDeclaredType(),
             methodElement,
             strategy
         )
@@ -179,11 +181,11 @@ class ViewInterfaceProcessor(
     ): Set<ViewInterfaceMethod> {
         val resultSet = mutableSetOf<ViewInterfaceMethod>()
         for (superInterface in superInterfaceMethods) {
-            for (superInterfaceMethod in superInterface) {
-                val isAdded = resultSet.add(superInterfaceMethod)
+            for (method in superInterface) {
+                val isAdded = resultSet.add(method)
                 if (!isAdded) {
-                    val contained = resultSet.first { it == superInterfaceMethod }
-                    reportSuperinterfaceMethodsClash(superInterfaceMethod, contained)
+                    val contained = resultSet.first { it == method }
+                    contained.superInterfaceClash = method
                 }
             }
         }
@@ -196,11 +198,11 @@ class ViewInterfaceProcessor(
             && methodB.strategy != null
         ) {
             messager.printMessage(
-                Kind.WARNING,
+                Kind.ERROR,
                 "Strategy clash in superinterfaces of $viewInterfaceElement. " +
-                        "Interface ${methodB.enclosedClassName} defines ${methodB.signature} " +
+                        "Interface ${methodB.enclosingInterfaceElement.toString()} defines ${methodB.signature} " +
                         "with strategy ${methodB.strategy.strategyClass.simpleName}, " +
-                        "but ${methodA.enclosedClassName} defines this method " +
+                        "but ${methodA.enclosingInterfaceElement.toString()} defines this method " +
                         "with strategy ${methodA.strategy.strategyClass.simpleName}. " +
                         "Override this method in $viewInterfaceElement to choose appropriate strategy",
                 viewInterfaceElement
@@ -230,6 +232,14 @@ class ViewInterfaceProcessor(
             value.asTypeElement()
         } else {
             null
+        }
+    }
+
+    private fun validateSuperInterfaceMethodClashes(viewInterfaceMethods: Set<ViewInterfaceMethod>) {
+        for (method in viewInterfaceMethods) {
+            method.superInterfaceClash?.let { clashed ->
+                reportSuperinterfaceMethodsClash(clashed, method)
+            }
         }
     }
 
