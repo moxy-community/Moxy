@@ -132,10 +132,6 @@ class PresentersBinderTagTest : CompilerTest() {
         assertExceptedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(target, presenter, expected).generatedFiles())
-
-        compileSourcesWithProcessor(target, presenter).generatedSourceFiles().forEach {
-            println(it.openReader(false).readText())
-        }
     }
 
     private fun sourceTemplate(

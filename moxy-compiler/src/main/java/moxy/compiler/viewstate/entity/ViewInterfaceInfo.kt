@@ -1,4 +1,4 @@
-package moxy.compiler.viewstate
+package moxy.compiler.viewstate.entity
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
@@ -12,7 +12,7 @@ import javax.lang.model.element.TypeElement
  */
 class ViewInterfaceInfo constructor(
     val element: TypeElement,
-    val methods: List<ViewMethod>
+    val methods: List<ViewStateMethod>
 ) {
     val name: ClassName = ClassName.get(element)
     val typeVariables: List<TypeVariableName> = element.typeParameters.map { TypeVariableName.get(it) }

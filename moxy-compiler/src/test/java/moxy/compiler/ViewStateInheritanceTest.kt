@@ -32,14 +32,14 @@ class ViewStateInheritanceTest : CompilerTest() {
     }
 
     @Test
-    fun superInterfaceWithoutStrategiesFailsEvenWithOverride() {
+    fun superInterfaceWithoutStrategiesDoesNotFailWhenOverridden() {
         @Language("JAVA") val view = """
             import moxy.MvpView;
             import moxy.viewstate.strategy.OneExecutionStateStrategy;
             import moxy.viewstate.strategy.StateStrategyType;
             
             interface NoStrategyViewInterface extends MvpView {
-                void someFun(); // <-- fails
+                void someFun();
             }
             
             @StateStrategyType(OneExecutionStateStrategy.class)
@@ -47,6 +47,30 @@ class ViewStateInheritanceTest : CompilerTest() {
                 
                 @Override
                 void someFun();
+            } 
+        """.toJavaFile()
+
+        val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
+
+        compilation.assertSucceeded()
+    }
+
+    @Test
+    fun superInterfaceStrategyNotInheritedByChild() {
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            interface NoStrategyViewInterface extends MvpView {
+                void someFun();
+            }
+            
+            public interface ExtendNoStrategyViewInterface extends NoStrategyViewInterface {
+                
+                @Override
+                void someFun(); // <-- fails
             } 
         """.toJavaFile()
 
@@ -59,21 +83,79 @@ class ViewStateInheritanceTest : CompilerTest() {
     }
 
     @Test
-    fun superInterfaceStrategyDoesNotInheritedByChild() {
+    fun superInterfaceMethodsClashFails() {
         @Language("JAVA") val view = """
             import moxy.MvpView;
             import moxy.viewstate.strategy.OneExecutionStateStrategy;
             import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.alias.AddToEndSingle;
+            import moxy.viewstate.strategy.alias.OneExecution;
             
-            @StateStrategyType(OneExecutionStateStrategy.class)
-            interface NoStrategyViewInterface extends MvpView {
+            interface ViewA extends MvpView {
+                @OneExecution
+                void someFun(String bird);
+            }
+            
+            interface ViewB extends MvpView {
+                @AddToEndSingle
+                void someFun(String dog);
+            }
+            
+            public interface ExtendBothViews extends ViewA, ViewB {
+            } 
+        """.toJavaFile()
+
+        val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
+
+        compilation.assertThatIt()
+            .hadErrorContaining("Strategy clash in superinterfaces of ExtendBothViews. Interface ViewA defines someFun(java.lang.String) with strategy OneExecutionStateStrategy, but ViewB defines this method with strategy AddToEndSingleStrategy. Override this method in ExtendBothViews to choose appropriate strategy")
+            .inFile(view)
+    }
+
+    @Test
+    fun superInterfaceMethodsClashSameStrategySucceeds() {
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.alias.OneExecution;
+            
+            interface ViewA extends MvpView {
+                @OneExecution
+                void someFun(int hello);
+            }
+            
+            interface ViewB extends MvpView {
+                @OneExecution
+                void someFun(int hi);
+            }
+            
+            public interface ExtendBothViews extends ViewA, ViewB {
+            } 
+        """.toJavaFile()
+
+        val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
+
+        compilation.assertSucceededWithoutWarnings()
+    }
+
+    @Test
+    fun superInterfaceMethodsClashWithoutStrategiesFailsOnMissingStrategy() {
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.alias.OneExecution;
+            
+            interface ViewA extends MvpView {
                 void someFun();
             }
             
-            public interface ExtendNoStrategyViewInterface extends NoStrategyViewInterface {
-                
-                @Override
-                void someFun(); // <-- fails
+            interface ViewB extends MvpView {
+                void someFun();
+            }
+            
+            public interface ExtendBothViews extends ViewA, ViewB {
             } 
         """.toJavaFile()
 
@@ -82,6 +164,37 @@ class ViewStateInheritanceTest : CompilerTest() {
         compilation.assertThatIt()
             .hadErrorContaining("A View method has no strategy!")
             .inFile(view)
-            .onLineContaining("<-- fails")
+    }
+
+    @Test
+    fun superInterfaceMethodsClashButOverriddenSucceeds() {
+        @Language("JAVA") val view = """
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.alias.AddToEnd;
+            import moxy.viewstate.strategy.alias.AddToEndSingle;
+            
+            interface ViewA extends MvpView {
+                @AddToEnd
+                void someFun();
+            }
+            
+            interface ViewB extends MvpView {
+                @AddToEndSingle
+                void someFun();
+            }
+            
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            public interface SomeView extends ViewA, ViewB {
+                
+                @Override
+                void someFun();
+            } 
+        """.toJavaFile()
+
+        val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
+
+        compilation.assertSucceeded()
     }
 }

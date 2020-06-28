@@ -1,4 +1,4 @@
-package moxy.compiler.viewstate
+package moxy.compiler.viewstate.entity
 
 import javax.lang.model.element.ExecutableElement
 import javax.lang.model.element.TypeElement

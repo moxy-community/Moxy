@@ -4,6 +4,7 @@ import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import moxy.compiler.toJavaFile
+import moxy.compiler.viewstate.entity.MigrationMethod
 import javax.lang.model.element.Modifier
 
 object EmptyStrategyHelperGenerator {

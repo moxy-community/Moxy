@@ -15,6 +15,8 @@ import moxy.compiler.asDeclaredType
 import moxy.compiler.className
 import moxy.compiler.parametrizedWith
 import moxy.compiler.toJavaFile
+import moxy.compiler.viewstate.entity.ViewInterfaceInfo
+import moxy.compiler.viewstate.entity.ViewStateMethod
 import moxy.viewstate.MvpViewState
 import moxy.viewstate.ViewCommand
 import javax.lang.model.element.Modifier
@@ -44,7 +46,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
     }
 
     private fun generateCommandClass(
-        method: ViewMethod,
+        method: ViewStateMethod,
         viewTypeName: TypeName
     ): TypeSpec {
         val applyMethod: MethodSpec? = MethodSpec.methodBuilder("apply")
@@ -71,7 +73,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
 
     private fun generateMethod(
         enclosingType: DeclaredType,
-        method: ViewMethod,
+        method: ViewStateMethod,
         viewTypeName: TypeName,
         commandClass: TypeSpec
     ): MethodSpec? {
@@ -104,12 +106,12 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
             .build()
     }
 
-    private fun generateCommandConstructor(method: ViewMethod): MethodSpec? {
+    private fun generateCommandConstructor(method: ViewStateMethod): MethodSpec? {
         val parameters: List<ParameterSpec> = method.parameters
 
         val builder: MethodSpec.Builder = MethodSpec.constructorBuilder()
             .addParameters(parameters)
-            .addStatement("super($1S, $2T.class)", method.tag, method.strategy)
+            .addStatement("super($1S, $2T.class)", method.strategy.tag, method.strategy.strategyClass)
 
         if (parameters.isNotEmpty()) builder.addCode("\n")
 
