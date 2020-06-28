@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.3.50'
+    ext.kotlin_version = '1.3.72'
     repositories {
         jcenter()
         mavenCentral()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.android.tools.build:gradle:4.0.0'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -92,9 +92,9 @@ ext {
         asm: ['org.ow2.asm:asm:7.1', 'org.ow2.asm:asm-util:7.1'],
         autoservice: 'com.google.auto.service:auto-service:1.0-rc5',
         autocommon: 'com.google.auto:auto-common:0.10',
-        kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
-        coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1",
-        coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.1",
+        kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
+        coroutines: "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7",
+        coroutinesTest: "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.7",
         gradleIncapHelperAnnotations: "net.ltgt.gradle.incap:incap:0.2",
         gradleIncapHelperProcessor  : "net.ltgt.gradle.incap:incap-processor:0.2",
     ]

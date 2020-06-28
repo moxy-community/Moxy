@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         consumerProguardFiles '../moxy/src/main/resources/META-INF/proguard/moxy.pro'
     }
