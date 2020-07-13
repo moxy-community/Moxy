@@ -31,15 +31,15 @@ public class NestedPresenterViewStateProviderTest extends CompilerTest {
     @Test
     public void test() throws Exception {
         JavaFileObject presenter = getSourceFile(testParams.sourceFileName);
-        JavaFileObject exceptedViewStateProvider = getSourceFile(testParams.compiledFileName);
+        JavaFileObject expectedViewStateProvider = getSourceFile(testParams.compiledFileName);
 
         Compilation presenterCompilation = compileSourcesWithProcessor(presenter);
-        Compilation exceptedViewStateProviderCompilation =
-            compileSources(exceptedViewStateProvider);
+        Compilation expectedViewStateProviderCompilation =
+            compileSources(expectedViewStateProvider);
 
         assertThat(presenterCompilation).succeeded();
-        assertExceptedFilesGenerated(presenterCompilation.generatedFiles(),
-            exceptedViewStateProviderCompilation.generatedFiles());
+        assertExpectedFilesGenerated(presenterCompilation.generatedFiles(),
+            expectedViewStateProviderCompilation.generatedFiles());
     }
 
     private static class TestParams {

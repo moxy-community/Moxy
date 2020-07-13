@@ -26,15 +26,15 @@ public class ViewStateProviderTest extends CompilerTest {
     @Test
     public void test() throws Exception {
         JavaFileObject presenter = getSourceFile(presenterClassName);
-        JavaFileObject exceptedViewStateProvider = getSourceFile(
+        JavaFileObject expectedViewStateProvider = getSourceFile(
             presenterClassName + MvpProcessor.VIEW_STATE_PROVIDER_SUFFIX);
 
         Compilation presenterCompilation = compileSourcesWithProcessor(presenter);
-        Compilation exceptedViewStateProviderCompilation =
-            compileSources(exceptedViewStateProvider);
+        Compilation expectedViewStateProviderCompilation =
+            compileSources(expectedViewStateProvider);
 
         assertThat(presenterCompilation).succeeded(); // TODO: assert no warnings
-        assertExceptedFilesGenerated(presenterCompilation.generatedFiles(),
-            exceptedViewStateProviderCompilation.generatedFiles());
+        assertExpectedFilesGenerated(presenterCompilation.generatedFiles(),
+            expectedViewStateProviderCompilation.generatedFiles());
     }
 }
