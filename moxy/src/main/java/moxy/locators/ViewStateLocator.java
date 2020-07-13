@@ -15,7 +15,7 @@ public class ViewStateLocator {
             Class<? extends ViewStateProvider> aClass = (Class<? extends ViewStateProvider>) Class.forName(className);
             return aClass.newInstance().getViewState();
         } catch (Exception e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 }
