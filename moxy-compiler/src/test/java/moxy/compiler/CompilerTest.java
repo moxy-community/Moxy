@@ -41,14 +41,14 @@ public abstract class CompilerTest {
     }
 
     /**
-     * Asserts that all files from {@code exceptedGeneratedFiles} exists in {@code
+     * Asserts that all files from {@code expectedGeneratedFiles} exists in {@code
      * actualGeneratedFiles}
      * and have equivalent bytecode
      */
-    protected void assertExceptedFilesGenerated(List<JavaFileObject> actualGeneratedFiles,
-        List<JavaFileObject> exceptedGeneratedFiles) throws Exception {
-        for (JavaFileObject exceptedClass : exceptedGeneratedFiles) {
-            final String fileName = exceptedClass.getName();
+    protected void assertExpectedFilesGenerated(List<JavaFileObject> actualGeneratedFiles,
+        List<JavaFileObject> expectedGeneratedFiles) throws Exception {
+        for (JavaFileObject expectedClass : expectedGeneratedFiles) {
+            final String fileName = expectedClass.getName();
 
             JavaFileObject actualClass = actualGeneratedFiles.stream()
                 .filter(input -> fileName.equals(input.getName()))
@@ -56,20 +56,20 @@ public abstract class CompilerTest {
                 .orElseThrow(() -> new AssertionFailedError("File " + fileName + " is not generated"));
 
             String actualBytecode = getBytecodeString(actualClass);
-            String exceptedBytecode = getBytecodeString(exceptedClass);
+            String expectedBytecode = getBytecodeString(expectedClass);
 
-            if (!exceptedBytecode.equals(actualBytecode)) {
+            if (!expectedBytecode.equals(actualBytecode)) {
                 JavaFileObject actualSource = findSourceForClass(actualGeneratedFiles, fileName);
 
                 throw new ComparisonFailure(Joiner.on('\n').join(
-                    "Bytecode for file " + fileName + " not equal to excepted",
+                    "Bytecode for file " + fileName + " not equal to expected",
                     "",
                     "Actual generated file (" + actualSource.getName() + "):",
                     "================",
                     "",
                     actualSource.getCharContent(false),
                     ""
-                ), exceptedBytecode, actualBytecode);
+                ), expectedBytecode, actualBytecode);
             }
         }
     }

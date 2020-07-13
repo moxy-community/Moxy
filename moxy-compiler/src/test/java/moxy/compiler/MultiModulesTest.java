@@ -22,10 +22,10 @@ public class MultiModulesTest extends CompilerTest {
         };
 
         Compilation compilation = compileLibSourcesWithProcessor(sources);
-        Compilation exceptedCompilation = compileSources(generatedSources);
+        Compilation expectedCompilation = compileSources(generatedSources);
 
         assertThat(compilation).succeededWithoutWarnings();
-        assertExceptedFilesGenerated(compilation.generatedFiles(),
-            exceptedCompilation.generatedFiles());
+        assertExpectedFilesGenerated(compilation.generatedFiles(),
+            expectedCompilation.generatedFiles());
     }
 }
