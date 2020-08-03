@@ -15,9 +15,12 @@ import moxy.compiler.toJavaFile
 import moxy.viewstate.MvpViewState
 import javax.lang.model.element.Modifier
 
-class ViewStateProviderClassGenerator : JavaFilesGenerator<PresenterInfo> {
+class ViewStateProviderClassGenerator : JavaFilesGenerator<PresenterInfo?> {
 
-    override fun generate(presenterInfo: PresenterInfo): List<JavaFile> {
+    override fun generate(presenterInfo: PresenterInfo?): List<JavaFile> {
+        if (presenterInfo == null) {
+            return emptyList()
+        }
         val typeSpec = TypeSpec
             .classBuilder(presenterInfo.name.simpleName() + MvpProcessor.VIEW_STATE_PROVIDER_SUFFIX)
             .addModifiers(Modifier.PUBLIC)
