@@ -9,7 +9,7 @@ class MainPresenter constructor(
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
 
-        logger.printLog( "presenter hash code : ${hashCode()}")
+        logger.printLog("presenter hash code : ${hashCode()}")
         viewState.printLog("TEST")
     }
 
@@ -20,5 +20,4 @@ class MainPresenter constructor(
     fun onOpenKtxButtonClick() {
         viewState.openKtxActivity()
     }
-
 }
