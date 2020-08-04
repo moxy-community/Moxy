@@ -3,11 +3,11 @@ package example.com.androidxsample.view
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import example.com.androidxsample.R
 import example.com.androidxsample.view.ktx.KtxActivity
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
+import moxy.sample.R
 
 class MainActivity : MvpAppCompatActivity(R.layout.activity_main), MainView {
 

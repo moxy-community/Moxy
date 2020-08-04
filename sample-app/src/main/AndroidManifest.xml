@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="example.com.androidxsample">
+    package="moxy.sample">
 
     <application
         android:allowBackup="false"
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="moxy.sample.AppActivity">
+        <activity android:name="moxy.sample.app.AppActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

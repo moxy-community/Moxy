@@ -1,10 +1,10 @@
 package example.com.androidxsample.view.ktx
 
 import android.os.Bundle
-import example.com.androidxsample.R
 import example.com.androidxsample.view.Logger
 import moxy.MvpAppCompatActivity
 import moxy.ktx.moxyPresenter
+import moxy.sample.R
 
 class KtxActivity : MvpAppCompatActivity(), KtxView {
 
