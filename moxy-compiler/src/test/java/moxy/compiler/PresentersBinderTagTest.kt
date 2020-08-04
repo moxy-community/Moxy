@@ -39,7 +39,7 @@ class PresentersBinderTagTest : CompilerTest() {
 
         val compilation = compileSourcesWithProcessor(target, presenter)
         compilation.assertSucceededWithoutWarnings()
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(target, presenter, expected).generatedFiles())
     }
@@ -69,7 +69,7 @@ class PresentersBinderTagTest : CompilerTest() {
 
         val compilation = compileSourcesWithProcessor(target, presenter)
         compilation.assertSucceededWithoutWarnings()
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(target, presenter, expected).generatedFiles())
     }
@@ -99,7 +99,7 @@ class PresentersBinderTagTest : CompilerTest() {
 
         val compilation = compileSourcesWithProcessor(target, presenter)
         compilation.assertSucceededWithoutWarnings()
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(target, presenter, expected).generatedFiles())
     }
@@ -129,7 +129,7 @@ class PresentersBinderTagTest : CompilerTest() {
 
         val compilation = compileSourcesWithProcessor(target, presenter)
         compilation.assertSucceededWithoutWarnings()
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(target, presenter, expected).generatedFiles())
     }

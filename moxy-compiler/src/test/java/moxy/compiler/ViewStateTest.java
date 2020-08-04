@@ -35,15 +35,15 @@ public class ViewStateTest extends CompilerTest {
     @Test
     public void test() throws Exception {
         JavaFileObject presenter = createDummyPresenter(viewClassName);
-        JavaFileObject exceptedViewState =
+        JavaFileObject expectedViewState =
             getSourceFile(viewClassName + MvpProcessor.VIEW_STATE_SUFFIX);
 
         Compilation presenterCompilation = compileSourcesWithProcessor(presenter);
-        Compilation exceptedViewStateCompilation = compileSources(exceptedViewState);
+        Compilation expectedViewStateCompilation = compileSources(expectedViewState);
 
         assertThat(presenterCompilation).succeededWithoutWarnings();
-        assertExceptedFilesGenerated(presenterCompilation.generatedFiles(),
-            exceptedViewStateCompilation.generatedFiles());
+        assertExpectedFilesGenerated(presenterCompilation.generatedFiles(),
+            expectedViewStateCompilation.generatedFiles());
     }
 
     private JavaFileObject createDummyPresenter(String viewClass) {

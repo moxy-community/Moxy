@@ -90,7 +90,7 @@ class ViewStateTestKt : CompilerTest() {
         val compilation = compileSourcesWithProcessor(view, generateViewStateFor("TaggedView"))
         compilation.assertSucceededWithoutWarnings()
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(view, expected).generatedFiles()
         )
@@ -176,7 +176,7 @@ class ViewStateTestKt : CompilerTest() {
         val compilation = compileSourcesWithProcessor(view, generateViewStateFor(view.name.substringBefore('.')))
         compilation.assertSucceededWithoutWarnings()
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             compileSources(view, expected).generatedFiles()
         )

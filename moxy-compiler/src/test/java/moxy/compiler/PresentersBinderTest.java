@@ -27,14 +27,14 @@ public class PresentersBinderTest extends CompilerTest {
     @Test
     public void test() throws Exception {
         JavaFileObject target = getSourceFile(targetClassName);
-        JavaFileObject exceptedPresentersBinder =
+        JavaFileObject expectedPresentersBinder =
             getSourceFile(targetClassName + MvpProcessor.PRESENTER_BINDER_SUFFIX);
 
         Compilation targetCompilation = compileSourcesWithProcessor(target);
-        Compilation exceptedPresentersBinderCompilation = compileSources(exceptedPresentersBinder);
+        Compilation expectedPresentersBinderCompilation = compileSources(expectedPresentersBinder);
 
         assertThat(targetCompilation).succeededWithoutWarnings();
-        assertExceptedFilesGenerated(targetCompilation.generatedFiles(),
-            exceptedPresentersBinderCompilation.generatedFiles());
+        assertExpectedFilesGenerated(targetCompilation.generatedFiles(),
+            expectedPresentersBinderCompilation.generatedFiles());
     }
 }

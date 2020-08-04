@@ -87,7 +87,7 @@ class StrategyAliasTest : CompilerTest() {
 
         val expectedCompilation = compileSources(viewInterface, presenter, expected)
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             expectedCompilation.generatedFiles())
     }
@@ -118,7 +118,7 @@ class StrategyAliasTest : CompilerTest() {
 
         val expectedCompilation = compileSources(viewInterface, presenter, expected)
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             expectedCompilation.generatedFiles())
     }
@@ -146,7 +146,7 @@ class StrategyAliasTest : CompilerTest() {
 
         val expectedCompilation = compileSources(viewInterface, presenter, expected)
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             expectedCompilation.generatedFiles())
     }

@@ -53,7 +53,7 @@ class ViewStateNegativeTestKt : CompilerTest() {
         val presenterCompilation = compileSourcesWithProcessor(presenter, view)
         val viewStateCompilation = compileSources(view, expected)
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
                 presenterCompilation.generatedFiles(),
                 viewStateCompilation.generatedFiles())
     }

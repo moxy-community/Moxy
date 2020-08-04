@@ -69,7 +69,7 @@ class PresentersBinderErrorTestKt : CompilerTest() {
         val compilation = compileSourcesWithProcessor(view, presenter)
         val expectedCompilation = compileSources(view, presenter, expected)
 
-        assertExceptedFilesGenerated(
+        assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             expectedCompilation.generatedFiles())
     }
