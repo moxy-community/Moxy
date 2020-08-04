@@ -20,10 +20,18 @@ import javax.lang.model.type.TypeMirror
 
 class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo?> {
 
+    /**
+     * A ViewState implementation is generated for each
+     * View interface in this set.
+     *
+     * This set is filled during the processing of presenters
+     * annotated with @InjectViewState.
+     */
     val usedViews = mutableSetOf<TypeElement>()
 
     /**
-     * Returns null if this Presenter should not be used for ViewState generation.
+     * Returns null if this Presenter should not be used for ViewState and
+     * ViewStateProvider generation.
      */
     override fun process(element: TypeElement): PresenterInfo? {
         return getViewStateClassName(element)?.let { PresenterInfo(element, it) }
