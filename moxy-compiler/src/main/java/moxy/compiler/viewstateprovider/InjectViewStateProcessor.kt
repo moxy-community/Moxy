@@ -36,7 +36,7 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo?> {
         val viewState = getViewStateClassFromAnnotationParams(typeElement)
         if (viewState != null) return viewState
 
-        if (isAbstractClass(typeElement)) {
+        if (typeElement.isAbstractClass) {
             return null
         }
 
@@ -50,9 +50,10 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo?> {
         return Util.getFullClassName(viewTypeElement) + MvpProcessor.VIEW_STATE_SUFFIX
     }
 
-    private fun isAbstractClass(typeElement: TypeElement): Boolean {
-        return typeElement.modifiers.contains(Modifier.ABSTRACT)
-    }
+    private val TypeElement.isAbstractClass: Boolean
+        get() {
+            return this.modifiers.contains(Modifier.ABSTRACT)
+        }
 
     private fun getViewClassFromPresenterTypeElement(typeElement: TypeElement): String {
         val view = getViewClassFromAnnotationParams(typeElement)
