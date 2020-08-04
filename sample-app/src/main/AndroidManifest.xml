@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="example.com.androidxsample.view.MainActivity">
+        <activity android:name="moxy.sample.AppActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
