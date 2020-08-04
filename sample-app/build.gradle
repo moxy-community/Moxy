@@ -11,6 +11,7 @@ repositories {
 
 android {
     compileSdkVersion 29
+
     defaultConfig {
         applicationId "moxy.sample"
         minSdkVersion 21
@@ -28,6 +29,7 @@ android {
             }
         }
     }
+
     signingConfigs {
         release {
             keyAlias 'Moxy'
@@ -45,6 +47,10 @@ android {
 
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     // we've placed source code in "kotlin folder" but you don't have to do that.
@@ -69,17 +75,26 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
 
     // AndroidX KTX
-    implementation "androidx.core:core-ktx:1.3.1"
-    implementation "androidx.fragment:fragment-ktx:1.2.5"
+    implementation 'androidx.core:core-ktx:1.3.1'
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
 
-    //uncomment for test library from local sources
-    implementation project(':moxy-androidx')
-    implementation project(':moxy-ktx')
-    kapt project(':moxy-compiler')
+    // Material Design
+    implementation 'com.google.android.material:material:1.1.0'
 
-    //uncomment for test library from maven
+    // HTTP client
+    implementation 'io.ktor:ktor-client-android:1.3.2'
+
+    // Moxy
+    // uncomment for test library from local sources
+    //implementation project(':moxy-androidx')
+    //implementation project(':moxy-ktx')
+    //kapt project(':moxy-compiler')
+
+    // uncomment for test library from maven
     def moxyVersion = targetVersion
-    //implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
-    //implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
-    //kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
+    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 }
