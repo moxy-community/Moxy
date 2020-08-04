@@ -1,6 +1,7 @@
-package moxy.sample.dailypicture
+package moxy.sample.dailypicture.ui
 
 import moxy.MvpView
+import moxy.sample.dailypicture.domain.PictureOfTheDayApiModel
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.OneExecution
 
@@ -24,7 +25,7 @@ interface DailyPictureView : MvpView {
      * after screen rotation.
      */
     @AddToEndSingle
-    fun showPicture(url: String)
+    fun showPicture(picture: PictureOfTheDayApiModel)
 
     /**
      * Show error message.
