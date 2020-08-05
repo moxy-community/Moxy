@@ -15,7 +15,7 @@ import kotlinx.serialization.json.JsonConfiguration
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import moxy.sample.dailypicture.domain.DailyPictureInteractor
-import moxy.sample.dailypicture.domain.PictureOfTheDayApiModel
+import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
 import moxy.sample.ui.ViewBindingHolder
 
@@ -50,7 +50,7 @@ class DailyPictureFragment : MvpAppCompatFragment(),
         FragmentDailyPictureBinding.inflate(inflater, container, false)
     }
 
-    override fun showPicture(picture: PictureOfTheDayApiModel) {
+    override fun showPicture(picture: PictureOfTheDay) {
         binding.textPictureDescription.text = picture.explanation
         binding.imageDailyPicture.load(picture.url) {
             crossfade(true)

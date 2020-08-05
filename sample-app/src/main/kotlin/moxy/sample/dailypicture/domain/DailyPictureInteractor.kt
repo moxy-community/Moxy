@@ -8,9 +8,9 @@ class DailyPictureInteractor(
     private val httpClient: HttpClient
 ) {
 
-    suspend fun getPictureForToday(): PictureOfTheDayApiModel {
-        return httpClient.get(NasaApi.APOD_URL) {
+    suspend fun getPictureForToday(): PictureOfTheDay {
+        return httpClient.get<PictureOfTheDayApiModel>(NasaApi.APOD_URL) {
             parameter("api_key", NasaApi.KEY)
-        }
+        }.toDomain()
     }
 }

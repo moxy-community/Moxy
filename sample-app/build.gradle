@@ -64,6 +64,8 @@ android {
     }
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
+
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -105,6 +107,9 @@ dependencies {
 
     // Image loader
     implementation("io.coil-kt:coil:0.11.0")
+
+    // java.time and other stuff without third-party libraries
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
 
     // Moxy
     // uncomment for test library from local sources
