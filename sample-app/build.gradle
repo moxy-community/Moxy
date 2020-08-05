@@ -122,13 +122,13 @@ dependencies {
 
     // Moxy
     // uncomment for test library from local sources
-    //implementation project(':moxy-androidx')
-    //implementation project(':moxy-ktx')
-    //kapt project(':moxy-compiler')
+    implementation project(':moxy-androidx')
+    implementation project(':moxy-ktx')
+    kapt project(':moxy-compiler')
 
     // uncomment for test library from maven
-    def moxyVersion = targetVersion
-    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
-    implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
-    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
+//    def moxyVersion = targetVersion
+//    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+//    implementation "com.github.moxy-community:moxy-ktx:$moxyVersion"
+//    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 }
