@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import coil.api.load
 import com.google.android.material.snackbar.Snackbar
 import io.ktor.client.HttpClient
@@ -14,6 +15,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
+import moxy.sample.R
 import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
@@ -52,8 +54,26 @@ class DailyPictureFragment : MvpAppCompatFragment(),
 
     override fun showPicture(picture: PictureOfTheDay) {
         binding.textPictureDescription.text = picture.explanation
-        binding.imageDailyPicture.load(picture.url) {
-            crossfade(true)
+        showImage(picture)
+    }
+
+    private fun showImage(picture: PictureOfTheDay) {
+        when (picture.mediaType) {
+            PictureOfTheDay.MediaType.IMAGE -> {
+                binding.imageDailyPicture.isVisible = true
+                binding.imageDailyPicture.load(picture.url) {
+                    crossfade(true)
+                    placeholder(R.drawable.ic_placeholder_image_padded)
+                    error(R.drawable.ic_placeholder_error_padded)
+                }
+            }
+            PictureOfTheDay.MediaType.VIDEO -> {
+                binding.imageDailyPicture.isVisible = true
+                binding.imageDailyPicture.setImageResource(R.drawable.ic_placeholder_video_padded)
+            }
+            PictureOfTheDay.MediaType.UNKNOWN -> {
+                binding.imageDailyPicture.isVisible = false
+            }
         }
     }
 
