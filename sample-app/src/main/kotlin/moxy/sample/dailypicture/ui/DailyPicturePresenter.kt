@@ -36,6 +36,14 @@ class DailyPicturePresenter(
     }
 
     private fun loadPicture() {
+        // Try rotating the screen, and look at the logs!
+        // You'll see that the network request is not executed
+        // the second time after the screen is rotated. Awesome!
+        Log.d("DailyPicturePresenter", "Loading picture for date: $date")
+
+        // We use the handy presenterScope extension from moxy-ktx artifact to launch a coroutine.
+        // You can do your own implementation for asynchronous work: RxJava, plain old callbacks,
+        // or something else. Just remember to call viewState methods only from Main thread!
         presenterScope.launch {
             viewState.showProgress(true)
             try {

@@ -16,6 +16,7 @@ import kotlinx.serialization.json.JsonConfiguration
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import moxy.sample.R
+import moxy.sample.dailypicture.data.KtorDailyPictureRepository
 import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
@@ -32,17 +33,19 @@ class DailyPictureFragment : MvpAppCompatFragment(),
     private val presenter: DailyPicturePresenter by moxyPresenter {
         DailyPicturePresenter(
             DailyPictureInteractor(
-                HttpClient(Android) {
-                    install(JsonFeature) {
-                        serializer = KotlinxSerializer(
-                            Json(
-                                JsonConfiguration.Stable.copy(
-                                    ignoreUnknownKeys = true
+                KtorDailyPictureRepository(
+                    HttpClient(Android) {
+                        install(JsonFeature) {
+                            serializer = KotlinxSerializer(
+                                Json(
+                                    JsonConfiguration.Stable.copy(
+                                        ignoreUnknownKeys = true
+                                    )
                                 )
                             )
-                        )
+                        }
                     }
-                }
+                )
             )
         )
     }

@@ -1,31 +1,24 @@
 package moxy.sample.dailypicture.domain
 
-import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import moxy.sample.dailypicture.data.DateMapper
-import moxy.sample.dailypicture.data.NasaApi
-import moxy.sample.dailypicture.data.PictureOfTheDayApiModel
-import moxy.sample.dailypicture.data.toDomain
 import java.time.LocalDate
 import kotlin.random.Random
 import kotlin.random.nextLong
 
 class DailyPictureInteractor(
-    private val httpClient: HttpClient
+    private val repository: DailyPictureRepository
 ) {
 
     /**
      * Get Astronomy Picture of the Day for specific [date].
      * `null` [date] loads the picture for today.
      *
-     * Note that this function is `suspend`-ing. It
+     * Note that this function is `suspend`-ing. It means that it's asynchronous.
+     * In our case the DailyPictureRepository executes the network request
+     * in background. The function suspends for that time, and resumes execution after
+     * the request is complete. The Main thread is not blocked, and everyone is happy.
      */
-    suspend fun getPicture(date: LocalDate? = null): PictureOfTheDay {
-        return httpClient.get<PictureOfTheDayApiModel>(NasaApi.APOD_URL) {
-            parameter("api_key", NasaApi.KEY)
-            date?.let { parameter("date", DateMapper.serialize(it)) }
-        }.toDomain()
+    suspend fun getPicture(date: LocalDate?): PictureOfTheDay {
+        return repository.getPicture(date)
     }
 
     /**
