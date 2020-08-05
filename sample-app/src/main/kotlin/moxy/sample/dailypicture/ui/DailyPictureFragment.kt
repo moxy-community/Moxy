@@ -7,49 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import coil.api.load
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.android.Android
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
+import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import moxy.sample.R
-import moxy.sample.dailypicture.data.KtorDailyPictureRepository
-import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
 import moxy.sample.ui.ProgressRequestListener
 import moxy.sample.ui.ViewBindingHolder
 import moxy.sample.ui.openBrowser
 import moxy.sample.ui.snackbar
+import javax.inject.Inject
+import javax.inject.Provider
 
+@AndroidEntryPoint
 class DailyPictureFragment : MvpAppCompatFragment(),
     DailyPictureView {
+
+    @Inject
+    lateinit var presenterProvider: Provider<DailyPicturePresenter>
 
     // moxyPresenter delegate is the recommended way to create an instance of Presenter in Kotlin.
     // This is a factory for creating presenter for this fragment. You can do it
     // any way you want: manually, or with DI framework of your choice.
-    private val presenter: DailyPicturePresenter by moxyPresenter {
-        DailyPicturePresenter(
-            DailyPictureInteractor(
-                KtorDailyPictureRepository(
-                    HttpClient(Android) {
-                        install(JsonFeature) {
-                            serializer = KotlinxSerializer(
-                                Json(
-                                    JsonConfiguration.Stable.copy(
-                                        ignoreUnknownKeys = true
-                                    )
-                                )
-                            )
-                        }
-                    }
-                )
-            )
-        )
-    }
+    // We use Dagger Hilt as an example of DI framework integration.
+    private val presenter: DailyPicturePresenter by moxyPresenter { presenterProvider.get() }
 
     private val bindingHolder = ViewBindingHolder<FragmentDailyPictureBinding>()
     private val binding get() = bindingHolder.binding

@@ -1,10 +1,13 @@
 package moxy.sample.dailypicture.domain
 
 import java.time.LocalDate
+import javax.inject.Inject
 import kotlin.random.Random
 import kotlin.random.nextLong
 
-class DailyPictureInteractor(
+class DailyPictureInteractor
+@Inject
+constructor(
     private val repository: DailyPictureRepository
 ) {
 

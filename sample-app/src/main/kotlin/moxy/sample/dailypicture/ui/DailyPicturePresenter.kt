@@ -7,16 +7,24 @@ import moxy.presenterScope
 import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import java.time.LocalDate
+import javax.inject.Inject
 
-class DailyPicturePresenter(
+class DailyPicturePresenter
+@Inject
+constructor(
     private val dailyPictureInteractor: DailyPictureInteractor
 ) : MvpPresenter<DailyPictureView>() {
 
     private var pictureOfTheDay: PictureOfTheDay? = null
     private var date: LocalDate? = null
 
+    init {
+        Log.d("DailyPicturePresenter", "init $this")
+    }
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        Log.d("DailyPicturePresenter", "onFirstViewAttach $this")
         loadPicture()
     }
 

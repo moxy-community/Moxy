@@ -6,8 +6,11 @@ import io.ktor.client.request.parameter
 import moxy.sample.dailypicture.domain.DailyPictureRepository
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import java.time.LocalDate
+import javax.inject.Inject
 
-class KtorDailyPictureRepository(
+class KtorDailyPictureRepository
+@Inject
+constructor(
     private val httpClient: HttpClient
 ) : DailyPictureRepository {
 
