@@ -20,6 +20,7 @@ import moxy.sample.dailypicture.data.KtorDailyPictureRepository
 import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
+import moxy.sample.ui.ProgressRequestListener
 import moxy.sample.ui.ViewBindingHolder
 import moxy.sample.ui.openBrowser
 import moxy.sample.ui.snackbar
@@ -88,6 +89,9 @@ class DailyPictureFragment : MvpAppCompatFragment(),
                     crossfade(true)
                     placeholder(R.drawable.ic_placeholder_image_padded)
                     error(R.drawable.ic_placeholder_error_padded)
+                    listener(ProgressRequestListener { isProgress ->
+                        binding.progressBar.isVisible = isProgress
+                    })
                 }
             }
             PictureOfTheDay.MediaType.VIDEO -> {

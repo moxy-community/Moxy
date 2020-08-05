@@ -29,6 +29,18 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:srcCompat="@drawable/ic_placeholder_image_padded" />
 
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:indeterminateTint="?colorPrimary"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/image_daily_picture"
+                    app:layout_constraintLeft_toLeftOf="@id/image_daily_picture"
+                    app:layout_constraintRight_toRightOf="@id/image_daily_picture"
+                    app:layout_constraintTop_toTopOf="@id/image_daily_picture"
+                    tools:visibility="visible" />
+
                 <TextView
                     android:id="@+id/text_title"
                     android:layout_width="match_parent"
