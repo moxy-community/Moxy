@@ -31,6 +31,16 @@ interface DailyPictureView : MvpView {
     fun showProgress(isProgress: Boolean)
 
     /**
+     * Open web browser to show some URL content.
+     *
+     * This should probably be implemented with a separate Router entity
+     * which is responsible for navigation, but for the sample purposes we go with
+     * a lazy option.
+     */
+    @OneExecution
+    fun openBrowser(url: String)
+
+    /**
      * Show error message.
      *
      * This method has [OneExecution] strategy because

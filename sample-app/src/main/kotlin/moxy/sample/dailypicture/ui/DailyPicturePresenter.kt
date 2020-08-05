@@ -26,7 +26,7 @@ class DailyPicturePresenter(
 
     fun onPictureClicked() {
         pictureOfTheDay?.let {
-            // todo
+            viewState.openBrowser(it.url)
         }
     }
 

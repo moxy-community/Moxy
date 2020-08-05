@@ -1,12 +1,12 @@
 package moxy.sample.dailypicture.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import coil.api.load
-import com.google.android.material.snackbar.Snackbar
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.features.json.JsonFeature
@@ -20,6 +20,8 @@ import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
 import moxy.sample.ui.ViewBindingHolder
+import moxy.sample.ui.openBrowser
+import moxy.sample.ui.snackbar
 
 class DailyPictureFragment : MvpAppCompatFragment(),
     DailyPictureView {
@@ -99,7 +101,13 @@ class DailyPictureFragment : MvpAppCompatFragment(),
         binding.swipeRefreshLayout.isRefreshing = isProgress
     }
 
+    override fun openBrowser(url: String) {
+        openBrowser(Uri.parse(url)) {
+            binding.root.snackbar(getString(R.string.common_error_browser_not_installed))
+        }
+    }
+
     override fun showError(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+        binding.root.snackbar(message)
     }
 }
