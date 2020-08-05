@@ -1,4 +1,4 @@
-package moxy.sample.dailypicture.domain
+package moxy.sample.dailypicture.data
 
 object NasaApi {
 

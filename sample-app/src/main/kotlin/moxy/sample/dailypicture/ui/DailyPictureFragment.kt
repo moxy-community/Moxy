@@ -33,7 +33,11 @@ class DailyPictureFragment : MvpAppCompatFragment(),
                 HttpClient(Android) {
                     install(JsonFeature) {
                         serializer = KotlinxSerializer(
-                            Json(JsonConfiguration.Stable.copy(ignoreUnknownKeys = true))
+                            Json(
+                                JsonConfiguration.Stable.copy(
+                                    ignoreUnknownKeys = true
+                                )
+                            )
                         )
                     }
                 }
@@ -52,7 +56,21 @@ class DailyPictureFragment : MvpAppCompatFragment(),
         FragmentDailyPictureBinding.inflate(inflater, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.swipeRefreshLayout.setOnRefreshListener { presenter.onRefresh() }
+        binding.imageDailyPicture.setOnClickListener { presenter.onPictureClicked() }
+        binding.buttonRandomize.setOnClickListener { presenter.onRandomizeClicked() }
+    }
+
     override fun showPicture(picture: PictureOfTheDay) {
+        binding.textTitle.text = picture.title
+        if (picture.copyright.isEmpty()) {
+            binding.textCopyright.isVisible = false
+        } else {
+            binding.textCopyright.isVisible = true
+            binding.textCopyright.text = picture.copyright
+        }
         binding.textPictureDescription.text = picture.explanation
         showImage(picture)
     }
@@ -75,6 +93,10 @@ class DailyPictureFragment : MvpAppCompatFragment(),
                 binding.imageDailyPicture.isVisible = false
             }
         }
+    }
+
+    override fun showProgress(isProgress: Boolean) {
+        binding.swipeRefreshLayout.isRefreshing = isProgress
     }
 
     override fun showError(message: String) {

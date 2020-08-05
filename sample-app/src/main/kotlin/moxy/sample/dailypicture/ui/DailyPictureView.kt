@@ -27,6 +27,9 @@ interface DailyPictureView : MvpView {
     @AddToEndSingle
     fun showPicture(picture: PictureOfTheDay)
 
+    @AddToEndSingle
+    fun showProgress(isProgress: Boolean)
+
     /**
      * Show error message.
      *
