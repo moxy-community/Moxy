@@ -34,19 +34,17 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo?> {
      * ViewStateProvider generation.
      */
     override fun process(element: TypeElement): PresenterInfo? {
-        return getViewStateClassName(element)?.let { PresenterInfo(element, it) }
-    }
-
-    /**
-     * Returns null if this Presenter should not be used for ViewState generation.
-     */
-    private fun getViewStateClassName(typeElement: TypeElement): String? {
-        val viewState = getViewStateClassFromAnnotationParams(typeElement)
-        if (viewState != null) return viewState
-
-        if (typeElement.isAbstractClass) {
+        if (element.isAbstractClass) {
             return null
         }
+
+        val viewStateClassName = getViewStateClassName(element)
+        return PresenterInfo(element, viewStateClassName)
+    }
+
+    private fun getViewStateClassName(typeElement: TypeElement): String {
+        val viewState = getViewStateClassFromAnnotationParams(typeElement)
+        if (viewState != null) return viewState
 
         val view: String = getViewClassFromPresenterTypeElement(typeElement)
 
