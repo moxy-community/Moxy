@@ -11,7 +11,7 @@ targetCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     implementation project(':moxy')
 
-    implementation deps.kotlinStdlib
+    implementation deps.kotlinStdlibForCompiler
 
     implementation deps.javapoet
 
