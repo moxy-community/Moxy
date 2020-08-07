@@ -28,4 +28,4 @@ The sample app is a miniature model of a real-world production application. It h
 ## Roadmap
 
 * One more screen to showcase navigation
-* `RecyclerView` inregration best practices 
+* `RecyclerView` integration best practices 
