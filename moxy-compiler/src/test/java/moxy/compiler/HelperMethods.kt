@@ -14,7 +14,8 @@ fun generateViewStateFor(view: String): JavaFileObject {
         public class InjectViewStateForViewPresenter extends MvpPresenter<$view> {
         
         }
-        """.trimIndent())
+        """.trimIndent()
+    )
 }
 
 fun String.toJavaFile(fullyQualifiedName: String): JavaFileObject {
@@ -25,14 +26,30 @@ fun String.toJavaFile(fullyQualifiedName: String): JavaFileObject {
  * Infers file name from first identifier after "public class" or "public interface"
  */
 fun String.toJavaFile(): JavaFileObject {
-    val fullyQualifiedName = if (contains("public class ")) {
-        lines().first { it.contains("public class ") }
-            .substringAfter("public class ")
-            .takeWhile { it.isLetterOrDigit() || it == '$' }
-    } else {
-        lines().first { it.contains("public interface ") }
-            .substringAfter("public interface ")
-            .takeWhile { it.isLetterOrDigit() }
+    val publicClassPrefix = "public class "
+    val publicAbstractClassPrefix = "public abstract class "
+    val publicInterfacePrefix = "public interface "
+    val fullyQualifiedName = when {
+        contains(publicClassPrefix) -> {
+            parseClassNameAfterPrefix(this, publicClassPrefix)
+        }
+        contains(publicAbstractClassPrefix) -> {
+            parseClassNameAfterPrefix(this, publicAbstractClassPrefix)
+        }
+        contains(publicInterfacePrefix) -> {
+            parseClassNameAfterPrefix(this, publicInterfacePrefix)
+        }
+        else -> throw IllegalArgumentException("Can't infer class name from the source code")
     }
     return toJavaFile(fullyQualifiedName)
+}
+
+private fun parseClassNameAfterPrefix(
+    sourceCode: String,
+    prefix: String
+): String {
+    return sourceCode.lines()
+        .first { it.contains(prefix) }
+        .substringAfter(prefix)
+        .takeWhile { it.isLetterOrDigit() || it == '$' }
 }

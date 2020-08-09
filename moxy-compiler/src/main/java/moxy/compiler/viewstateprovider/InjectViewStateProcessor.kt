@@ -11,25 +11,42 @@ import moxy.compiler.Util
 import moxy.compiler.Util.fillGenerics
 import moxy.compiler.asTypeElement
 import moxy.compiler.getFullClassName
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 import javax.lang.model.element.TypeParameterElement
 import javax.lang.model.type.MirroredTypeException
 import javax.lang.model.type.TypeKind
 import javax.lang.model.type.TypeMirror
 
-class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
+class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo?> {
 
+    /**
+     * A ViewState implementation is generated for each
+     * View interface in this set.
+     *
+     * This set is filled during the processing of presenters
+     * annotated with @InjectViewState.
+     */
     val usedViews = mutableSetOf<TypeElement>()
 
-    override fun process(element: TypeElement): PresenterInfo {
-        return PresenterInfo(element, getViewStateClassName(element)!!)
+    /**
+     * Returns null if this Presenter should not be used for ViewState and
+     * ViewStateProvider generation.
+     */
+    override fun process(element: TypeElement): PresenterInfo? {
+        if (element.isAbstractClass) {
+            return null
+        }
+
+        val viewStateClassName = getViewStateClassName(element)
+        return PresenterInfo(element, viewStateClassName)
     }
 
-    private fun getViewStateClassName(typeElement: TypeElement): String? {
+    private fun getViewStateClassName(typeElement: TypeElement): String {
         val viewState = getViewStateClassFromAnnotationParams(typeElement)
         if (viewState != null) return viewState
 
-        val view = getViewClassFromPresenterTypeElement(typeElement)
+        val view: String = getViewClassFromPresenterTypeElement(typeElement)
 
         val viewTypeElement = elementUtils.getTypeElement(view)
             ?: throw IllegalArgumentException("""View "$view" for $typeElement cannot be found""")
@@ -39,13 +56,26 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
         return Util.getFullClassName(viewTypeElement) + MvpProcessor.VIEW_STATE_SUFFIX
     }
 
+    private val TypeElement.isAbstractClass: Boolean
+        get() {
+            return this.modifiers.contains(Modifier.ABSTRACT)
+        }
+
     private fun getViewClassFromPresenterTypeElement(typeElement: TypeElement): String {
-        var view = getViewClassFromAnnotationParams(typeElement)
+        val view = getViewClassFromAnnotationParams(typeElement)
             ?: getViewClassFromGeneric(typeElement)
 
-        // Remove generic from view class name
+        return trimGenericFromClassName(view)
+    }
+
+    /**
+     * View class can have generic parameters, like `GenericView<T>`.
+     * In order to retrieve view TypeElement, we need canonical class name without generics,
+     * so we trim them.
+     */
+    private fun trimGenericFromClassName(view: String): String {
         if (view.contains("<")) {
-            view = view.substring(0, view.indexOf("<"))
+            return view.substring(0, view.indexOf("<"))
         }
         return view
     }
@@ -77,7 +107,7 @@ class InjectViewStateProcessor : ElementProcessor<TypeElement, PresenterInfo> {
         var parentTypes = emptyMap<String, String>()
 
         while (superclass.kind != TypeKind.NONE) {
-            val superclassElement = superclass.asTypeElement()
+            val superclassElement: TypeElement = superclass.asTypeElement()
 
             val typeArguments: List<TypeMirror> = superclass.typeArguments
             val typeParameters: List<TypeParameterElement?> = superclassElement.typeParameters
