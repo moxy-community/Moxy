@@ -1,3 +1,7 @@
 <resources>
-  <string name="app_name">Moxy androidX</string>
+    <string name="app_name">Moxy Sample</string>
+
+    <string name="daily_picture_button_randomize">Randomize</string>
+
+    <string name="common_error_browser_not_installed">Browser app is not installed</string>
 </resources>

@@ -1,0 +1,10 @@
+# KotlinX serialization
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.SerializationKt
+-keep,includedescriptorclasses class moxy.sample.**$$serializer { *; }
+-keepclassmembers class moxy.sample.** {
+    *** Companion;
+}
+-keepclasseswithmembers class moxy.sample.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
