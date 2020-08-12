@@ -25,7 +25,13 @@ interface DailyPictureView : MvpView {
      * after screen rotation.
      */
     @AddToEndSingle
-    fun showPicture(picture: PictureOfTheDay)
+    fun showImage(url: String)
+
+    @AddToEndSingle
+    fun showVideo()
+
+    @AddToEndSingle
+    fun hideImage()
 
     @AddToEndSingle
     fun showProgress(isProgress: Boolean)
@@ -50,4 +56,16 @@ interface DailyPictureView : MvpView {
      */
     @OneExecution
     fun showError(message: String)
+
+    @AddToEndSingle
+    fun setTitle(text: String)
+
+    @AddToEndSingle
+    fun setDescription(text: String)
+
+    @AddToEndSingle
+    fun showCopyright(text: String)
+
+    @AddToEndSingle
+    fun hideCopyright()
 }

@@ -51,39 +51,26 @@ class DailyPictureFragment : MvpAppCompatFragment(),
         binding.buttonRandomize.setOnClickListener { presenter.onRandomizeClicked() }
     }
 
-    override fun showPicture(picture: PictureOfTheDay) {
-        binding.textTitle.text = picture.title
-        if (picture.copyright.isEmpty()) {
-            binding.textCopyright.isVisible = false
-        } else {
-            binding.textCopyright.isVisible = true
-            binding.textCopyright.text = picture.copyright
+    override fun showImage(url: String) {
+        binding.imageDailyPicture.isVisible = true
+        binding.imageDailyPicture.load(url) {
+            crossfade(true)
+            placeholder(R.drawable.ic_placeholder_image_padded)
+            error(R.drawable.ic_placeholder_error_padded)
+            listener(ProgressRequestListener { isProgress ->
+                binding.progressBar.isVisible = isProgress // TODO business logic
+            })
         }
-        binding.textPictureDescription.text = picture.explanation
-        showImage(picture)
+
     }
 
-    private fun showImage(picture: PictureOfTheDay) {
-        when (picture.mediaType) {
-            PictureOfTheDay.MediaType.IMAGE -> {
-                binding.imageDailyPicture.isVisible = true
-                binding.imageDailyPicture.load(picture.url) {
-                    crossfade(true)
-                    placeholder(R.drawable.ic_placeholder_image_padded)
-                    error(R.drawable.ic_placeholder_error_padded)
-                    listener(ProgressRequestListener { isProgress ->
-                        binding.progressBar.isVisible = isProgress
-                    })
-                }
-            }
-            PictureOfTheDay.MediaType.VIDEO -> {
-                binding.imageDailyPicture.isVisible = true
-                binding.imageDailyPicture.setImageResource(R.drawable.ic_placeholder_video_padded)
-            }
-            PictureOfTheDay.MediaType.UNKNOWN -> {
-                binding.imageDailyPicture.isVisible = false
-            }
-        }
+    override fun showVideo() {
+        binding.imageDailyPicture.isVisible = true
+        binding.imageDailyPicture.setImageResource(R.drawable.ic_placeholder_video_padded)
+    }
+
+    override fun hideImage() {
+        binding.imageDailyPicture.isVisible = false
     }
 
     override fun showProgress(isProgress: Boolean) {
@@ -92,11 +79,28 @@ class DailyPictureFragment : MvpAppCompatFragment(),
 
     override fun openBrowser(url: String) {
         openBrowser(Uri.parse(url)) {
-            binding.root.snackbar(getString(R.string.common_error_browser_not_installed))
+            presenter.onOpenBrowserError()
         }
     }
 
     override fun showError(message: String) {
         binding.root.snackbar(message)
+    }
+
+    override fun setTitle(text: String) {
+        binding.textTitle.text = text
+    }
+
+    override fun setDescription(text: String) {
+        binding.textPictureDescription.text = text
+    }
+
+    override fun showCopyright(text: String) {
+        binding.textCopyright.isVisible = true
+        binding.textCopyright.text = text
+    }
+
+    override fun hideCopyright() {
+        binding.textCopyright.isVisible = false
     }
 }
