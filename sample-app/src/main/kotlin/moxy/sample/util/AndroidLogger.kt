@@ -1,14 +1,16 @@
 package moxy.sample.util
 
+import android.util.Log
 import java.lang.Exception
+import javax.inject.Inject
 
-class AndroidLogger : Logger {
+class AndroidLogger @Inject constructor() : Logger {
 
     override fun d(tag: String, msg: String) {
-        android.util.Log.d(tag, msg)
+        Log.d(tag, msg)
     }
 
     override fun e(tag: String, msg: String, exception: Exception) {
-        android.util.Log.e(tag, msg, exception)
+        Log.e(tag, msg, exception)
     }
 }

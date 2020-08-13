@@ -4,14 +4,17 @@ import com.nhaarman.mockitokotlin2.clearInvocations
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import moxy.sample.TestCoroutineDispatcherProvider
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import moxy.sample.dailypicture.domain.DailyPictureInteractor
 import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.util.ConsoleLogger
+import moxy.sample.util.MainCoroutineRule
+import moxy.sample.util.createMockPresenterBlocking
+import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 
-class DailyPicturePresenterTest : BaseTest() {
+class DailyPicturePresenterTest {
 
     private val url = "some_url"
 
@@ -23,9 +26,15 @@ class DailyPicturePresenterTest : BaseTest() {
 
     private val interactor: DailyPictureInteractor = mock()
 
+    private val logger = ConsoleLogger()
+
+    @ExperimentalCoroutinesApi
+    @get:Rule
+    val coroutineRule = MainCoroutineRule()
+
     @Test
     fun `on first view attach`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, copyright, PictureOfTheDay.MediaType.IMAGE))
     }) {
@@ -39,7 +48,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `load image success test`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, copyright, PictureOfTheDay.MediaType.IMAGE))
     }) {
@@ -57,7 +66,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `load video success test`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, copyright, PictureOfTheDay.MediaType.VIDEO))
     }) {
@@ -75,7 +84,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `load unknown media type success test`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, copyright, PictureOfTheDay.MediaType.UNKNOWN))
     }) {
@@ -93,7 +102,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `load image error test`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenThrow(RuntimeException::class.java)
     }) {
@@ -108,7 +117,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `on picture clicked`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, copyright, PictureOfTheDay.MediaType.IMAGE))
     }) {
@@ -121,7 +130,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `on randomize clicked`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         val date = LocalDate.of(2020, 1, 1)
         whenever(interactor.getRandomDate()).thenReturn(date)
@@ -141,7 +150,7 @@ class DailyPicturePresenterTest : BaseTest() {
 
     @Test
     fun `on open browser error`() = createMockPresenterBlocking({
-        DailyPicturePresenter(interactor, TestCoroutineDispatcherProvider(), ConsoleLogger())
+        DailyPicturePresenter(interactor, logger)
     }, {
         whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, copyright, PictureOfTheDay.MediaType.IMAGE))
     }) {
@@ -150,5 +159,17 @@ class DailyPicturePresenterTest : BaseTest() {
         presenter.onOpenBrowserError()
 
         verify(view).showError("Browser app is not installed")
+    }
+
+    @Test
+    fun `show image without copyright`() = createMockPresenterBlocking({
+        DailyPicturePresenter(interactor, logger)
+    }, {
+        whenever(interactor.getPicture(null)).thenReturn(PictureOfTheDay(LocalDate.now(), url, title, description, "", PictureOfTheDay.MediaType.IMAGE))
+    }) {
+        verify(view).showProgress(true)
+        verify(view).showImage(url)
+        verify(view).hideCopyright()
+        verify(view).showProgress(false)
     }
 }
