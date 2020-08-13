@@ -14,6 +14,7 @@ import org.junit.Rule
 import org.junit.Test
 import java.time.LocalDate
 
+@ExperimentalCoroutinesApi
 class DailyPicturePresenterTest {
 
     private val url = "some_url"
