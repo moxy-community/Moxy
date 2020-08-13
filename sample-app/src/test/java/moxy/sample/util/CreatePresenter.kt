@@ -10,7 +10,7 @@ import moxy.MvpView
 inline fun <P, reified V> createMockPresenterBlocking(
     noinline createPresenter: () -> P,
     noinline createMocks: (suspend () -> Unit)? = null,
-    noinline testState: suspend PVContext<P, V>.() -> Unit
+    noinline testState: PVContext<P, V>.() -> Unit
 ) where P : MvpPresenter<V>, V : MvpView = runBlockingTest {
     createMocks?.invoke()
     val view = mock<V>()
