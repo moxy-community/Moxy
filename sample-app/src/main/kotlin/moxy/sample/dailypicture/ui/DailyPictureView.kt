@@ -2,6 +2,8 @@ package moxy.sample.dailypicture.ui
 
 import moxy.MvpView
 import moxy.sample.dailypicture.domain.PictureOfTheDay
+import moxy.viewstate.strategy.AddToEndSingleTagStrategy
+import moxy.viewstate.strategy.StateStrategyType
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import moxy.viewstate.strategy.alias.OneExecution
 
@@ -16,6 +18,12 @@ import moxy.viewstate.strategy.alias.OneExecution
  */
 interface DailyPictureView : MvpView {
 
+    @AddToEndSingle
+    fun setTitle(text: String)
+
+    @AddToEndSingle
+    fun setDescription(text: String)
+
     /**
      * Show and astronomy picture of the day.
      *
@@ -24,8 +32,20 @@ interface DailyPictureView : MvpView {
      * different picture is loaded, and it should still be displayed
      * after screen rotation.
      */
-    @AddToEndSingle
-    fun showPicture(picture: PictureOfTheDay)
+    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_image")
+    fun showImage(url: String)
+
+    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_image")
+    fun showVideo()
+
+    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_image")
+    fun hideImage()
+
+    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_copyright")
+    fun showCopyright(text: String)
+
+    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_copyright")
+    fun hideCopyright()
 
     @AddToEndSingle
     fun showProgress(isProgress: Boolean)
