@@ -1,5 +1,9 @@
-const val targetVersion = "2.1.1"
-const val kotlin_version = "1.3.61"
+const val targetVersion = "2.1.2"
+const val kotlinVersion = "1.4.10"
+
+object Versions {
+    const val kotlin = kotlinVersion
+}
 
 object Deps {
 
@@ -12,8 +16,8 @@ object Deps {
     val asm = arrayOf("org.ow2.asm:asm:7.1", "org.ow2.asm:asm-util:7.1")
     const val autoservice = "com.google.auto.service:auto-service:1.0-rc5"
     const val autocommon = "com.google.auto:auto-common:0.10"
-    const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    const val kotlinStdlibForCompiler = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+    const val kotlinStdlibForCompiler = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1"
     const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.1"
     const val gradleIncapHelperAnnotations = "net.ltgt.gradle.incap:incap:0.2"
