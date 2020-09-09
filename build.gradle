@@ -10,7 +10,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.28.3-alpha'
@@ -46,6 +45,20 @@ allprojects {
                 }
             }
         }
+    }
+}
+
+subprojects {
+    repositories {
+        def repo = maven {
+            url project.parent.file("build/localMavenPublish")
+            content {
+                includeGroup "com.github.moxy-community"
+            }
+        }
+        // The only way to put the repository to the top using public api
+        remove(repo)
+        addFirst(repo)
     }
 }
 

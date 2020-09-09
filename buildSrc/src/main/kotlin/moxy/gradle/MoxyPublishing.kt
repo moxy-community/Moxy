@@ -1,14 +1,17 @@
 package moxy.gradle
 
 import com.jfrog.bintray.gradle.BintrayExtension
-import groovy.lang.GroovyObject
+import groovy.util.Node
+import groovy.util.NodeList
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.publication.maven.internal.deployer.BaseMavenInstaller
-import org.gradle.api.tasks.Upload
+import org.gradle.api.XmlProvider
+import org.gradle.api.component.SoftwareComponent
+import org.gradle.api.publish.PublishingExtension
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.withGroovyBuilder
+import org.gradle.kotlin.dsl.register
 import java.util.*
 
 abstract class MoxyPublishingPluginExtension {
@@ -38,19 +41,31 @@ class MoxyPublishing : Plugin<Project> {
             project.version = params.version // Library version
             project.group = params.groupId // Maven Group ID for the artifact
 
-            val baseMavenInstaller = (project.tasks.getByName("install") as Upload).let { install ->
-                install.repositories.getByName("mavenInstaller") as BaseMavenInstaller
-            }
-            baseMavenInstaller.pom.project {
-                populateXml(params)
+            project.extensions.getByType<PublishingExtension>().apply {
+                repositories {
+                    maven {
+                        name = "ProjectLocal"
+                        url = rootProject.file("build/localMavenPublish").toURI()
+                    }
+                }
+                publications {
+                    register<MavenPublication>("release") {
+                        from(getSoftwareComponent())
+
+                        groupId = params.groupId
+                        artifactId = params.artifactName
+                        version = params.version
+
+                        pom.withXml { populateXml(params) }
+                    }
+                }
             }
 
             project.bintray {
                 // User and ApiKey stored in local.properties
                 user = credentials.bintrayUser
                 key = credentials.bintrayApiKey
-                setConfigurations("archives") // When uploading configuration files
-                // setPublications("publicationName") // When uploading Maven-based publication files
+                setPublications("release") // When uploading Maven-based publication files
 
                 publish = true // [Default: false] Whether version should be auto published after an upload
                 // dryRun = false // [Default: false] Whether to run this as dry-run, without deploying
@@ -79,36 +94,50 @@ class MoxyPublishing : Plugin<Project> {
         }
     }
 
-    private fun GroovyObject.populateXml(params: Params) {
-        withGroovyBuilder {
-            setProperty("groupId", params.groupId)
-            setProperty("artifactId", params.artifactName)
-            setProperty("version", params.version)
-            setProperty("name", params.pomName)
-            setProperty("modelVersion", "4.0.0")
-            setProperty("description", params.pomDescription)
-            setProperty("url", "https://github.com/moxy-community/")
-            setProperty("inceptionYear", "2019")
-            "licenses" {
-                "license" {
-                    setProperty("name", "MIT")
-                    setProperty("url", "https://opensource.org/licenses/MIT")
-                    setProperty("distribution", "repo")
+    private fun XmlProvider.populateXml(params: Params) {
+        asNode().apply {
+            appendNode("name", params.pomName)
+            appendNode("description", params.pomDescription)
+            appendNode("url", "https://github.com/moxy-community/")
+            appendNode("inceptionYear", "2019")
+            appendNode("licenses").apply {
+                appendNode("license").apply {
+                    appendNode("name", "MIT")
+                    appendNode("url", "https://opensource.org/licenses/MIT")
+                    appendNode("distribution", "repo")
                 }
             }
-            "developers" {
-                "developer" {
-                    setProperty("name", "Moxy Community")
-                    setProperty("email", "moxy-community@yandex.ru")
-                    setProperty("organization", "Moxy Community")
-                    setProperty("organizationUrl", "https://github.com/moxy-community/")
+            appendNode("developers").apply {
+                appendNode("developer").apply {
+                    appendNode("name", "Moxy Community")
+                    appendNode("email", "moxy-community@yandex.ru")
+                    appendNode("organization", "Moxy Community")
+                    appendNode("organizationUrl", "https://github.com/moxy-community/")
                 }
             }
-            "scm" {
-                setProperty("connection", "scm:git@github.com:moxy-community/Moxy.git")
-                setProperty("developerConnection", "scm:git@github.com:moxy-community/Moxy.git")
-                setProperty("url", "https://github.com/moxy-community/Moxy.git")
+            appendNode("scm").apply {
+                appendNode("connection", "scm:git@github.com:moxy-community/Moxy.git")
+                appendNode("developerConnection", "scm:git@github.com:moxy-community/Moxy.git")
+                appendNode("url", "https://github.com/moxy-community/Moxy.git")
             }
+
+            // Move dependencies node to the end of pom
+            (this["dependencies"] as NodeList).map { it as Node }
+                .forEach { dependenciesNode ->
+                    remove(dependenciesNode)
+                    append(dependenciesNode)
+                }
+        }
+    }
+
+    private fun Project.getSoftwareComponent(): SoftwareComponent {
+        val hasAndroidPlugin = project.extensions.findByName("android") != null
+        return if (hasAndroidPlugin) {
+            // Created by android plugin
+            components.getByName("release")
+        } else {
+            // Created by java plugin
+            components.getByName("java")
         }
     }
 }
