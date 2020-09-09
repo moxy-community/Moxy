@@ -1,4 +1,3 @@
-const val targetVersion = "2.1.2"
 const val kotlinVersion = "1.4.10"
 
 object Versions {
@@ -13,7 +12,8 @@ object Deps {
     const val mockito = "org.mockito:mockito-core:2.27.0"
     const val truth = "androidx.test.ext:truth:1.1.0"
     const val compiletesting = "com.google.testing.compile:compile-testing:0.17"
-    val asm = arrayOf("org.ow2.asm:asm:7.1", "org.ow2.asm:asm-util:7.1")
+    const val asm = "org.ow2.asm:asm:7.1"
+    const val asmUtil = "org.ow2.asm:asm-util:7.1"
     const val autoservice = "com.google.auto.service:auto-service:1.0-rc5"
     const val autocommon = "com.google.auto:auto-common:0.10"
     const val kotlinStdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
