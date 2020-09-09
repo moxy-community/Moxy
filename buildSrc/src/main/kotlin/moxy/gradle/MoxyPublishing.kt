@@ -25,7 +25,7 @@ abstract class MoxyPublishingPluginExtension {
     var groupId: String? = null
     var version: String? = null
     val publishingProperties: Properties? = null
-    var publishToMaven: Boolean? = null
+    var isDryRun: Boolean? = null
 }
 
 class MoxyPublishing : Plugin<Project> {
@@ -68,7 +68,7 @@ class MoxyPublishing : Plugin<Project> {
                 setPublications("release") // When uploading Maven-based publication files
 
                 publish = true // [Default: false] Whether version should be auto published after an upload
-                // dryRun = false // [Default: false] Whether to run this as dry-run, without deploying
+                dryRun = params.isDryRun // [Default: false] Whether to run this as dry-run, without deploying
                 // override = false // [Default: false] Whether to override version artifacts already published
 
                 // Package configuration. The plugin will use the repo and name properties to check if the package already exists. In that case, there's no need to configure the other package properties (like userOrg, desc, etc).
@@ -83,7 +83,7 @@ class MoxyPublishing : Plugin<Project> {
                             passphrase = credentials.gpgPassphrase // Optional. The passphrase for GPG signing'
                         }
                         mavenCentralSync.apply {
-                            sync = params.publishToMaven // [Default: true] Determines whether to sync the version to Maven Central.
+                            sync = true // [Default: true] Determines whether to sync the version to Maven Central.
                             user = credentials.mavenUser // OSS user token: mandatory
                             password = credentials.mavenToken // OSS user password: mandatory
                             close = "1" // Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
@@ -151,7 +151,7 @@ private class Params(
     val pomDescription: String,
     val groupId: String,
     val version: String,
-    val publishToMaven: Boolean,
+    val isDryRun: Boolean,
     val credentials: Credentials
 )
 
@@ -173,8 +173,8 @@ private fun MoxyPublishingPluginExtension.toParams(project: Project): Params {
         pomName = pomName,
         pomDescription = pomDescription,
         groupId = groupId ?: "com.github.moxy-community",
-        version = version ?: project.readArtifactVersionFromProperties(artifactName),
-        publishToMaven = publishToMaven ?: project.readPublishToMavenFromProperties(),
+        version = version ?: project.readArtifactVersionFromProperties(),
+        isDryRun = isDryRun ?: project.readIsDryRunFromProperties(),
         credentials = Credentials(
             bintrayUser = properties.getProperty("bintrayUser"),
             bintrayApiKey = properties.getProperty("bintrayApiKey"),
@@ -193,10 +193,10 @@ private fun Project.rootProperties(name: String): Properties {
     return Properties().apply { load(rootProject.file(name).inputStream()) }
 }
 
-private fun Project.readArtifactVersionFromProperties(module: String): String {
-    return rootProperties("publish.properties").getOrDefault(module + "_version", "0.1") as String
+private fun Project.readArtifactVersionFromProperties(): String {
+    return rootProperties("publish.properties").getOrDefault("publishVersion", "0.1") as String
 }
 
-private fun Project.readPublishToMavenFromProperties(): Boolean {
-    return (rootProperties("publish.properties").getOrDefault("publish_to_maven", "false") as String).toBoolean()
+private fun Project.readIsDryRunFromProperties(): Boolean {
+    return (rootProperties("publish.properties").getOrDefault("isDryRun", "true") as String).toBoolean()
 }
