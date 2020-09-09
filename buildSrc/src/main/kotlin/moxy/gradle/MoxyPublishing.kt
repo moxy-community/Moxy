@@ -9,9 +9,12 @@ import org.gradle.api.XmlProvider
 import org.gradle.api.component.SoftwareComponent
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.api.tasks.bundling.Jar
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
+import com.android.build.gradle.LibraryExtension
+import org.gradle.api.tasks.TaskProvider
 import java.util.*
 
 abstract class MoxyPublishingPluginExtension {
@@ -55,6 +58,10 @@ class MoxyPublishing : Plugin<Project> {
                         groupId = params.groupId
                         artifactId = params.artifactName
                         version = params.version
+
+                        if (hasAndroidPlugin()) {
+                            artifact(createAndroidSourcesJarTask())
+                        }
 
                         pom.withXml { populateXml(params) }
                     }
@@ -131,13 +138,21 @@ class MoxyPublishing : Plugin<Project> {
     }
 
     private fun Project.getSoftwareComponent(): SoftwareComponent {
-        val hasAndroidPlugin = project.extensions.findByName("android") != null
-        return if (hasAndroidPlugin) {
+        return if (hasAndroidPlugin()) {
             // Created by android plugin
             components.getByName("release")
         } else {
             // Created by java plugin
             components.getByName("java")
+        }
+    }
+
+    private fun Project.hasAndroidPlugin() = project.extensions.findByName("android") != null
+
+    private fun Project.createAndroidSourcesJarTask(): TaskProvider<Jar> {
+        return tasks.register<Jar>("androidSourcesJar") {
+            archiveClassifier.set("sources")
+            from(android.sourceSets.getByName("main").java.srcDirs)
         }
     }
 }
@@ -200,3 +215,5 @@ private fun Project.readArtifactVersionFromProperties(): String {
 private fun Project.readIsDryRunFromProperties(): Boolean {
     return (rootProperties("publish.properties").getOrDefault("isDryRun", "true") as String).toBoolean()
 }
+
+private val Project.android get() = this.extensions.getByType<LibraryExtension>()
