@@ -4,11 +4,11 @@ apply plugin: 'maven-publish'
 apply plugin: 'moxy-publishing-plugin'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         consumerProguardFiles '../moxy/src/main/resources/META-INF/proguard/moxy.pro'
     }
