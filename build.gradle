@@ -25,6 +25,12 @@ allprojects {
         google()
         mavenCentral()
         jcenter()
+        maven {
+            url = "https://kotlin.bintray.com/kotlinx"
+            content {
+                includeGroup "org.jetbrains.kotlinx"
+            }
+        }
 
         maven {
             url = 'https://dl.bintray.com/xanderblinov/maven'

@@ -9,7 +9,6 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import javax.inject.Singleton
 
 @Module
@@ -22,11 +21,9 @@ object NetworkModule {
         return HttpClient(Android) {
             install(JsonFeature) {
                 serializer = KotlinxSerializer(
-                    Json(
-                        JsonConfiguration.Stable.copy(
-                            ignoreUnknownKeys = true
-                        )
-                    )
+                    Json {
+                        ignoreUnknownKeys = true
+                    }
                 )
             }
         }

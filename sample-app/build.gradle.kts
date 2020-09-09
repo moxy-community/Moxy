@@ -75,6 +75,7 @@ android {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
     kotlinOptions {
+        freeCompilerArgs = listOf("-Xjvm-default=all")
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
@@ -86,30 +87,30 @@ kapt {
 dependencies {
     // Kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
 
     // AndroidX
-    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.appcompat:appcompat:1.2.0")
 
     // AndroidX KTX
     implementation("androidx.core:core-ktx:1.3.1")
     implementation("androidx.fragment:fragment-ktx:1.2.5")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-rc1")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.1")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Material Design
-    implementation("com.google.android.material:material:1.2.0")
+    implementation("com.google.android.material:material:1.2.1")
 
     // HTTP client
-    implementation("io.ktor:ktor-client-android:1.3.2")
-    implementation("io.ktor:ktor-client-json-jvm:1.3.2")
-    implementation("io.ktor:ktor-client-serialization-jvm:1.3.2")
+    implementation("io.ktor:ktor-client-android:1.4.0")
+    implementation("io.ktor:ktor-client-json-jvm:1.4.0")
+    implementation("io.ktor:ktor-client-serialization-jvm:1.4.0")
 
     // Image loader
-    implementation("io.coil-kt:coil:0.11.0")
+    implementation("io.coil-kt:coil:1.0.0-rc2")
 
     implementation("com.google.dagger:hilt-android:2.28.3-alpha")
     kapt("com.google.dagger:hilt-android-compiler:2.28.3-alpha")
@@ -130,6 +131,6 @@ dependencies {
 //    kapt("com.github.moxy-community:moxy-compiler:$moxyVersion")
 
     testImplementation("junit:junit:4.13")
-    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.8")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
 }

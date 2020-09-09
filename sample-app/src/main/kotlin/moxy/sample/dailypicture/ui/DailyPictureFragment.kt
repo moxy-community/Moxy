@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import coil.api.load
+import coil.load
 import dagger.hilt.android.AndroidEntryPoint
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import moxy.sample.R
-import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.sample.databinding.FragmentDailyPictureBinding
 import moxy.sample.ui.ProgressRequestListener
 import moxy.sample.ui.ViewBindingHolder

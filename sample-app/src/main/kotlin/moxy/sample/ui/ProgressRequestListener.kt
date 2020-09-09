@@ -1,25 +1,25 @@
 package moxy.sample.ui
 
-import coil.decode.DataSource
-import coil.request.Request
+import coil.request.ImageRequest
+import coil.request.ImageResult
 
 class ProgressRequestListener(
     private val showProgress: (isProgress: Boolean) -> Unit
-) : Request.Listener {
+) : ImageRequest.Listener {
 
-    override fun onStart(request: Request) {
+    override fun onStart(request: ImageRequest) {
         showProgress.invoke(true)
     }
 
-    override fun onSuccess(request: Request, source: DataSource) {
+    override fun onSuccess(request: ImageRequest, metadata: ImageResult.Metadata) {
         showProgress.invoke(false)
     }
 
-    override fun onCancel(request: Request) {
+    override fun onCancel(request: ImageRequest) {
         showProgress.invoke(false)
     }
 
-    override fun onError(request: Request, throwable: Throwable) {
+    override fun onError(request: ImageRequest, throwable: Throwable) {
         showProgress.invoke(false)
     }
 }
