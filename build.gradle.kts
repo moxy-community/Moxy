@@ -51,7 +51,7 @@ subprojects {
     apply(plugin = "checkstyle")
 
     tasks.register<Checkstyle>("checkstyle") {
-        description = "Runs Checkstyle inspection against ICanPlayer sourcesets."
+        description = "Runs Checkstyle inspection"
         group = "moxy"
         configFile = rootProject.file("checkstyle.xml")
         ignoreFailures = false
