@@ -15,7 +15,7 @@ java {
 
 dependencies {
     api(project(":moxy"))
-    implementation(Deps.kotlinStdlib)
+
     compileOnly(Deps.coroutines)
 
     testImplementation(Deps.junit)

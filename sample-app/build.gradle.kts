@@ -86,7 +86,6 @@ kapt {
 
 dependencies {
     // Kotlin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:${Versions.kotlin}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.0.0-RC")
 
