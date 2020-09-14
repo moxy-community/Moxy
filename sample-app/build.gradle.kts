@@ -26,7 +26,7 @@ android {
                 arguments.putAll(mapOf(
                     "disableEmptyStrategyCheck" to "false",
                     "enableEmptyStrategyHelper" to "true",
-                    "defaultoxyStrategy" to "moxy.viewstate.strategy.AddToEndSingleStrategy"
+                    "defaultMoxyStrategy" to "moxy.viewstate.strategy.AddToEndSingleStrategy"
                 ))
             }
         }
