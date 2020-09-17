@@ -213,7 +213,8 @@ Brave people who created the library:
 [@senneco](https://github.com/senneco)  
 [@jordan1997](https://github.com/jordan1997)  
 [@xanderblinov](https://github.com/xanderblinov)  
-[@asitnkova](https://github.com/asitnkova)  
+[@VovaStelmashchuk](https://github.com/VovaStelmashchuk)
+[@aasitinkov](https://github.com/aasitinkov)
 [@alaershov](https://github.com/alaershov)  
 [@bejibx](https://github.com/bejibx)  
 [@katkoff](https://github.com/katkoff)  
@@ -237,6 +238,9 @@ Brave people who created the library:
 [@lion4ik](https://github.com/lion4ik)  
 [@NotPerfectBlue](https://github.com/NotPerfectBlue)  
 [@IlyaGulya](https://github.com/IlyaGulya)  
+[@Svechnikov](https://github.com/Svechnikov)  
+[@hram](https://github.com/hram)  
+[@ValdZX](https://github.com/ValdZX)  
 
 
 You may also find them in [contributors page of the old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
