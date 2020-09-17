@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2020-09-18
+### Added
+- Allow MvpView to extend arbitrary interfaces ([#94](https://github.com/moxy-community/Moxy/issues/94))
+- Added sources jar for android modules ([#44](https://github.com/moxy-community/Moxy/issues/44))
+
+### Changes
+- BuildConfig classes no longer included in android modules ([#118](https://github.com/moxy-community/Moxy/pull/118))
+
+### Fixes
+- Do not generate ViewState for abstract presenter classes ([#101](https://github.com/moxy-community/Moxy/issues/101))
+- Fix ViewStateProvider generation for nested presenters ([#108](https://github.com/moxy-community/Moxy/pull/108))
+- Throw exception if generated ViewStateProvider was not found ([#107](https://github.com/moxy-community/Moxy/pull/107))
+
+
 ## [2.1.2] - 2020-03-09
 - Fixed R8 obfuscating names of presenters without explicit `@InjectViewState` ([#87](https://github.com/moxy-community/Moxy/issues/87))
 - Added proguard rules to `com.github.moxy-community:moxy` artifact
