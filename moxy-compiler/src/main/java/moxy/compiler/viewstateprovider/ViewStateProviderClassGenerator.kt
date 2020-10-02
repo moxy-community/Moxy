@@ -32,6 +32,7 @@ class ViewStateProviderClassGenerator : JavaFilesGenerator<PresenterInfo?> {
 
         val typeSpec = TypeSpec
             .classBuilder(className)
+            .addOriginatingElement(presenterInfo.element)
             .addModifiers(Modifier.PUBLIC)
             .superclass(ViewStateProvider::class.java)
             .addMethod(presenterInfo.generateGetViewStateMethod())

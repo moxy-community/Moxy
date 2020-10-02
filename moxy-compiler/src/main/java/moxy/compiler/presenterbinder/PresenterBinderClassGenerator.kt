@@ -36,6 +36,7 @@ class PresenterBinderClassGenerator : JavaFilesGenerator<TargetClassInfo> {
 
         val classBuilder = TypeSpec
             .classBuilder(containerSimpleName + MvpProcessor.PRESENTER_BINDER_SUFFIX)
+            .addOriginatingElement(targetClassInfo.element)
             .addModifiers(Modifier.PUBLIC)
             .superclass(PresenterBinder::class.className().parametrizedWith(targetClassName))
 
