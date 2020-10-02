@@ -21,9 +21,10 @@ dependencies {
 
     implementation(Deps.javapoet)
 
+    implementation(Deps.gradleIncapHelperAnnotations)
+
     compileOnly(Deps.autocommon)
     compileOnly(Deps.autoservice)
-    compileOnly(Deps.gradleIncapHelperAnnotations)
 
     kapt(Deps.gradleIncapHelperProcessor)
     kapt(Deps.autoservice)
