@@ -196,7 +196,7 @@ To enable `Isolating` incremental annotation processor mode for Moxy processor u
 ```kotlin
 moxyEnableIsolatingProcessing : 'true'
 ```
-**Warning!** This option is experimental for a now. It should work fine, but we prefer to make this transition as safe as possible. If you'll encounter compilation problems after enabling this option, please feal free to [report an ussue](please report them using https://github.com/moxy-community/Moxy/issues/new). Hopefully we will enable isolating annotation processor mode by default after several releases.
+**Warning!** This option is experimental for now. It should work fine, but we prefer to make this transition as safe as possible. If you'll encounter compilation problems after enabling this option, please feal free to [report an ussue](please report them using https://github.com/moxy-community/Moxy/issues/new). Hopefully we will enable isolating annotation processor mode by default after several releases.
 
 How to correctly use compilation flags check out the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle.kts)
 
