@@ -51,7 +51,7 @@ class MvpCompiler : AbstractProcessor() {
 
     private fun printIsolatingOptionWarning() {
         messager.printMessage(
-                Diagnostic.Kind.WARNING,
+                Diagnostic.Kind.NOTE,
                 """
                          Isolating annotation processor mode was enabled for Moxy.
                          This option is experimental for now. We are pretty sure it should work correctly but we are not 100% sure.
