@@ -53,7 +53,6 @@ class MvpCompiler : AbstractProcessor() {
         messager.printMessage(
                 Diagnostic.Kind.WARNING,
                 """
-                        
                          Isolating annotation processor mode was enabled for Moxy.
                          This option is experimental for now. We are pretty sure it should work correctly but we are not 100% sure.
                          
@@ -63,8 +62,8 @@ class MvpCompiler : AbstractProcessor() {
                          please report them using https://github.com/moxy-community/Moxy/issues/new.
                          
                          In the same time to fix such problems while waiting for fix on our side you have two options:
-                         1. Just disable incremental mode. This will switch Moxy processor back to aggregating mode, so incremental compilation will be ok. This could hurt you compilation time a bit, hopefully not very much.
-                         2. Do clean build. This will force to recompile all generated from scratch. Sure this is also bad for compilation time.
+                         1. Just disable isolating mode. This will switch Moxy processor back to aggregating mode, so incremental compilation will be ok. This could hurt you compilation time a bit, hopefully not very much.
+                         2. Do clean build. This will force Gradle to recompile all generated sources from scratch. Sure, this is also bad for compilation time.
                         
                          Hopefully we will enable isolating annotation processor mode by default after several releases. 
                     """.trimIndent()
