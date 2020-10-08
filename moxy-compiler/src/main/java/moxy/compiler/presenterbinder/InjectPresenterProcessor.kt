@@ -44,9 +44,10 @@ class InjectPresenterProcessor : ElementProcessor<VariableElement, TargetClassIn
         bindTagProvidersToFields(fields, collectTagProviders(presentersContainer))
 
         return TargetClassInfo(
-            ClassName.get(presentersContainer),
-            fields,
-            findSuperPresenterContainer(presentersContainer)
+            element = presentersContainer,
+            name = ClassName.get(presentersContainer),
+            fields = fields,
+            superPresenterBinder = findSuperPresenterContainer(presentersContainer)
         )
     }
 

@@ -31,6 +31,7 @@ class ViewStateClassGenerator : JavaFilesGenerator<ViewInterfaceInfo> {
 
         val typeName = Util.getSimpleClassName(viewInterfaceInfo.element) + MvpProcessor.VIEW_STATE_SUFFIX
         val classBuilder: Builder = TypeSpec.classBuilder(typeName)
+            .addOriginatingElement(viewInterfaceInfo.element)
             .addModifiers(Modifier.PUBLIC)
             .superclass(MvpViewState::class.className().parametrizedWith(nameWithTypeVariables))
             .addSuperinterface(nameWithTypeVariables)

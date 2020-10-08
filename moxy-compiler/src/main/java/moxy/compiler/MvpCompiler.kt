@@ -11,7 +11,8 @@ import moxy.compiler.viewstateprovider.InjectViewStateProcessor
 import moxy.compiler.viewstateprovider.ViewStateProviderClassGenerator
 import moxy.presenter.InjectPresenter
 import net.ltgt.gradle.incap.IncrementalAnnotationProcessor
-import net.ltgt.gradle.incap.IncrementalAnnotationProcessorType.AGGREGATING
+import net.ltgt.gradle.incap.IncrementalAnnotationProcessorType
+import net.ltgt.gradle.incap.IncrementalAnnotationProcessorType.DYNAMIC
 import java.io.IOException
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Messager
@@ -29,7 +30,7 @@ import javax.lang.model.util.Types
 import javax.tools.Diagnostic
 
 @AutoService(Processor::class)
-@IncrementalAnnotationProcessor(AGGREGATING)
+@IncrementalAnnotationProcessor(DYNAMIC)
 class MvpCompiler : AbstractProcessor() {
 
     private val defaultStrategy: String? get() = options[DEFAULT_MOXY_STRATEGY]
@@ -42,13 +43,51 @@ class MvpCompiler : AbstractProcessor() {
         typeUtils = processingEnv.typeUtils
         elementUtils = processingEnv.elementUtils
         options = processingEnv.options
+
+        if (isIsolatingProcessingEnabled) {
+            printIsolatingOptionWarning()
+        }
     }
 
-    override fun getSupportedOptions(): Set<String> = setOf(
-        OPTION_ENABLE_EMPTY_STRATEGY_HELPER,
-        DEFAULT_MOXY_STRATEGY,
-        OPTION_DISABLE_EMPTY_STRATEGY_CHECK
-    )
+    private fun printIsolatingOptionWarning() {
+        messager.printMessage(
+                Diagnostic.Kind.NOTE,
+                """
+                         Isolating annotation processor mode was enabled for Moxy.
+                         This option is experimental for now. We are pretty sure it should work correctly but we are not 100% sure.
+                         
+                         If you'll notice problems after enabling this option such as:
+                         - ViewState is not being recompiled after you change your view interface
+                         - ViewState is not being compiled at all after you change your view interface
+                         please report them using https://github.com/moxy-community/Moxy/issues/new.
+                         
+                         In the same time to fix such problems while waiting for fix on our side you have two options:
+                         1. Just disable isolating mode. This will switch Moxy processor back to aggregating mode, so incremental compilation will be ok. This could hurt you compilation time a bit, hopefully not very much.
+                         2. Do clean build. This will force Gradle to recompile all generated sources from scratch. Sure, this is also bad for compilation time.
+                        
+                         Hopefully we will enable isolating annotation processor mode by default after several releases. 
+                    """.trimIndent()
+        )
+    }
+
+    override fun getSupportedOptions(): Set<String> {
+        val gradleIncrementalProcessingTypeOption = if (isIsolatingProcessingEnabled) {
+            IncrementalAnnotationProcessorType.ISOLATING
+        } else {
+            IncrementalAnnotationProcessorType.AGGREGATING
+        }.processorOption
+        return setOf(
+                OPTION_ENABLE_EMPTY_STRATEGY_HELPER,
+                DEFAULT_MOXY_STRATEGY,
+                OPTION_DISABLE_EMPTY_STRATEGY_CHECK,
+                OPTION_ENABLE_ISOLATING_PROCESSING,
+                gradleIncrementalProcessingTypeOption
+        )
+    }
+
+    private val isIsolatingProcessingEnabled by lazy {
+        isOptionEnabled(OPTION_ENABLE_ISOLATING_PROCESSING)
+    }
 
     override fun getSupportedAnnotationTypes(): Set<String> = setOf(
         InjectPresenter::class.java.canonicalName,
@@ -198,6 +237,7 @@ class MvpCompiler : AbstractProcessor() {
         private const val OPTION_DISABLE_EMPTY_STRATEGY_CHECK = "disableEmptyStrategyCheck"
         const val DEFAULT_MOXY_STRATEGY = "defaultMoxyStrategy"
         private const val OPTION_ENABLE_EMPTY_STRATEGY_HELPER = "enableEmptyStrategyHelper"
+        private const val OPTION_ENABLE_ISOLATING_PROCESSING = "moxyEnableIsolatingProcessing"
 
         @get:JvmStatic
         lateinit var messager: Messager

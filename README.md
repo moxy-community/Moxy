@@ -192,7 +192,14 @@ To switch the error output method enable this option
 enableEmptyStrategyHelper : 'true'
 ```
 
-How to correctly use compilation flags check out the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle)
+To enable `Isolating` incremental annotation processor mode for Moxy processor use this option
+```kotlin
+moxyEnableIsolatingProcessing : 'true'
+```
+Use this option for faster incremental builds. You can read about differences between `Isolating` and `Aggreagating` modes and Gradle incremental annotation processing support in [Gradle documentation](https://docs.gradle.org/5.0/userguide/java_plugin.html#sec:incremental_annotation_processing).
+**Warning!** This option is experimental for now. It should work fine, but we prefer to make this transition as safe as possible. If you'll encounter compilation problems after enabling this option, please feel free to [report an ussue](https://github.com/moxy-community/Moxy/issues/new). Hopefully we will enable isolating annotation processor mode by default after several releases.
+
+How to correctly use compilation flags check out the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle.kts)
 
 ## ProGuard\R8
 If you are using R8 then no additional configuration required. If you use ProGuard then you have to manually add rules from [this file](https://github.com/moxy-community/Moxy/blob/develop/moxy/src/main/resources/META-INF/proguard/moxy.pro).

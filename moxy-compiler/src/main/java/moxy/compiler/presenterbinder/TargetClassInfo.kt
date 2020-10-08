@@ -1,6 +1,7 @@
 package moxy.compiler.presenterbinder
 
 import com.squareup.javapoet.ClassName
+import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 
 /**
@@ -8,7 +9,8 @@ import javax.lang.model.element.TypeElement
  * `PresenterBinder` will be generated based on data from this class.
  * [superPresenterBinder] will be set if any parent class also requires injection.
  */
-class TargetClassInfo constructor(
+class TargetClassInfo(
+    val element: Element,
     val name: ClassName,
     val fields: List<TargetPresenterField>,
     val superPresenterBinder: TypeElement?
