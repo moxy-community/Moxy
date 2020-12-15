@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2020-12-15
+### Added
+- Added option to enable experimental isolating incremental annotation processing mode. More info in [README](https://github.com/moxy-community/Moxy#new-features-and-compiler-option-for-migration-from-old-version) ([#121](https://github.com/moxy-community/Moxy/issues/121))
+
+
 ## [2.2.0] - 2020-09-18
 ### Added
 - Allow MvpView to extend arbitrary interfaces ([#94](https://github.com/moxy-community/Moxy/issues/94))

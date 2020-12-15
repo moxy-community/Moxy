@@ -125,7 +125,7 @@ dependencies {
     kapt(project(":moxy-compiler"))
 
     // uncomment to test library from maven
-//    val moxyVersion = "2.2.0"
+//    val moxyVersion = "2.2.1"
 //    implementation("com.github.moxy-community:moxy-androidx:$moxyVersion")
 //    implementation("com.github.moxy-community:moxy-ktx:$moxyVersion")
 //    kapt("com.github.moxy-community:moxy-compiler:$moxyVersion")
