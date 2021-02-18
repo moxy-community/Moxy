@@ -201,6 +201,15 @@ Use this option for faster incremental builds. You can read about differences be
 
 How to correctly use compilation flags check out the [sample-app build.gradle file](https://github.com/moxy-community/Moxy/blob/develop/sample-app/build.gradle.kts)
 
+
+## Plugin
+This plugin automates work with strategies
+You can download it here https://plugins.jetbrains.com/plugin/13679-moxy-strategy/versions
+developing here https://github.com/Maksim-Novikov/moxy-strategy-plugin
+
+![](https://github.com/Maksim-Novikov/moxy-strategy-plugin/blob/master/media/moxy-strategy-plugin.gif)
+
+
 ## ProGuard\R8
 If you are using R8 then no additional configuration required. If you use ProGuard then you have to manually add rules from [this file](https://github.com/moxy-community/Moxy/blob/develop/moxy/src/main/resources/META-INF/proguard/moxy.pro).
 
@@ -248,7 +257,7 @@ Brave people who created the library:
 [@Svechnikov](https://github.com/Svechnikov)  
 [@hram](https://github.com/hram)  
 [@ValdZX](https://github.com/ValdZX)  
-
+[@Maksim-Novikov](https://github.com/Maksim-Novikov)
 
 You may also find them in [contributors page of the old project](https://github.com/Arello-Mobile/Moxy/graphs/contributors)
 
