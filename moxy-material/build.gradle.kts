@@ -1,8 +1,6 @@
 plugins {
     id("com.android.library")
-    id("com.jfrog.bintray")
-    id("maven-publish")
-    id("moxy-publishing-plugin")
+    id("com.vanniktech.maven.publish")
 }
 
 android {
@@ -31,10 +29,4 @@ dependencies {
 
     compileOnly(project(":stub-androidx"))
     compileOnly(project(":stub-material"))
-}
-
-moxyPublishing {
-    artifactName = "moxy-material"
-    pomName = "Moxy Material"
-    pomDescription = "Moxy Material library for Android"
 }
