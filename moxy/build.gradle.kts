@@ -1,14 +1,9 @@
 plugins {
     id("java-library")
-    id("com.jfrog.bintray")
-    id("maven-publish")
-    id("moxy-publishing-plugin")
+    id("com.vanniktech.maven.publish")
 }
 
 java {
-    withJavadocJar()
-    withSourcesJar()
-
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
@@ -22,10 +17,4 @@ dependencies {
     testImplementation(Deps.compiletesting)
     testImplementation(Deps.javapoet)
     testAnnotationProcessor(project(":moxy-compiler"))
-}
-
-moxyPublishing {
-    artifactName = "moxy"
-    pomName = "Moxy"
-    pomDescription = "Moxy library for Android"
 }

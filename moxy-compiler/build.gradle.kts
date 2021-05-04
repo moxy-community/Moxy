@@ -2,14 +2,10 @@ plugins {
     id("java")
     id("kotlin")
     id("kotlin-kapt")
-    id("com.jfrog.bintray")
-    id("maven-publish")
-    id("moxy-publishing-plugin")
+    id("com.vanniktech.maven.publish")
 }
 
 java {
-    withSourcesJar()
-
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
@@ -38,10 +34,4 @@ dependencies {
 
     //workaround to use test resources (https://stackoverflow.com/q/24870464)
     testRuntime(files(sourceSets.test.get().output.resourcesDir))
-}
-
-moxyPublishing {
-    artifactName = "moxy-compiler"
-    pomName = "Moxy Compiler"
-    pomDescription = "Moxy Compiler library for Android"
 }

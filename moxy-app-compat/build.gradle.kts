@@ -1,8 +1,6 @@
 plugins {
     id("com.android.library")
-    id("com.jfrog.bintray")
-    id("maven-publish")
-    id("moxy-publishing-plugin")
+    id("com.vanniktech.maven.publish")
 }
 
 android {
@@ -30,10 +28,4 @@ dependencies {
 
     compileOnly(Deps.android)
     compileOnly(project(":stub-appcompat"))
-}
-
-moxyPublishing {
-    artifactName = "moxy-app-compat"
-    pomName = "Moxy AppCompat"
-    pomDescription = "Moxy AppCompat library for Android"
 }

@@ -1,9 +1,5 @@
-# Publish to bintray with options from publish.properties
+# Publish to Maven Central
+# Don't forget to setup mavenCentralRepositoryUsername/mavenCentralRepositoryPassword Gradle Property
 cd ../
-./gradlew moxy:bintrayUpload
-./gradlew moxy-compiler:bintrayUpload
-./gradlew moxy-app-compat:bintrayUpload
-./gradlew moxy-androidx:bintrayUpload
-./gradlew moxy-material:bintrayUpload
-./gradlew moxy-android:bintrayUpload
-./gradlew moxy-ktx:bintrayUpload
+./gradlew publish --no-daemon --no-parallel
+./gradlew closeAndReleaseRepository

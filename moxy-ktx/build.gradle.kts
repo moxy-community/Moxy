@@ -1,14 +1,10 @@
 plugins {
     id("java-library")
     id("kotlin")
-    id("com.jfrog.bintray")
-    id("maven-publish")
-    id("moxy-publishing-plugin")
+    id("com.vanniktech.maven.publish")
 }
 
 java {
-    withSourcesJar()
-
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
@@ -21,10 +17,4 @@ dependencies {
     testImplementation(Deps.junit)
     testImplementation(Deps.coroutines)
     testImplementation(Deps.coroutinesTest)
-}
-
-moxyPublishing {
-    artifactName = "moxy-ktx"
-    pomName = "Moxy Kotlin Extensions"
-    pomDescription = "Kotlin extensions for Moxy"
 }
