@@ -112,8 +112,8 @@ dependencies {
     // Image loader
     implementation("io.coil-kt:coil:1.0.0-rc2")
 
-    implementation("com.google.dagger:hilt-android:2.28.3-alpha")
-    kapt("com.google.dagger:hilt-android-compiler:2.28.3-alpha")
+    implementation("com.google.dagger:hilt-android:2.35.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.35.1")
 
     // java.time and other stuff without third-party libraries
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")

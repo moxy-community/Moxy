@@ -9,7 +9,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:4.1.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.28.3-alpha")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.35.1")
     }
 }
 
