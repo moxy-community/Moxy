@@ -15,8 +15,8 @@ buildscript {
 
 plugins {
     id("com.github.ben-manes.versions") version "0.31.0"
-    id("org.jetbrains.dokka") version "1.4.30"
-    id("com.vanniktech.maven.publish") version "0.14.2" apply false
+    id("org.jetbrains.dokka") version "1.4.32"
+    id("com.vanniktech.maven.publish") version "0.15.1" apply false
 }
 
 subprojects {
