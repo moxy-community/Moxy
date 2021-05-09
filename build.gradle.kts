@@ -30,10 +30,6 @@ subprojects {
             }
         }
 
-        maven {
-            setUrl("https://dl.bintray.com/xanderblinov/maven")
-        }
-
         val repo = maven {
             url = rootProject.file("build/localMavenPublish").toURI()
             content {

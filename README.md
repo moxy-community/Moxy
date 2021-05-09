@@ -1,5 +1,4 @@
 # Moxy
-[ ![Bintray](https://api.bintray.com/packages/moxy-community/maven/moxy/images/download.svg) ](https://bintray.com/moxy-community/maven/moxy/_latestVersion)
 [ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.moxy-community/moxy)
 
 Moxy 2 is out! Check out the [migration guide](https://github.com/moxy-community/Moxy/wiki/Migration-Guide-(1.x.x-to-2.x.x)) and give it a try!
