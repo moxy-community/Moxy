@@ -7,7 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.2.2] - 2021-05-07
 ### Changes
 - Set up publishing to Maven Central (thanks @DeKaN). ([#124](https://github.com/moxy-community/Moxy/issues/124))
-- Update AGP to 4.1.3
 - Update Kotlin 1.4.32
 
 
