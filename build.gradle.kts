@@ -6,17 +6,17 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.0.1")
+        classpath("com.android.tools.build:gradle:4.1.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.28.3-alpha")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.35.1")
     }
 }
 
 plugins {
     id("com.github.ben-manes.versions") version "0.31.0"
-    id("org.jetbrains.dokka") version "1.4.30"
-    id("com.vanniktech.maven.publish") version "0.14.2" apply false
+    id("org.jetbrains.dokka") version "1.4.32"
+    id("com.vanniktech.maven.publish") version "0.15.1" apply false
 }
 
 subprojects {
@@ -28,10 +28,6 @@ subprojects {
             content {
                 includeGroup("org.jetbrains.kotlinx")
             }
-        }
-
-        maven {
-            setUrl("https://dl.bintray.com/xanderblinov/maven")
         }
 
         val repo = maven {

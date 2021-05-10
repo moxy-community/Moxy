@@ -8,7 +8,7 @@ plugins {
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 android {
@@ -63,7 +63,7 @@ android {
     }
 
     compileOptions {
-        coreLibraryDesugaringEnabled = true
+        isCoreLibraryDesugaringEnabled = true
 
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -112,11 +112,11 @@ dependencies {
     // Image loader
     implementation("io.coil-kt:coil:1.0.0-rc2")
 
-    implementation("com.google.dagger:hilt-android:2.28.3-alpha")
-    kapt("com.google.dagger:hilt-android-compiler:2.28.3-alpha")
+    implementation("com.google.dagger:hilt-android:2.35.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.35.1")
 
     // java.time and other stuff without third-party libraries
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.0.10")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
     // Moxy
     // uncomment to test library from local sources
@@ -125,7 +125,7 @@ dependencies {
     kapt(project(":moxy-compiler"))
 
     // uncomment to test library from maven
-//    val moxyVersion = "2.2.1"
+//    val moxyVersion = "2.2.2"
 //    implementation("com.github.moxy-community:moxy-androidx:$moxyVersion")
 //    implementation("com.github.moxy-community:moxy-ktx:$moxyVersion")
 //    kapt("com.github.moxy-community:moxy-compiler:$moxyVersion")
