@@ -17,6 +17,7 @@ import moxy.compiler.viewstate.entity.ViewInterfaceMethod
 import moxy.compiler.viewstate.entity.ViewStateMethod
 import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.StateStrategyType
+import moxy.viewstate.strategy.StateStrategyTypeTag
 import javax.lang.model.element.AnnotationMirror
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
@@ -125,16 +126,6 @@ class ViewInterfaceProcessor(
         )
     }
 
-    private fun getStateStrategy(methodElement: ExecutableElement): StrategyWithTag? {
-        val annotation = getStateStrategyAnnotation(methodElement) ?: return null
-
-        val strategyClassFromAnnotation = annotation.getValueAsTypeMirror(StateStrategyType::value) ?: return null
-        val strategyType = strategyClassFromAnnotation.asTypeElement()
-        val tag = annotation.getValueAsString(StateStrategyType::tag) ?: methodElement.defaultTag()
-
-        return StrategyWithTag(strategyType, tag)
-    }
-
     /**
      * Returns ViewMethods for all superinterfaces, or empty set if element does not have superinterfaces
      */
@@ -226,13 +217,8 @@ class ViewInterfaceProcessor(
      * Returns default StateStrategyType for this [viewInterface], if specified
      */
     private fun getInterfaceStateStrategyType(viewInterface: TypeElement): TypeElement? {
-        val annotation = getStateStrategyAnnotation(viewInterface)
-        val value = annotation?.getValueAsTypeMirror(StateStrategyType::value)
-        return if (value != null && value.kind == TypeKind.DECLARED) {
-            value.asTypeElement()
-        } else {
-            null
-        }
+        val annotation = getStateStrategy(viewInterface)
+        return annotation?.strategyClass?.asTypeElement()
     }
 
     private fun validateSuperInterfaceMethodClashes(viewInterfaceMethods: Set<ViewInterfaceMethod>) {
@@ -261,30 +247,110 @@ class ViewInterfaceProcessor(
             if (enableEmptyStrategyHelper) {
                 migrationMethods.add(MigrationMethod(viewInterfaceElement, methodElement))
             } else {
-                val message = ("A View method has no strategy! " +
-                        "Add @StateStrategyType annotation to this method, or to the View interface. " +
-                        "You can also specify default strategy via compiler option.")
+                val message = """
+                    A View method has no strategy!
+                    Add @StateStrategyType annotation to this method, or to the View interface.
+                    You can also specify default strategy via compiler option.
+                """.trimIndent()
                 messager.printMessage(Kind.ERROR, message, methodElement)
             }
         }
     }
 
-    private fun getStateStrategyAnnotation(element: Element): AnnotationMirror? {
-        val enclosed = listOfNotNull(element.getAnnotationMirror(StateStrategyType::class))
-        val aliased = element.annotationMirrors
-            .mapNotNull { it.annotationType.asTypeElement().getAnnotationMirror(StateStrategyType::class) }
+    private val STRING_TYPE_ELEMENT by lazy {
+        elementUtils.getTypeElement(String::class.java.name)
+    }
+
+    private fun getStateStrategy(element: Element): StrategyWithTag? {
+        val executableElement = element as? ExecutableElement
+        val enclosed =
+            listOfNotNull(element.getAnnotationMirror(StateStrategyType::class))
+                .map { it.toStrategyWithTag(executableElement) }
+
+        val methodAnnotations =
+            element
+                .annotationMirrors
+
+        val aliased =
+            methodAnnotations
+                .mapNotNull { annotationMirror ->
+                    val annotation = annotationMirror.annotationType.asTypeElement()
+                    val stateStrategyType = annotation.getAnnotationMirror(StateStrategyType::class)
+                    if (stateStrategyType != null) {
+                        val annotationMethods =
+                            annotation
+                                .enclosedElements
+                                .asSequence()
+                                .filter { it.kind == ElementKind.METHOD && !it.isStatic() }
+                                .map { it as ExecutableElement }
+                                .toSet()
+
+                        val tagAnnotatedMethods =
+                            annotationMethods
+                                .asSequence()
+                                .filter { it.getAnnotationMirror(StateStrategyTypeTag::class) != null }
+                                .toSet()
+
+                        if (tagAnnotatedMethods.isEmpty()) return@mapNotNull stateStrategyType.toStrategyWithTag(executableElement)
+                        if (tagAnnotatedMethods.size > 1) {
+                            messager.printMessage(
+                                Kind.ERROR, """
+                                Annotation @StateStrategyTypeTag can't be applied to more than one method!
+                                Annotation: ${annotation.qualifiedName}
+                            """.trimIndent(), annotation
+                            )
+                            return@mapNotNull null
+                        }
+
+                        val tagAnnotatedMethod = tagAnnotatedMethods.first()
+
+                        fun wrongTagAnnotatedMethodReturnType() {
+                            val methodParameters = tagAnnotatedMethod.parameters.joinToString { it.asType().toString() }
+                            messager.printMessage(
+                                Kind.ERROR,
+                                """
+                                    Annotation @StateStrategyTypeTag can only be applied to method returning String!
+                                    Annotation: ${annotation.qualifiedName}
+                                    Method: ${tagAnnotatedMethod.simpleName}($methodParameters)
+                                """.trimIndent(),
+                                tagAnnotatedMethod,
+                            )
+                        }
+
+                        if (tagAnnotatedMethod.returnType.kind != TypeKind.DECLARED) {
+                            wrongTagAnnotatedMethodReturnType()
+                            return@mapNotNull null
+                        }
+                        val tagMethodReturnType = tagAnnotatedMethod.returnType.asTypeElement()
+
+                        if (tagMethodReturnType != STRING_TYPE_ELEMENT) {
+                            wrongTagAnnotatedMethodReturnType()
+                            return@mapNotNull null
+                        }
+
+                        val customAliasTagValue = annotationMirror.getValueAsString(tagAnnotatedMethod.simpleName.toString())
+
+                        stateStrategyType.toStrategyWithTag(method = executableElement, tagOverride = customAliasTagValue)
+                    } else {
+                        null
+                    }
+                }
 
         val strategies = enclosed + aliased
 
         if (strategies.size > 1) {
             if (element is ExecutableElement) {
-                messager.printMessage(
-                    Kind.ERROR, "There's more than one state strategy type defined for method " +
-                            "'${element.simpleName}(${element.parameters.joinToString {
-                                it.asType().toString()
-                            }})'" +
-                            " in interface '${element.enclosingElement.asType()}'", element
-                )
+                val methodName = element.simpleName
+                val methodParameters = element.parameters.joinToString {
+                    it.asType().toString()
+                }
+
+                val errorMessage = """
+                    There's more than one state strategy type defined for method
+                    '$methodName($methodParameters)' 
+                    in interface '${element.enclosingElement.asType()}'
+                """.trimIndent()
+                messager.printMessage(Kind.ERROR, errorMessage, element)
             } else if (element is TypeElement) {
                 messager.printMessage(
                     Kind.ERROR, "There's more than one state strategy type defined for " +
@@ -294,6 +360,14 @@ class ViewInterfaceProcessor(
         }
 
         return strategies.firstOrNull()
+    }
+
+    private fun AnnotationMirror.toStrategyWithTag(method: ExecutableElement? = null, tagOverride: String? = null): StrategyWithTag? {
+        val strategyClassFromAnnotation = getValueAsTypeMirror(StateStrategyType::value) ?: return null
+        val strategyType = strategyClassFromAnnotation.asTypeElement()
+        val tag = tagOverride ?: getValueAsString(StateStrategyType::tag) ?: method?.defaultTag() ?: ""
+
+        return StrategyWithTag(strategyType, tag)
     }
 
     private fun ExecutableElement.defaultTag(): String = simpleName.toString()

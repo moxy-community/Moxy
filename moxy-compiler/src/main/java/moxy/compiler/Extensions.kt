@@ -58,6 +58,11 @@ fun AnnotationMirror.getValueAsString(property: KProperty1<*, *>): String? {
     return Util.getAnnotationValueAsString(this, property.name)
 }
 
+// Pass property name string
+fun AnnotationMirror.getValueAsString(propertyName: String): String? {
+    return Util.getAnnotationValueAsString(this, propertyName)
+}
+
 // Pass property name, like StateStrategyType::value
 fun AnnotationMirror.getValueAsTypeMirror(property: KProperty1<*, *>): TypeMirror? {
     return Util.getAnnotationValueAsTypeMirror(this, property.name)
