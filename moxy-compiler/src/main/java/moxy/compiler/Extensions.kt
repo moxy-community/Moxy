@@ -1,16 +1,7 @@
 package moxy.compiler
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
-import com.squareup.javapoet.TypeVariableName
-import com.squareup.javapoet.WildcardTypeName
-import javax.lang.model.element.AnnotationMirror
-import javax.lang.model.element.Element
-import javax.lang.model.element.TypeElement
+import com.squareup.javapoet.*
+import javax.lang.model.element.*
 import javax.lang.model.type.DeclaredType
 import javax.lang.model.type.TypeMirror
 import kotlin.contracts.ExperimentalContracts
@@ -21,7 +12,7 @@ import kotlin.reflect.KProperty1
 /**
  * TypeMirror must be of kind TypeKind.DECLARED
  */
-@UseExperimental(ExperimentalContracts::class)
+@OptIn(ExperimentalContracts::class)
 fun TypeMirror.asTypeElement(): TypeElement {
     contract {
         returns() implies (this@asTypeElement is DeclaredType)
@@ -45,8 +36,8 @@ fun ClassName.supertypeWildcard(): WildcardTypeName = WildcardTypeName.supertype
 fun TypeSpec.toJavaFile(className: ClassName): JavaFile = toJavaFile(className.packageName())
 fun TypeSpec.toJavaFile(packageName: String): JavaFile {
     return JavaFile.builder(packageName, this)
-        .indent("\t")
-        .build()
+            .indent("\t")
+            .build()
 }
 
 fun <T : Annotation> Element.getAnnotationMirror(type: KClass<T>): AnnotationMirror? {
@@ -74,4 +65,15 @@ fun List<ParameterSpec>.equalsByType(other: List<ParameterSpec>): Boolean {
     return Util.equalsBy(this, other) { first, second ->
         first.type == second.type
     }
+}
+
+fun TypeElement.getNonStaticMethods(): Set<ExecutableElement> {
+    return enclosedElements
+            .filter { it.kind == ElementKind.METHOD && !it.isStatic() }
+            .map { it as ExecutableElement }
+            .toSet()
+}
+
+private fun Element.isStatic(): Boolean {
+    return modifiers.contains(Modifier.STATIC)
 }

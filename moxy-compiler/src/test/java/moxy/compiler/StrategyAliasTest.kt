@@ -82,10 +82,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
@@ -116,10 +116,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = generateViewInterfaceWithOneExecutionTestMethod("testTag")
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
@@ -150,10 +150,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
@@ -185,13 +185,11 @@ class StrategyAliasTest : CompilerTest() {
             }
         """.toJavaFile()
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
         compilation.assertThatIt()
-            .hadErrorContaining("""
-                Annotation @StateStrategyTypeTag can't be applied to more than one method!
-            """.trimIndent())
+            .hadErrorContaining("Annotation @StateStrategyTypeTag can't be applied to more than one method!")
             .inFile(viewInterface)
             .onLineContaining("@interface OneExecution")
     }
@@ -218,8 +216,8 @@ class StrategyAliasTest : CompilerTest() {
             }
         """.toJavaFile()
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
         compilation.assertThatIt()
             .hadErrorContaining("Annotation @StateStrategyTypeTag can only be applied to method returning String!")
@@ -248,10 +246,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
@@ -276,10 +274,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),

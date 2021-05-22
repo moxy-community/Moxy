@@ -12,7 +12,7 @@ import moxy.viewstate.strategy.StateStrategyTypeTag;
 /**
  * State strategy alias for {@link moxy.viewstate.strategy.AddToEndSingleTagStrategy}.
  * Applying this annotation has the same effect as applying
- * {@code @StateStrategyType(AddToEndSingleTagStrategy.class, tag = "someTag)}.
+ * {@code @StateStrategyType(AddToEndSingleTagStrategy.class, tag = "someTag")}.
  * <br><br>
  * Command will be added to the end of the commands queue. If the commands queue contains the same tag, then
  * an existing command will be removed.
