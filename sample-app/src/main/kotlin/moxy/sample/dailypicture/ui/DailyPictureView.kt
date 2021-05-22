@@ -5,6 +5,7 @@ import moxy.sample.dailypicture.domain.PictureOfTheDay
 import moxy.viewstate.strategy.AddToEndSingleTagStrategy
 import moxy.viewstate.strategy.StateStrategyType
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import moxy.viewstate.strategy.alias.AddToEndSingleTag
 import moxy.viewstate.strategy.alias.OneExecution
 
 /**
@@ -32,19 +33,19 @@ interface DailyPictureView : MvpView {
      * different picture is loaded, and it should still be displayed
      * after screen rotation.
      */
-    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_image")
+    @AddToEndSingleTag(tag = "show_hide_image")
     fun showImage(url: String)
 
-    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_image")
+    @AddToEndSingleTag(tag = "show_hide_image")
     fun showVideo()
 
-    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_image")
+    @AddToEndSingleTag(tag = "show_hide_image")
     fun hideImage()
 
-    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_copyright")
+    @AddToEndSingleTag(tag = "show_hide_copyright")
     fun showCopyright(text: String)
 
-    @StateStrategyType(value = AddToEndSingleTagStrategy::class, tag = "show_hide_copyright")
+    @AddToEndSingleTag(tag = "show_hide_copyright")
     fun hideCopyright()
 
     @AddToEndSingle

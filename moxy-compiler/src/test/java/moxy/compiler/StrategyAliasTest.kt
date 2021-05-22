@@ -82,14 +82,147 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
             expectedCompilation.generatedFiles())
+    }
+
+    @Test
+    fun testAliasedStateStrategyWithTag() {
+        @Language("JAVA") val viewInterface = """
+            package moxy;
+            
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.StateStrategyTypeTag;
+            
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            @interface OneExecution {
+                @StateStrategyTypeTag
+                String tag() default "";
+            }
+            
+            public interface ViewInterface extends MvpView {
+                @OneExecution(tag = "testTag")
+                void testMethod();
+            }
+        """.toJavaFile()
+
+        val expected = generateViewInterfaceWithOneExecutionTestMethod("testTag")
+
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
+
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
+
+        assertExpectedFilesGenerated(
+            compilation.generatedFiles(),
+            expectedCompilation.generatedFiles())
+    }
+
+    @Test
+    fun testAliasedStateStrategyWithoutTagSpecified() {
+        @Language("JAVA") val viewInterface = """
+            package moxy;
+            
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.StateStrategyTypeTag;
+            
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            @interface OneExecution {
+                @StateStrategyTypeTag
+                String tag() default "";
+            }
+            
+            public interface ViewInterface extends MvpView {
+                @OneExecution
+                void testMethod();
+            }
+        """.toJavaFile()
+
+        val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
+
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
+
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
+
+        assertExpectedFilesGenerated(
+            compilation.generatedFiles(),
+            expectedCompilation.generatedFiles())
+    }
+
+
+    @Test
+    fun testWrongMultipleAliasTagMethods() {
+        @Language("JAVA") val viewInterface = """
+            package moxy;
+            
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.StateStrategyTypeTag;
+            
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            @interface OneExecution {
+                @StateStrategyTypeTag
+                String tag() default "";
+                @StateStrategyTypeTag
+                String tag2() default "";
+            }
+            
+            public interface ViewInterface extends MvpView {
+                @OneExecution
+                void testMethod();
+            }
+        """.toJavaFile()
+
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
+
+        compilation.assertThatIt()
+            .hadErrorContaining("Annotation @StateStrategyTypeTag can't be applied to more than one method!")
+            .inFile(viewInterface)
+            .onLineContaining("@interface OneExecution")
+    }
+
+    @Test
+    fun testWrongAliasTagMethodReturnType() {
+        @Language("JAVA") val viewInterface = """
+            package moxy;
+            
+            import moxy.MvpView;
+            import moxy.viewstate.strategy.OneExecutionStateStrategy;
+            import moxy.viewstate.strategy.StateStrategyType;
+            import moxy.viewstate.strategy.StateStrategyTypeTag;
+            
+            @StateStrategyType(OneExecutionStateStrategy.class)
+            @interface OneExecution {
+                @StateStrategyTypeTag
+                int tag() default 0;
+            }
+            
+            public interface ViewInterface extends MvpView {
+                @OneExecution
+                void testMethod();
+            }
+        """.toJavaFile()
+
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
+
+        compilation.assertThatIt()
+            .hadErrorContaining("Annotation @StateStrategyTypeTag can only be applied to method returning String!")
+            .inFile(viewInterface)
+            .onLineContaining("int tag() default 0;")
     }
 
     @Test
@@ -113,10 +246,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
@@ -141,10 +274,10 @@ class StrategyAliasTest : CompilerTest() {
 
         val expected = GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD
 
-        val presenter = generateViewStateFor("moxy.ViewInterface")
-        val compilation = compileSourcesWithProcessor(viewInterface, presenter)
+        val viewState = generateViewStateFor("moxy.ViewInterface")
+        val compilation = compileSourcesWithProcessor(viewInterface, viewState)
 
-        val expectedCompilation = compileSources(viewInterface, presenter, expected)
+        val expectedCompilation = compileSources(viewInterface, viewState, expected)
 
         assertExpectedFilesGenerated(
             compilation.generatedFiles(),
@@ -152,7 +285,8 @@ class StrategyAliasTest : CompilerTest() {
     }
 
     companion object {
-        private val GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD = """
+        private fun generateViewInterfaceWithOneExecutionTestMethod(testMethodTag: String) =
+            """
             package moxy;
 
             import java.lang.Override;
@@ -179,7 +313,7 @@ class StrategyAliasTest : CompilerTest() {
 
             	public class TestMethodCommand extends ViewCommand<ViewInterface> {
             		TestMethodCommand() {
-            			super("testMethod", OneExecutionStateStrategy.class);
+            			super("$testMethodTag", OneExecutionStateStrategy.class);
             		}
 
             		@Override
@@ -189,6 +323,9 @@ class StrategyAliasTest : CompilerTest() {
             	}
             }
         """.toJavaFile()
+
+        private val GENERATED_VIEW_INTERFACE_WITH_ONE_EXECUTION_TEST_METHOD =
+            generateViewInterfaceWithOneExecutionTestMethod("testMethod")
     }
 
 }
